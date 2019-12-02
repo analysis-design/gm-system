@@ -6,6 +6,62 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/hello.css}">
 </head>
 <body>
-<h2 class="prompt" th:text="${msg}"></h2>
+
+<h1 class="prompt" th:text="${msg}"></h1>
+
+<h2 class="prompt">列表</h2>
+<table class="prompt">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>message</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="hello : ${list}">
+        <td th:text="${hello.id}">neo</td>
+        <td th:text="${hello.message}">neo</td>
+    </tr>
+    </tbody>
+</table>
+
+<h2 class="prompt">查询信息</h2>
+<form action="#" th:action="@{/hello/get}" method="get">
+    查询的id：
+    <label>
+        <input type="text" name="id"/>
+    </label>
+    <input type="submit" value="提交"/>
+</form>
+
+<h2 class="prompt">添加信息</h2>
+<form action="#" th:action="@{/hello/add}" method="post">
+    添加的信息：
+    <label>
+        <input type="text" name="message"/>
+    </label>
+    <input type="submit" value="提交"/>
+</form>
+
+
+<h2 class="prompt">修改信息</h2>
+<form action="#" th:action="@{/hello/upd}" method="post">
+    <label>
+        ID： <input type="text" name="id"/><br/>
+    </label>
+    <label>
+        信息： <input type="text" name="message"/>
+    </label>
+    <input type="submit" value="提交"/>
+</form>
+
+<h2 class="prompt">删除信息</h2>
+<form action="#" th:action="@{/hello/del}" method="get">
+    删除的id：
+    <label>
+        <input type="text" name="id"/>
+    </label>
+    <input type="submit" value="提交"/>
+</form>
 </body>
 </html>

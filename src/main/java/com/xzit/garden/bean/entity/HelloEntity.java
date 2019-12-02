@@ -2,22 +2,22 @@ package com.xzit.garden.bean.entity;
 
 public class HelloEntity {
 
-    private String no;
-    private String name;
+    private Integer id;
+    private String message;
 
-    public String getNo() {
-        return no;
+    public Integer getId() {
+        return id;
     }
 
-    public void setNo(String no) {
-        this.no = no;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getMessage() {
+        return message;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

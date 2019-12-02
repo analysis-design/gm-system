@@ -11,7 +11,7 @@
     <groupId>com.xzit.garden</groupId>
     <artifactId>management-system</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>management-system</name>
+    <msg>management-system</msg>
     <description>Demo project for Spring Boot</description>
 
     <properties>
