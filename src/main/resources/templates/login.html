@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" href="webjars/layui/2.5.5/css/layui.css">
+
+</head>
+<body background="images/login-bg1.jpg">
+    <div class="loginLine">
+        <p class="yhdl">用户登录</p>
+            <form class="layui-form" action="main" method="post">
+                <div class="layui-form-item" style="text-align: center">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">账号：</label>
+                        <div class="layui-input-inline">
+                            <input name="id" class="layui-input" type="text" placeholder="请输入用户名" autocomplete="off" lay-verify="required" lay-reqtext="用户名是必填项，岂能为空？">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="text-align: center">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">密码：</label>
+                        <div class="layui-input-inline">
+                            <input name="password" class="layui-input" type="password" placeholder="请输入密码" autocomplete="off" lay-verify="pass">
+                        </div>
+                        <!--                                <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div>-->
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" type="submit" lay-filter="demo1" lay-submit="">立即提交</button>
+                        <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+                    </div>
+                </div>
+            </form>
+        <div style="text-align: center;margin-left: 80px;color: crimson" th:text="${message}"></div>
+    </div>
+</body>
+</html>
