@@ -14,7 +14,7 @@ public interface HelloMapper {
     @Select("select * from hello")
     List<HelloEntity> findAll();
 
-    @Insert("insert into hello(message) values(#{message})")
+    @Insert("insert into hello(message, A) values(#{message}, #{A})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int add(HelloEntity entity);
 

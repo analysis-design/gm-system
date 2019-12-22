@@ -4,6 +4,7 @@ public class HelloEntity {
 
     private Integer id;
     private String message;
+    private String A;
 
     public Integer getId() {
         return id;
@@ -19,5 +20,13 @@ public class HelloEntity {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getA() {
+        return A;
+    }
+
+    public void setA(String a) {
+        A = a;
     }
 }
