@@ -30,6 +30,6 @@ public class AuthController {
     public String index(Model model) {
         UserDto user = userService.getUserDto();
         model.addAttribute("user", user);
-        return "main";
+        return "engineer";
     }
 }
