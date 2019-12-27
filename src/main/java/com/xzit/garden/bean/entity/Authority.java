@@ -19,6 +19,10 @@ public class Authority implements Serializable {
      */
     private String resName;
     /**
+     * 资源类型：0：菜单，1：按钮
+     */
+    private Integer resType;
+    /**
      * 资源url
      */
     private String url;
@@ -26,6 +30,10 @@ public class Authority implements Serializable {
      * 资源图标
      */
     private String icon;
+    /**
+     * 菜单的上一级菜单的id或者按钮属于的菜单的id
+     */
+    private Long parentId;
 
     public Integer getId() {
         return id;
@@ -51,6 +59,14 @@ public class Authority implements Serializable {
         this.resName = resName;
     }
 
+    public Integer getResType() {
+        return resType;
+    }
+
+    public void setResType(Integer resType) {
+        this.resType = resType;
+    }
+
     public String getUrl() {
         return url;
     }
@@ -65,5 +81,13 @@ public class Authority implements Serializable {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 }
