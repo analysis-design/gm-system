@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .formLogin().loginPage("/auth").loginProcessingUrl("/auth/form")
+                .formLogin().loginPage("/login").loginProcessingUrl("/auth/form")
                 .successHandler(successHandler)
                 .failureHandler(failureHandler)
                 .permitAll()
@@ -52,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/index").hasAnyAuthority("ROLE_USER")
+                .antMatchers("/css/**", "/webjars/**", "/images/**", "/js/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
 //                .antMatchers("/whoim").hasRole("ADMIN") //这就表示/whoim的这个资源需要有ROLE_ADMIN的这个角色才能访问。不然就会提示拒绝访问
 //                .anyRequest().authenticated() //必须经过认证以后才能访问
