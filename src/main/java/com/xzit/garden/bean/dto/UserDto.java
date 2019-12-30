@@ -35,10 +35,9 @@ public class UserDto implements Serializable {
     public UserDto() {
     }
 
-    public UserDto(Long id, String username, String mobile, List<Role> roleList, List<Authority> authorityList) {
+    public UserDto(Long id, String username, List<Role> roleList, List<Authority> authorityList) {
         this.id = id;
         this.username = username;
-        this.mobile = mobile;
         this.roleList = roleList;
         this.authorityList = authorityList;
     }
@@ -57,14 +56,6 @@ public class UserDto implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 
     public List<Role> getRoleList() {

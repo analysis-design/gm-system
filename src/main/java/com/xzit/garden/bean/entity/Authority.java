@@ -34,6 +34,10 @@ public class Authority implements Serializable {
      * 菜单的上一级菜单的id或者按钮属于的菜单的id
      */
     private Long parentId;
+    /**
+     * 描述
+     */
+    private String description;
 
     public Integer getId() {
         return id;
@@ -89,5 +93,13 @@ public class Authority implements Serializable {
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

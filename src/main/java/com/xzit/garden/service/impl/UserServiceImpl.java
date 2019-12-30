@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         // 假设返回的用户信息如下;
         List<Role> roleList = roleMapper.findByUserId(user.getId());
-        for (Role role:roleList) {
+        for (Role role : roleList) {
             List<Authority> authorityList = authorityMapper.findByRoleId(role.getId());
             role.setAuthorityList(authorityList);
         }
@@ -51,7 +51,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         List<Authority> authorities = new ArrayList<>();
         principal.getRoleList().forEach(role -> authorities.addAll(role.getAuthorityList()));
 
-        return new UserDto(principal.getId(), principal.getUsername(),
-                principal.getMobile(), principal.getRoleList(), authorities);
+        return new UserDto(principal.getId(), principal.getUsername(), principal.getRoleList(), authorities);
     }
 }

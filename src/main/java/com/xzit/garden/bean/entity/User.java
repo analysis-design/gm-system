@@ -28,9 +28,9 @@ public class User implements Serializable, UserDetails {
      */
     private String password;
     /**
-     * 用户联系方式
+     * 账号关联员工
      */
-    private String mobile;
+    private Long staffId;
 
     private boolean enabled;
 
@@ -99,12 +99,12 @@ public class User implements Serializable, UserDetails {
         this.password = password;
     }
 
-    public String getMobile() {
-        return mobile;
+    public Long getStaffId() {
+        return staffId;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setStaffId(Long staffId) {
+        this.staffId = staffId;
     }
 
     public void setEnabled(boolean enabled) {
