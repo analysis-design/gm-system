@@ -30,4 +30,7 @@ public interface RoleMapper {
     @Select("select * from role where id in " +
             "(select roleId from user_role where userId=#{userId})")
     List<Role> findByUserId(@Param("userId")Long userId);
+
+    @Select("select * from role")
+    List<Role> findAll();
 }

@@ -39,8 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .formLogin().loginPage("/auth/form").loginProcessingUrl("/auth/form")
+        http.formLogin().loginPage("/auth/form").loginProcessingUrl("/auth/form")
                 .successHandler(successHandler)
                 .failureHandler(failureHandler)
                 .permitAll()
@@ -66,6 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().access("@RBACService.hasPermission(request,authentication)")    //必须经过认证以后才能访问
                 .and()
                 .csrf().disable();
+        http.headers().frameOptions().sameOrigin();
     }
 
     @Override

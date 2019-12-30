@@ -53,10 +53,27 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public UserDto getUserDto() {
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) loadUserByUsername(principal.getUsername());
         List<Authority> authorities = new ArrayList<>();
-        principal.getRoleList().forEach(role -> authorities.addAll(role.getAuthorityList()));
+        user.getRoleList().forEach(role -> authorities.addAll(role.getAuthorityList()));
 
         Staff staff = staffMapper.findById(principal.getStaffId());
         return new UserDto(principal.getId(), principal.getUsername(), principal.getRoleList(), authorities, staff);
+    }
+
+    @Override
+    public List<UserDto> getUserList() {
+        List<User> userList = userMapper.findAll();
+        List<UserDto> userDtoList = new ArrayList<>();
+
+        for (User user: userList) {
+            Staff staff = staffMapper.findById(user.getStaffId());
+            UserDto userDto = new UserDto(
+                    user.getId(), user.getUsername(), new ArrayList<>(), new ArrayList<>(), staff);
+
+            userDtoList.add(userDto);
+        }
+
+        return userDtoList;
     }
 }

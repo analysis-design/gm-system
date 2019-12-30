@@ -39,12 +39,12 @@ public class UserDto implements Serializable {
         this.id = id;
         this.username = username;
         this.roleList = roleList;
-        this.root = new AuthorityDto();
         this.staff = staff;
-        loadAuthority(authorityList);
+        this.root = loadAuthority(authorityList);
     }
 
-    private void loadAuthority(List<Authority> authorityList) {
+    public static AuthorityDto loadAuthority(List<Authority> authorityList) {
+        AuthorityDto root = new AuthorityDto();
         List<Authority> level1 = authorityList.stream()
                 .filter(authority -> !authority.getResType().equals(2) &&
                         authority.getParentId() == null).collect(Collectors.toList());
@@ -56,18 +56,25 @@ public class UserDto implements Serializable {
         while (children != null && children.size() > 0) {
             children = getChildren(authorityList, children);
         }
+        return root;
     }
 
-    private List<AuthorityDto> getChildren(List<Authority> authorityList, List<AuthorityDto> children) {
+    private static List<AuthorityDto> getChildren(List<Authority> authorityList, List<AuthorityDto> children) {
         List<AuthorityDto> level2 = new ArrayList<>();
         for (AuthorityDto authorityDto : children) {
             List<Authority> list = authorityList
                     .stream()
-                    .filter(authority ->
+                    .filter(authority -> authority.getResType() == 0 &&
                             authorityDto.getId().equals(authority.getParentId())).collect(Collectors.toList());
 
             authorityDto.addChildren(list);
             level2.addAll(authorityDto.getChildren());
+
+            list = authorityList
+                    .stream()
+                    .filter(authority -> authority.getResType() != 0 &&
+                            authorityDto.getId().equals(authority.getParentId())).collect(Collectors.toList());
+            authorityDto.addContents(list);
         }
         return level2;
     }
