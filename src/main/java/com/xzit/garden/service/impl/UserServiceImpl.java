@@ -3,9 +3,11 @@ package com.xzit.garden.service.impl;
 import com.xzit.garden.bean.dto.UserDto;
 import com.xzit.garden.bean.entity.Authority;
 import com.xzit.garden.bean.entity.Role;
+import com.xzit.garden.bean.entity.Staff;
 import com.xzit.garden.bean.entity.User;
 import com.xzit.garden.mapper.AuthorityMapper;
 import com.xzit.garden.mapper.RoleMapper;
+import com.xzit.garden.mapper.StaffMapper;
 import com.xzit.garden.mapper.UserMapper;
 import com.xzit.garden.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private AuthorityMapper authorityMapper;
 
+    @Autowired
+    private StaffMapper staffMapper;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userMapper.findByName(username);
@@ -51,6 +56,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         List<Authority> authorities = new ArrayList<>();
         principal.getRoleList().forEach(role -> authorities.addAll(role.getAuthorityList()));
 
-        return new UserDto(principal.getId(), principal.getUsername(), principal.getRoleList(), authorities);
+        Staff staff = staffMapper.findById(principal.getStaffId());
+        return new UserDto(principal.getId(), principal.getUsername(), principal.getRoleList(), authorities, staff);
     }
 }

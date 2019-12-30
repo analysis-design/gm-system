@@ -2,67 +2,70 @@ package com.xzit.garden.bean.entity;
 
 import java.util.Date;
 
+/**
+ * 人员考勤表
+ */
 public class Attendance {
-    private Integer id;
+    private Long id;
 
-    private Date starttime;
+    private Date startTime;
 
-    private Date endtime;
+    private Date endTime;
 
-    private Integer staffid;
+    private Long staffId;
 
-    private Integer stafftype;
+    private Integer staffType;
 
-    private Integer attendancestate;
+    private Integer attendanceState;
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Date getStarttime() {
-        return starttime;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setStarttime(Date starttime) {
-        this.starttime = starttime;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getEndtime() {
-        return endtime;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEndtime(Date endtime) {
-        this.endtime = endtime;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
-    public Integer getStaffid() {
-        return staffid;
+    public Long getStaffId() {
+        return staffId;
     }
 
-    public void setStaffid(Integer staffid) {
-        this.staffid = staffid;
+    public void setStaffId(Long staffId) {
+        this.staffId = staffId;
     }
 
-    public Integer getStafftype() {
-        return stafftype;
+    public Integer getStaffType() {
+        return staffType;
     }
 
-    public void setStafftype(Integer stafftype) {
-        this.stafftype = stafftype;
+    public void setStaffType(Integer staffType) {
+        this.staffType = staffType;
     }
 
-    public Integer getAttendancestate() {
-        return attendancestate;
+    public Integer getAttendanceState() {
+        return attendanceState;
     }
 
-    public void setAttendancestate(Integer attendancestate) {
-        this.attendancestate = attendancestate;
+    public void setAttendanceState(Integer attendanceState) {
+        this.attendanceState = attendanceState;
     }
 
     public String getDescription() {

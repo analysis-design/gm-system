@@ -40,10 +40,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .formLogin().loginPage("/login").loginProcessingUrl("/auth/form")
+                .formLogin().loginPage("/auth/form").loginProcessingUrl("/auth/form")
                 .successHandler(successHandler)
                 .failureHandler(failureHandler)
                 .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/auth/form")
+                .deleteCookies("JSESSIONID")
                 .and()
                 .rememberMe()
                 .rememberMeParameter("remember-me").userDetailsService(userDetailsService)
