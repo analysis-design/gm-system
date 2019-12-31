@@ -3,6 +3,7 @@ package com.xzit.garden.config;
 import com.xzit.garden.handler.AuthenticationSuccessHandler;
 import com.xzit.garden.service.impl.SecurityAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,8 +38,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;   //是在application.properites
 
+    @Value("${auth.restful.enable}")
+    private boolean authEnable;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        if (isNotAuthEnable(http)) return;
+
         http.formLogin().loginPage("/auth/form").loginProcessingUrl("/auth/form")
                 .successHandler(successHandler)
                 .failureHandler(failureHandler)
@@ -66,6 +72,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable();
         http.headers().frameOptions().sameOrigin();
+    }
+
+    private boolean isNotAuthEnable(HttpSecurity http) throws Exception {
+        if (!authEnable) {
+            http.authorizeRequests().anyRequest().permitAll();
+            http.headers().frameOptions().sameOrigin();
+        }
+        return !authEnable;
     }
 
     @Override

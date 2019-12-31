@@ -4,6 +4,7 @@ import com.xzit.garden.bean.dto.AuthorityDto;
 import com.xzit.garden.bean.dto.UserDto;
 import com.xzit.garden.bean.entity.Authority;
 import com.xzit.garden.bean.entity.Role;
+import com.xzit.garden.bean.model.AuthModel;
 import com.xzit.garden.service.AuthorityService;
 import com.xzit.garden.service.RoleService;
 import com.xzit.garden.service.UserService;
@@ -94,8 +95,44 @@ public class AuthController {
         authorityService.updateById(authority);
         Map<String, Object> rs = new HashMap<>();
         rs.put("code", 0);
-        rs.put("msg", "修改成功成功");
+        rs.put("msg", "修改成功");
         rs.put("data", authority);
+        return rs;
+    }
+
+    @PostMapping("/auth/alloc/add")
+    @ResponseBody
+    public Map<String, Object> authAllocate(@RequestBody AuthModel authModel) {
+        userService.addAuthority(authModel);
+        Map<String, Object> rs = new HashMap<>();
+
+        rs.put("code", 0);
+        rs.put("msg", "添加成功");
+        rs.put("data", authModel);
+        return rs;
+    }
+
+    @PostMapping("/auth/alloc/upd")
+    @ResponseBody
+    public Map<String, Object> authAllocationUpdate(@RequestBody AuthModel authModel) {
+        userService.updAuthority(authModel);
+        Map<String, Object> rs = new HashMap<>();
+
+        rs.put("code", 0);
+        rs.put("msg", "修改完成");
+        rs.put("data", authModel);
+        return rs;
+    }
+
+    @GetMapping("/auth/alloc/list")
+    @ResponseBody
+    public Map<String, Object> authAllocationList(@RequestParam("userId") Long userId) {
+        AuthModel authModelList = userService.getUserAuthByUserId(userId);
+        Map<String, Object> rs = new HashMap<>();
+
+        rs.put("code", 0);
+        rs.put("msg", "查询完成");
+        rs.put("data", authModelList);
         return rs;
     }
 }
