@@ -1,19 +1,19 @@
 package com.xzit.garden.bean.entity;
 
 public class Department {
-    private Integer id;
+    private Long id;
 
     private String name;
 
-    private Integer leaderid;
+    private Long leaderId;
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -25,12 +25,12 @@ public class Department {
         this.name = name == null ? null : name.trim();
     }
 
-    public Integer getLeaderid() {
-        return leaderid;
+    public Long getLeaderId() {
+        return leaderId;
     }
 
-    public void setLeaderid(Integer leaderid) {
-        this.leaderid = leaderid;
+    public void setLeaderId(Long leaderId) {
+        this.leaderId = leaderId;
     }
 
     public String getDescription() {
