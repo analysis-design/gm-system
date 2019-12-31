@@ -1,6 +1,6 @@
 package com.xzit.garden.mapperAndSqlprovider2;
 
-import entity.StaffApply;
+import com.xzit.garden.bean.entity.*;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 
