@@ -3,6 +3,7 @@ package com.xzit.garden.config;
 import com.xzit.garden.handler.AuthenticationSuccessHandler;
 import com.xzit.garden.service.impl.SecurityAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,13 +38,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;   //是在application.properites
 
+    @Value("${auth.restful.enable}")
+    private boolean authEnable;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .formLogin().loginPage("/login").loginProcessingUrl("/auth/form")
+        if (isNotAuthEnable(http)) return;
+
+        http.formLogin().loginPage("/auth/form").loginProcessingUrl("/auth/form")
                 .successHandler(successHandler)
                 .failureHandler(failureHandler)
                 .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/auth/form")
+                .deleteCookies("JSESSIONID")
                 .and()
                 .rememberMe()
                 .rememberMeParameter("remember-me").userDetailsService(userDetailsService)
@@ -61,6 +71,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().access("@RBACService.hasPermission(request,authentication)")    //必须经过认证以后才能访问
                 .and()
                 .csrf().disable();
+        http.headers().frameOptions().sameOrigin();
+    }
+
+    private boolean isNotAuthEnable(HttpSecurity http) throws Exception {
+        if (!authEnable) {
+            http.authorizeRequests().anyRequest().permitAll();
+            http.headers().frameOptions().sameOrigin();
+        }
+        return !authEnable;
     }
 
     @Override

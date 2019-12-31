@@ -1,9 +1,7 @@
 package com.xzit.garden.mapper;
 
 import com.xzit.garden.bean.entity.Authority;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -45,4 +43,19 @@ public interface AuthorityMapper {
     @Select("select * from authority where id in " +
             "(select authId from role_authority where roleId=#{roleId})")
     List<Authority> findByRoleId(@Param("roleId") Long roleId);
+
+    @Select("select * from authority")
+    List<Authority> findAll();
+
+    @Select("select * from authority where id=#{id}")
+    Authority findById(Long id);
+
+    @Insert("")
+    void add(Authority authority);
+
+    @Delete("delete from authority where id=#{id}")
+    void deleteById(Long id);
+
+    @Update("")
+    void update(Authority authority);
 }

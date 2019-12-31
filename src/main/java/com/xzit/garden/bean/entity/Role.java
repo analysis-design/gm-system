@@ -1,5 +1,7 @@
 package com.xzit.garden.bean.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -54,6 +56,7 @@ public class Role implements Serializable {
         this.description = description;
     }
 
+    @JsonIgnore
     public List<Authority> getAuthorityList() {
         return authorityList;
     }
