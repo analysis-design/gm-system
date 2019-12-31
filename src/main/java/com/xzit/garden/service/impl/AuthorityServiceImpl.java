@@ -7,6 +7,7 @@ import com.xzit.garden.mapper.AuthorityMapper;
 import com.xzit.garden.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthorityServiceImpl implements AuthorityService {
@@ -19,6 +20,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         return UserDto.loadAuthority(authorityMapper.findAll());
     }
 
+    @Transactional
     @Override
     public void add(Authority authority) {
         Long parentId = authority.getParentId();
@@ -29,6 +31,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         authorityMapper.add(authority);
     }
 
+    @Transactional
     @Override
     public Authority deleteById(Long authId) {
         Authority temp = authorityMapper.findById(authId);
@@ -38,6 +41,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         return temp;
     }
 
+    @Transactional
     @Override
     public void updateById(Authority authority) {
         Authority temp = authorityMapper.findById(authority.getId());

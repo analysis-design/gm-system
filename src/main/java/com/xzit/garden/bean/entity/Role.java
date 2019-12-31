@@ -27,6 +27,9 @@ public class Role implements Serializable {
     // 当前角色拥有的权限列表
     private List<Authority> authorityList;
 
+    public Role() {
+    }
+
     public Role(Long id, String name) {
         this.id = id;
         this.name = name;

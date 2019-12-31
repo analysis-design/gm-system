@@ -2,10 +2,7 @@ package com.xzit.garden.mapper;
 
 import com.xzit.garden.bean.entity.Role;
 import com.xzit.garden.bean.entity.RoleAuth;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -59,7 +56,20 @@ public interface RoleMapper {
     /**
      * 删除角色权限关系
      *
-     * @param delRAList 删除的角色权限关系列表
+     * @param authList 删除的角色权限关系列表
      */
-    void delAuthRelations(List<RoleAuth> delRAList);
+    @Delete("")
+    void delAuthRelations(Long roleId, List<Long> authList);
+
+    @Select("select * from role where name=#{roleName}")
+    Role findByName(String roleName);
+
+    @Insert("")
+    void addRole(Role role);
+
+    @Update("")
+    void updateById(Role role);
+
+    @Delete("delete from role where id=#{roleId}")
+    void deleteById(Long roleId);
 }
