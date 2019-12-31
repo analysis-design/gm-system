@@ -1,11 +1,11 @@
 package com.xzit.garden.bean.entity;
 
 public class HeavyTool {
-    private Integer id;
+    private Long id;
 
     private String name;
 
-    private Integer supplierid;
+    private Long supplierid;
 
     private Integer hireprice;
 
@@ -13,11 +13,11 @@ public class HeavyTool {
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -29,11 +29,11 @@ public class HeavyTool {
         this.name = name == null ? null : name.trim();
     }
 
-    public Integer getSupplierid() {
+    public Long getSupplierid() {
         return supplierid;
     }
 
-    public void setSupplierid(Integer supplierid) {
+    public void setSupplierid(Long supplierid) {
         this.supplierid = supplierid;
     }
 

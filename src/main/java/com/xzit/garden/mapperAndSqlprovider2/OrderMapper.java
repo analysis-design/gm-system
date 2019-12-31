@@ -17,13 +17,13 @@ public interface OrderMapper {
         "discount, prepaid, ",
         "payState, paymentMethod, ",
         "paymentTotal, createTime, ",
-        "endTime)",
+        "endTime, projectId)",
         "values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, ",
         "#{budgetid,jdbcType=INTEGER}, #{budgettotal,jdbcType=INTEGER}, ",
         "#{discount,jdbcType=DOUBLE}, #{prepaid,jdbcType=INTEGER}, ",
         "#{paystate,jdbcType=INTEGER}, #{paymentmethod,jdbcType=INTEGER}, ",
         "#{paymenttotal,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, ",
-        "#{endtime,jdbcType=TIMESTAMP})"
+        "#{endtime,jdbcType=TIMESTAMP}, #{projectid,jdbcType=INTEGER})"
     })
     int insert(Order record);
 
@@ -33,7 +33,7 @@ public interface OrderMapper {
     @Select({
         "select",
         "id, name, budgetId, budgetTotal, discount, prepaid, payState, paymentMethod, ",
-        "paymentTotal, createTime, endTime",
+        "paymentTotal, createTime, endTime, projectId",
         "from order",
         "where id = #{id,jdbcType=INTEGER}"
     })
@@ -48,7 +48,8 @@ public interface OrderMapper {
         @Result(column="paymentMethod", property="paymentmethod", jdbcType= JdbcType.INTEGER),
         @Result(column="paymentTotal", property="paymenttotal", jdbcType= JdbcType.INTEGER),
         @Result(column="createTime", property="createtime", jdbcType= JdbcType.TIMESTAMP),
-        @Result(column="endTime", property="endtime", jdbcType= JdbcType.TIMESTAMP)
+        @Result(column="endTime", property="endtime", jdbcType= JdbcType.TIMESTAMP),
+        @Result(column="projectId", property="projectid", jdbcType= JdbcType.INTEGER)
     })
     Order selectByPrimaryKey(Integer id);
 
@@ -66,7 +67,8 @@ public interface OrderMapper {
           "paymentMethod = #{paymentmethod,jdbcType=INTEGER},",
           "paymentTotal = #{paymenttotal,jdbcType=INTEGER},",
           "createTime = #{createtime,jdbcType=TIMESTAMP},",
-          "endTime = #{endtime,jdbcType=TIMESTAMP}",
+          "endTime = #{endtime,jdbcType=TIMESTAMP},",
+          "projectId = #{projectid,jdbcType=INTEGER}",
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(Order record);

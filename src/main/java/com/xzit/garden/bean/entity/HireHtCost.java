@@ -3,9 +3,9 @@ package com.xzit.garden.bean.entity;
 import java.util.Date;
 
 public class HireHtCost {
-    private Integer id;
+    private Long id;
 
-    private Integer heavytoolid;
+    private Long heavytoolid;
 
     private Date starttime;
 
@@ -15,19 +15,19 @@ public class HireHtCost {
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getHeavytoolid() {
+    public Long getHeavytoolid() {
         return heavytoolid;
     }
 
-    public void setHeavytoolid(Integer heavytoolid) {
+    public void setHeavytoolid(Long heavytoolid) {
         this.heavytoolid = heavytoolid;
     }
 

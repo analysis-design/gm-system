@@ -1,6 +1,7 @@
 package com.xzit.garden.mapperAndSqlprovider2;
 
 import com.xzit.garden.bean.entity.*;
+
 import static org.apache.ibatis.jdbc.SqlBuilder.*;
 
 public class StaffSchPlanSqlProvider {

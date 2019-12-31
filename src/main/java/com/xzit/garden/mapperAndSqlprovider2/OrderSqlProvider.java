@@ -54,6 +54,10 @@ public class OrderSqlProvider {
             VALUES("endTime", "#{endtime,jdbcType=TIMESTAMP}");
         }
         
+        if (record.getProjectid() != null) {
+            VALUES("projectId", "#{projectid,jdbcType=INTEGER}");
+        }
+        
         return SQL();
     }
 
@@ -99,6 +103,10 @@ public class OrderSqlProvider {
         
         if (record.getEndtime() != null) {
             SET("endTime = #{endtime,jdbcType=TIMESTAMP}");
+        }
+        
+        if (record.getProjectid() != null) {
+            SET("projectId = #{projectid,jdbcType=INTEGER}");
         }
         
         WHERE("id = #{id,jdbcType=INTEGER}");

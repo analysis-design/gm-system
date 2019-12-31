@@ -1,11 +1,11 @@
 package com.xzit.garden.bean.entity;
 
 public class ResourceCost {
-    private Integer id;
+    private Long id;
 
-    private Integer planid;
+    private Long planid;
 
-    private Integer resid;
+    private Long resid;
 
     private Integer resnum;
 
@@ -13,27 +13,27 @@ public class ResourceCost {
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getPlanid() {
+    public Long getPlanid() {
         return planid;
     }
 
-    public void setPlanid(Integer planid) {
+    public void setPlanid(Long planid) {
         this.planid = planid;
     }
 
-    public Integer getResid() {
+    public Long getResid() {
         return resid;
     }
 
-    public void setResid(Integer resid) {
+    public void setResid(Long resid) {
         this.resid = resid;
     }
 

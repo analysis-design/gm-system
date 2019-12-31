@@ -1,46 +1,46 @@
 package com.xzit.garden.bean.entity;
 
 public class ProjectRes {
-    private Integer id;
+    private Long id;
 
-    private Integer projectId;
+    private Long projectid;
 
-    private Integer resId;
+    private Long resid;
 
-    private Integer resNum;
+    private Integer resnum;
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getProjectId() {
-        return projectId;
+    public Long getProjectid() {
+        return projectid;
     }
 
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
+    public void setProjectid(Long projectid) {
+        this.projectid = projectid;
     }
 
-    public Integer getResId() {
-        return resId;
+    public Long getResid() {
+        return resid;
     }
 
-    public void setResId(Integer resId) {
-        this.resId = resId;
+    public void setResid(Long resid) {
+        this.resid = resid;
     }
 
-    public Integer getResNum() {
-        return resNum;
+    public Integer getResnum() {
+        return resnum;
     }
 
-    public void setResNum(Integer resNum) {
-        this.resNum = resNum;
+    public void setResnum(Integer resnum) {
+        this.resnum = resnum;
     }
 
     public String getDescription() {

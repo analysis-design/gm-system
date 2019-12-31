@@ -1,17 +1,17 @@
 package com.xzit.garden.bean.entity;
 
 public class Post {
-    private Integer id;
+    private Long id;
 
     private String name;
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
