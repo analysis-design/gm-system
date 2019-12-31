@@ -3,7 +3,7 @@ package com.xzit.garden.bean.entity;
 import java.util.Date;
 
 public class Staff {
-    private Integer id;
+    private Long id;
 
     private String name;
 
@@ -15,27 +15,27 @@ public class Staff {
 
     private String address;
 
-    private Date entrytime;
+    private Date entryTime;
 
     private Integer state;
 
-    private Integer settlementtype;
+    private Integer settlementType;
 
     private Integer salary;
 
     private String position;
 
-    private Integer stafftype;
+    private Integer staffType;
 
     private String description;
 
-    private Integer depid;
+    private Long depId;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -79,12 +79,12 @@ public class Staff {
         this.address = address == null ? null : address.trim();
     }
 
-    public Date getEntrytime() {
-        return entrytime;
+    public Date getEntryTime() {
+        return entryTime;
     }
 
-    public void setEntrytime(Date entrytime) {
-        this.entrytime = entrytime;
+    public void setEntryTime(Date entryTime) {
+        this.entryTime = entryTime;
     }
 
     public Integer getState() {
@@ -95,12 +95,12 @@ public class Staff {
         this.state = state;
     }
 
-    public Integer getSettlementtype() {
-        return settlementtype;
+    public Integer getSettlementType() {
+        return settlementType;
     }
 
-    public void setSettlementtype(Integer settlementtype) {
-        this.settlementtype = settlementtype;
+    public void setSettlementType(Integer settlementType) {
+        this.settlementType = settlementType;
     }
 
     public Integer getSalary() {
@@ -119,12 +119,12 @@ public class Staff {
         this.position = position == null ? null : position.trim();
     }
 
-    public Integer getStafftype() {
-        return stafftype;
+    public Integer getStaffType() {
+        return staffType;
     }
 
-    public void setStafftype(Integer stafftype) {
-        this.stafftype = stafftype;
+    public void setStaffType(Integer staffType) {
+        this.staffType = staffType;
     }
 
     public String getDescription() {
@@ -135,11 +135,11 @@ public class Staff {
         this.description = description == null ? null : description.trim();
     }
 
-    public Integer getDepid() {
-        return depid;
+    public Long getDepId() {
+        return depId;
     }
 
-    public void setDepid(Integer depid) {
-        this.depid = depid;
+    public void setDepId(Long depId) {
+        this.depId = depId;
     }
 }

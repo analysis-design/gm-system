@@ -1,7 +1,7 @@
 package com.xzit.garden.bean.entity;
 
 public class Client {
-    private Integer id;
+    private Long id;
 
     private String name;
 
@@ -11,17 +11,17 @@ public class Client {
 
     private String phone;
 
-    private Integer creditrating;
+    private Integer creditRating;
 
     private String comment;
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -57,12 +57,12 @@ public class Client {
         this.phone = phone == null ? null : phone.trim();
     }
 
-    public Integer getCreditrating() {
-        return creditrating;
+    public Integer getCreditRating() {
+        return creditRating;
     }
 
-    public void setCreditrating(Integer creditrating) {
-        this.creditrating = creditrating;
+    public void setCreditRating(Integer creditRating) {
+        this.creditRating = creditRating;
     }
 
     public String getComment() {

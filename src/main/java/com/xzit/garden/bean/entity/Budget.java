@@ -5,23 +5,23 @@ import java.util.Date;
 public class Budget {
     private Integer id;
 
-    private Integer projectid;
+    private Integer projectId;
 
-    private Integer restotal;
+    private Integer resTotal;
 
-    private Integer stafftotal;
+    private Integer staffTotal;
 
     private Integer period;
 
-    private Integer surchargetotal;
+    private Integer surchargeTotal;
 
-    private Integer hirestafftotal;
+    private Integer hireStaffTotal;
 
-    private Integer hiremechanictotal;
+    private Integer hireMechanicTotal;
 
-    private Date starttime;
+    private Date startTime;
 
-    private Date endtime;
+    private Date endTime;
 
     private String description;
 
@@ -33,28 +33,28 @@ public class Budget {
         this.id = id;
     }
 
-    public Integer getProjectid() {
-        return projectid;
+    public Integer getProjectId() {
+        return projectId;
     }
 
-    public void setProjectid(Integer projectid) {
-        this.projectid = projectid;
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
     }
 
-    public Integer getRestotal() {
-        return restotal;
+    public Integer getResTotal() {
+        return resTotal;
     }
 
-    public void setRestotal(Integer restotal) {
-        this.restotal = restotal;
+    public void setResTotal(Integer resTotal) {
+        this.resTotal = resTotal;
     }
 
-    public Integer getStafftotal() {
-        return stafftotal;
+    public Integer getStaffTotal() {
+        return staffTotal;
     }
 
-    public void setStafftotal(Integer stafftotal) {
-        this.stafftotal = stafftotal;
+    public void setStaffTotal(Integer staffTotal) {
+        this.staffTotal = staffTotal;
     }
 
     public Integer getPeriod() {
@@ -65,44 +65,44 @@ public class Budget {
         this.period = period;
     }
 
-    public Integer getSurchargetotal() {
-        return surchargetotal;
+    public Integer getSurchargeTotal() {
+        return surchargeTotal;
     }
 
-    public void setSurchargetotal(Integer surchargetotal) {
-        this.surchargetotal = surchargetotal;
+    public void setSurchargeTotal(Integer surchargeTotal) {
+        this.surchargeTotal = surchargeTotal;
     }
 
-    public Integer getHirestafftotal() {
-        return hirestafftotal;
+    public Integer getHireStaffTotal() {
+        return hireStaffTotal;
     }
 
-    public void setHirestafftotal(Integer hirestafftotal) {
-        this.hirestafftotal = hirestafftotal;
+    public void setHireStaffTotal(Integer hireStaffTotal) {
+        this.hireStaffTotal = hireStaffTotal;
     }
 
-    public Integer getHiremechanictotal() {
-        return hiremechanictotal;
+    public Integer getHireMechanicTotal() {
+        return hireMechanicTotal;
     }
 
-    public void setHiremechanictotal(Integer hiremechanictotal) {
-        this.hiremechanictotal = hiremechanictotal;
+    public void setHireMechanicTotal(Integer hireMechanicTotal) {
+        this.hireMechanicTotal = hireMechanicTotal;
     }
 
-    public Date getStarttime() {
-        return starttime;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setStarttime(Date starttime) {
-        this.starttime = starttime;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getEndtime() {
-        return endtime;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEndtime(Date endtime) {
-        this.endtime = endtime;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public String getDescription() {

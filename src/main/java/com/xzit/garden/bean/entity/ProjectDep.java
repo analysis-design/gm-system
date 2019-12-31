@@ -3,11 +3,11 @@ package com.xzit.garden.bean.entity;
 public class ProjectDep {
     private Integer id;
 
-    private Integer projectid;
+    private Integer projectId;
 
-    private Integer depid;
+    private Integer depId;
 
-    private Integer depstaffnum;
+    private Integer depStaffNum;
 
     private String description;
 
@@ -19,28 +19,28 @@ public class ProjectDep {
         this.id = id;
     }
 
-    public Integer getProjectid() {
-        return projectid;
+    public Integer getProjectId() {
+        return projectId;
     }
 
-    public void setProjectid(Integer projectid) {
-        this.projectid = projectid;
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
     }
 
-    public Integer getDepid() {
-        return depid;
+    public Integer getDepId() {
+        return depId;
     }
 
-    public void setDepid(Integer depid) {
-        this.depid = depid;
+    public void setDepId(Integer depId) {
+        this.depId = depId;
     }
 
-    public Integer getDepstaffnum() {
-        return depstaffnum;
+    public Integer getDepStaffNum() {
+        return depStaffNum;
     }
 
-    public void setDepstaffnum(Integer depstaffnum) {
-        this.depstaffnum = depstaffnum;
+    public void setDepStaffNum(Integer depStaffNum) {
+        this.depStaffNum = depStaffNum;
     }
 
     public String getDescription() {

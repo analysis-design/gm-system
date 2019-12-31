@@ -3,11 +3,11 @@ package com.xzit.garden.bean.entity;
 public class ProjectRes {
     private Integer id;
 
-    private Integer projectid;
+    private Integer projectId;
 
-    private Integer resid;
+    private Integer resId;
 
-    private Integer resnum;
+    private Integer resNum;
 
     private String description;
 
@@ -19,28 +19,28 @@ public class ProjectRes {
         this.id = id;
     }
 
-    public Integer getProjectid() {
-        return projectid;
+    public Integer getProjectId() {
+        return projectId;
     }
 
-    public void setProjectid(Integer projectid) {
-        this.projectid = projectid;
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
     }
 
-    public Integer getResid() {
-        return resid;
+    public Integer getResId() {
+        return resId;
     }
 
-    public void setResid(Integer resid) {
-        this.resid = resid;
+    public void setResId(Integer resId) {
+        this.resId = resId;
     }
 
-    public Integer getResnum() {
-        return resnum;
+    public Integer getResNum() {
+        return resNum;
     }
 
-    public void setResnum(Integer resnum) {
-        this.resnum = resnum;
+    public void setResNum(Integer resNum) {
+        this.resNum = resNum;
     }
 
     public String getDescription() {

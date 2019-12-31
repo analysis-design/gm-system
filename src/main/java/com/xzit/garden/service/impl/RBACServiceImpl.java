@@ -39,7 +39,12 @@ public class RBACServiceImpl implements RBACService {
 
         // 注意这里不能用equal来判断，因为有些URL是有参数的，所以要用AntPathMatcher来比较
         for (String url : urls) {
-            if (!antPathMatcher.match(url, request.getRequestURI())) continue;
+            String requestURI = request.getRequestURI();
+            String contextPath = request.getServletContext().getContextPath();
+            if (requestURI.contains(contextPath))
+                requestURI = requestURI.substring(contextPath.length());
+
+            if (!antPathMatcher.match(url, requestURI)) continue;
 
             hasPermission = true;
             break;
