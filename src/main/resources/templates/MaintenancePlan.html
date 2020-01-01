@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>养护计划</title>
+    <link rel="stylesheet" href="webjars/layui/2.5.5/css/layui.css" media="all">
+</head>
+<body>
+<table >
+    <tr>
+        <td>id</td>
+        <td>项目id</td>
+    </tr>
+    <tr  th:each="t:${maintenancePlanList}">
+        <td th:text="${t.id}"></td>
+        <td th:text="${t.projectid}"></td>
+    </tr>
+</table>
+</body>
+</html>
