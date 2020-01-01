@@ -86,6 +86,33 @@ public class AuthController {
         model.addAttribute("user", user);
         model.addAttribute("msg", "添加权限");
         model.addAttribute("authList", authorityList);
+        model.addAttribute("url", "/auth/add");
+        return "authority_edit";
+    }
+
+    /**
+     * 添加权限首页
+     *
+     * @param model 传入数据的域对象
+     * @return 首页
+     */
+    @GetMapping("/auth/upd/index")
+    public String updIndex(@RequestParam("authId") Long authId, Model model) {
+        PageModel<List<Authority>> pageModel = new PageModel<>();
+        pageModel.setPage(1);
+        pageModel.setLimit(65536);
+
+        UserDto user = userService.getUserDto();
+        List<Authority> authorityList = authorityService.getAllAuthorityList(pageModel);
+        Authority authority = authorityService.getById(authId);
+
+        if (authority.getParentId() != null)
+            authorityList.remove(authority);
+        model.addAttribute("user", user);
+        model.addAttribute("msg", "编辑权限");
+        model.addAttribute("updAuthority", authority);
+        model.addAttribute("authList", authorityList);
+        model.addAttribute("url", "/auth/upd");
         return "authority_edit";
     }
 
@@ -142,6 +169,17 @@ public class AuthController {
         rs.put("code", 0);
         rs.put("msg", "删除成功");
         rs.put("data", authority);
+        return rs;
+    }
+
+    @PostMapping("/auth/del/list")
+    @ResponseBody
+    public Map<String, Object> authDeleteAll(@RequestBody List<Long> authList) {
+        List<Authority> authorityList = authorityService.deleteAllById(authList);
+        Map<String, Object> rs = new HashMap<>();
+        rs.put("code", 0);
+        rs.put("msg", "删除成功");
+        rs.put("data", authorityList);
         return rs;
     }
 

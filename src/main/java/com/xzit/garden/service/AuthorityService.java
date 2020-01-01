@@ -35,8 +35,24 @@ public interface AuthorityService {
     void updateById(Authority authority);
 
     /**
-     * @return 获取所有的权限列表
      * @param page 分页对象
+     * @return 获取所有的权限列表
      */
     List<Authority> getAllAuthorityList(PageModel<List<Authority>> page);
+
+    /**
+     * 根据权限id获取权限
+     *
+     * @param authId 权限id
+     * @return 权限对象
+     */
+    Authority getById(Long authId);
+
+    /**
+     * 批量删除权限
+     *
+     * @param authList 删除的权限的id
+     * @return 删除的权限列表
+     */
+    List<Authority> deleteAllById(List<Long> authList);
 }

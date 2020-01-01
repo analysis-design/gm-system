@@ -102,4 +102,14 @@ public class Authority implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (!(obj instanceof Authority)) return false;
+        Authority temp = (Authority) obj;
+        if (this.getAuthName().equals(temp.getAuthName()) && this.getUrl().equals(temp.getUrl()))
+            return true;
+        return super.equals(obj);
+    }
 }

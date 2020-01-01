@@ -54,13 +54,13 @@
                 [ //表头
                     {title: '选择', width: 36, type: 'checkbox', fixed: 'left'}
                     , {field: 'id', title: '编号', width: 69, fixed: 'left', align: 'center'}
-                    , {field: 'authName', title: '权限名称', width: '12%', edit: 'text'}
-                    , {field: 'resName', title: '资源名称', width: '10%', edit: 'text'}
-                    , {field: 'resType', title: '资源类型\n(0：菜单/1：按钮)', width: '10%', edit: 'text'}
-                    , {field: 'url', title: '资源url', width: '15%', edit: 'text'}
-                    , {field: 'icon', title: '资源图标', width: '20%', edit: 'text'}
-                    , {field: 'parentId', title: '所属菜单编号', width: '13%', edit: 'text'}
-                    , {field: 'description', title: '描述', width: '16%', edit: 'text'}
+                    , {field: 'authName', title: '权限名称', width: '12%'}
+                    , {field: 'resName', title: '资源名称', width: '10%'}
+                    , {field: 'resType', title: '资源类型\n(0：菜单/1：按钮)', width: '10%'}
+                    , {field: 'url', title: '资源url', width: '15%'}
+                    , {field: 'icon', title: '资源图标', width: '20%'}
+                    , {field: 'parentId', title: '所属菜单编号', width: '13%'}
+                    , {field: 'description', title: '描述', width: '16%'}
                     , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150, align: "center"}
                 ]
             ]
@@ -81,11 +81,42 @@
                         area: ['85%', '69%'],
                         content: [[${#servletContext.getContextPath()}]] + '/auth/add/index' //iframe的url
                     });
-                    console.log("阻塞完成");
-                    authorityTable.reload({page: {curr: 1}});
+
+                    authorityTable.reload({url: [[${#servletContext.getContextPath()}]] + '/auth/list'});
                     break;
                 case 'delCheckedAuthBtn':
                     data = checkStatus.data;
+                    let del = [];
+                    for (let i in data)
+                        del.push(data[i].id);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: [[${#servletContext.getContextPath()}]] + "/auth/del/list",
+                        contentType: "application/json;charset=utf-8",
+                        data: JSON.stringify(del),
+                        dataType: "json",
+                        success: function (message) {
+                            layer.closeAll('loading');
+
+                            layer.msg(message.msg, {
+                                icon: 1,
+                                time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                            });
+
+                            authorityTable.reload({
+                                page: {curr: 1},
+                                url: [[${#servletContext.getContextPath()}]] + '/auth/list'
+                            });
+                        },
+                        error: function (message) {
+                            console.log(JSON.stringify(message));
+                            layer.msg("执行失败", {
+                                icon: 2,
+                                time: 1500
+                            });
+                        }
+                    });
                     break;
 
                 //自定义头工具栏右侧图标 - 提示
@@ -122,6 +153,10 @@
                                 icon: 1,
                                 time: 1500 //2秒关闭（如果不配置，默认是3秒）
                             });
+                            authorityTable.reload({
+                                page: {curr: 1},
+                                url: [[${#servletContext.getContextPath()}]] + '/auth/list'
+                            });
                         },
                         error: function (message) {
                             console.log(JSON.stringify(message));
@@ -135,15 +170,16 @@
                     layer.load();
                 });
             } else if (obj.event === 'edit') {
-                layer.prompt({
-                    formType: 2
-                    , value: data.email
-                }, function (value, index) {
-                    obj.update({
-                        email: value
-                    });
-                    layer.close(index);
+                layer.open({
+                    type: 2,
+                    title: '编辑权限',
+                    shadeClose: true,
+                    shade: 0.8,
+                    offset: '30px',
+                    area: ['85%', '69%'],
+                    content: [[${#servletContext.getContextPath()}]] + '/auth/upd/index?authId=' + data.id
                 });
+                authorityTable.reload({page: {curr: 1}, url: [[${#servletContext.getContextPath()}]] + '/auth/list'});
             }
         });
 

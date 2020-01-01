@@ -69,4 +69,12 @@ public interface AuthorityMapper {
 
     @Select("select count(*) from authority")
     int countList();
+
+    @Delete("<script>" +
+            "delete from authority where id in  " +
+            "<foreach collection=\"idList\"  item=\"item\" open=\"(\" separator=\",\" close=\")\">" +
+            "   #{item} " +
+            "</foreach>" +
+            "</script>")
+    void deleteByIdList(@Param("idList") List<Long> authList);
 }
