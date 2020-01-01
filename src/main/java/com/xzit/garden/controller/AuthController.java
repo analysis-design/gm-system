@@ -1,9 +1,11 @@
 package com.xzit.garden.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.xzit.garden.bean.dto.AuthorityDto;
 import com.xzit.garden.bean.dto.UserDto;
 import com.xzit.garden.bean.entity.Authority;
 import com.xzit.garden.bean.entity.Role;
+import com.xzit.garden.bean.model.PageModel;
 import com.xzit.garden.service.AuthorityService;
 import com.xzit.garden.service.RoleService;
 import com.xzit.garden.service.UserService;
@@ -46,7 +48,7 @@ public class AuthController {
     public String index(Model model) {
         UserDto user = userService.getUserDto();
         model.addAttribute("user", user);
-        return "engineer";
+        return "index";
     }
 
     /**
@@ -57,13 +59,68 @@ public class AuthController {
     @GetMapping("/auth/index")
     public String authIndex(Model model) {
         List<UserDto> users = userService.getUserList();
-        AuthorityDto root = authorityService.getAllAuthority();
+        AuthorityDto root = authorityService.getAllAuthorityTree();
         List<Role> roleList = roleService.getAllRole();
 
         model.addAttribute("userList", users);
         model.addAttribute("roleList", roleList);
         model.addAttribute("authorityTree", root);
         return "authority";
+    }
+
+    /**
+     * 添加权限首页
+     *
+     * @param model 传入数据的域对象
+     * @return 首页
+     */
+    @GetMapping("/auth/add/index")
+    public String addIndex(Model model) {
+        UserDto user = userService.getUserDto();
+        PageModel<List<Authority>> pageModel = new PageModel<>();
+        pageModel.setPage(1);
+        pageModel.setLimit(65536);
+
+        List<Authority> authorityList = authorityService.getAllAuthorityList(pageModel);
+
+        model.addAttribute("user", user);
+        model.addAttribute("msg", "添加权限");
+        model.addAttribute("authList", authorityList);
+        return "authority_edit";
+    }
+
+    @GetMapping("/auth/tree/index")
+    public String treeIndex(Model model) {
+
+        model.addAttribute("data", JSON.toJSON(authTree()));
+        return "authority_tree";
+    }
+
+    @GetMapping("/auth/tree")
+    @ResponseBody
+    public Map<String, Object> authTree() {
+        AuthorityDto root = authorityService.getAllAuthorityTree();
+        List<Role> roleList = roleService.getAllRole();
+
+        Map<String, Object> rs = new HashMap<>();
+        rs.put("code", 0);
+        rs.put("msg", "查询完成");
+        rs.put("data", root);
+        rs.put("role", roleList);
+        return rs;
+    }
+
+    @GetMapping("/auth/list")
+    @ResponseBody
+    public Map<String, Object> authList(PageModel<List<Authority>> page) {
+        List<Authority> authorityList = authorityService.getAllAuthorityList(page);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("code", 0);
+        data.put("msg", "查询完成");
+        data.put("count", page.getCount());
+        data.put("data", authorityList);
+        return data;
     }
 
     @PostMapping("/auth/add")
@@ -79,7 +136,7 @@ public class AuthController {
 
     @RequestMapping("/auth/del")
     @ResponseBody
-    public Map<String, Object> authDelete(@RequestParam("id") Long authId) {
+    public Map<String, Object> authDelete(@RequestParam("authId") Long authId) {
         Authority authority = authorityService.deleteById(authId);
         Map<String, Object> rs = new HashMap<>();
         rs.put("code", 0);

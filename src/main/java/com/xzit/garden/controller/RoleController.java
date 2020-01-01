@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -53,7 +54,7 @@ public class RoleController {
         return rs;
     }
 
-    @PostMapping("/del")
+    @RequestMapping("/del")
     @ResponseBody
     public Map<String, Object> roleUpd(@RequestParam Long roleId) {
         Role role = roleService.roleDelete(roleId);
@@ -65,7 +66,7 @@ public class RoleController {
         return rs;
     }
 
-    @PostMapping("/details")
+    @GetMapping("/details")
     @ResponseBody
     public Map<String, Object> roleDetails(@RequestParam Long roleId) {
         Role role = roleService.getRoleById(roleId);
@@ -101,7 +102,20 @@ public class RoleController {
         return rs;
     }
 
-    @PostMapping("/alloc/list")
+    @GetMapping("/list")
+    @ResponseBody
+    public Map<String, Object> roleList() {
+        List<Role> roleList = roleService.getAllRole();
+        Map<String, Object> rs = new HashMap<>();
+
+        rs.put("code", 0);
+        rs.put("msg", "查询完成");
+        rs.put("count", roleList.size());
+        rs.put("data", roleList);
+        return rs;
+    }
+
+    @GetMapping("/alloc/list")
     @ResponseBody
     public Map<String, Object> roleAllocList(@RequestParam Long roleId) {
         RoleModel roleList = roleService.roleAllocList(roleId);

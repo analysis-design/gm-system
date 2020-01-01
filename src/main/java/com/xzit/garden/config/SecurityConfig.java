@@ -76,8 +76,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private boolean isNotAuthEnable(HttpSecurity http) throws Exception {
         if (!authEnable) {
-            http.authorizeRequests().anyRequest().permitAll();
-            http.headers().frameOptions().sameOrigin();
+            http.headers().frameOptions().sameOrigin().and()
+                    .authorizeRequests().anyRequest().permitAll().and().csrf().disable();
         }
         return !authEnable;
     }

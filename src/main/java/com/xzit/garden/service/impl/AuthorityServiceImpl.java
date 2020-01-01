@@ -3,11 +3,15 @@ package com.xzit.garden.service.impl;
 import com.xzit.garden.bean.dto.AuthorityDto;
 import com.xzit.garden.bean.dto.UserDto;
 import com.xzit.garden.bean.entity.Authority;
+import com.xzit.garden.bean.model.PageModel;
 import com.xzit.garden.mapper.AuthorityMapper;
 import com.xzit.garden.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AuthorityServiceImpl implements AuthorityService {
@@ -15,7 +19,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     private AuthorityMapper authorityMapper;
 
     @Override
-    public AuthorityDto getAllAuthority() {
+    public AuthorityDto getAllAuthorityTree() {
 
         return UserDto.loadAuthority(authorityMapper.findAll());
     }
@@ -54,4 +58,18 @@ public class AuthorityServiceImpl implements AuthorityService {
 
         authorityMapper.update(authority);
     }
+
+    @Override
+    public List<Authority> getAllAuthorityList(PageModel<List<Authority>> page) {
+        Integer limit = page.getLimit();
+        List<Authority> authorityList = authorityMapper.findPage((page.getPage() - 1) * limit, limit);
+        if (authorityList == null)
+            authorityList = new ArrayList<>();
+
+        int count = authorityMapper.countList();
+        page.setCount(count);
+        return authorityList;
+    }
+
+
 }

@@ -24,7 +24,10 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> getAllRole() {
-        return roleMapper.findAll();
+        List<Role> roleList = roleMapper.findAll();
+        if (roleList == null)
+            roleList = new ArrayList<>();
+        return roleList;
     }
 
     @Transactional

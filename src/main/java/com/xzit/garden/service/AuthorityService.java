@@ -2,12 +2,15 @@ package com.xzit.garden.service;
 
 import com.xzit.garden.bean.dto.AuthorityDto;
 import com.xzit.garden.bean.entity.Authority;
+import com.xzit.garden.bean.model.PageModel;
+
+import java.util.List;
 
 public interface AuthorityService {
     /**
      * @return 获取所有的权限表示
      */
-    AuthorityDto getAllAuthority();
+    AuthorityDto getAllAuthorityTree();
 
     /**
      * 添加权限
@@ -30,4 +33,10 @@ public interface AuthorityService {
      * @param authority 修改的权限对象
      */
     void updateById(Authority authority);
+
+    /**
+     * @return 获取所有的权限列表
+     * @param page 分页对象
+     */
+    List<Authority> getAllAuthorityList(PageModel<List<Authority>> page);
 }
