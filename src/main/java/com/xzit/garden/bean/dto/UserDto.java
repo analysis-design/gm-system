@@ -46,8 +46,7 @@ public class UserDto implements Serializable {
     public static AuthorityDto loadAuthority(List<Authority> authorityList) {
         AuthorityDto root = new AuthorityDto();
         List<Authority> level1 = authorityList.stream()
-                .filter(authority -> !authority.getResType().equals(2) &&
-                        authority.getParentId() == null).collect(Collectors.toList());
+                .filter(authority -> authority.getParentId() == null).collect(Collectors.toList());
 
         root.addChildren(level1);
 

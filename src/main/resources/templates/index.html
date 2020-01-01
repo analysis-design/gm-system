@@ -29,7 +29,8 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
                 <li class="layui-nav-item" th:each="authority, state : ${user.getRoot().getChildren()}">
-                    <a href="javascript:;" th:data-id="${state.index + 1}" th:data-title="${authority.getAuthName()}"
+                    <a th:if="${authority.getResType() == 0}"
+                       href="javascript:;" th:data-id="${state.index + 1}" th:data-title="${authority.getAuthName()}"
                        th:data-url="${#servletContext.getContextPath() + authority.getUrl()}" class="site-demo-active"
                        data-type="tabAdd" th:text="${authority.getAuthName()}"></a>
                 </li>

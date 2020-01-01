@@ -41,8 +41,14 @@ public interface RoleMapper {
      *
      * @param roleAuthList 角色和权限关系列表
      */
-    @Insert("")
-    void addAuthRelations(List<RoleAuth> roleAuthList);
+    @Insert("<script>" +
+            "insert into role_authority(roleId, authId) " +
+            "values" +
+            "<foreach collection=\"list\" item=\"item\" index=\"index\" separator=\",\">" +
+            "   (#{item.roleId}, #{item.authId})" +
+            "</foreach>" +
+            "</script>")
+    void addAuthRelations(@Param("list") List<RoleAuth> roleAuthList);
 
     /**
      * 根据角色id查询角色权限关系
@@ -58,16 +64,22 @@ public interface RoleMapper {
      *
      * @param authList 删除的角色权限关系列表
      */
-    @Delete("")
-    void delAuthRelations(Long roleId, List<Long> authList);
+    @Delete("<script>" +
+            "delete from role_authority where roleId=#{roleId} and authId in  " +
+            "<foreach collection=\"idList\"  item=\"item\" open=\"(\" separator=\",\" close=\")\">" +
+            "   #{item} " +
+            "</foreach>" +
+            "</script>")
+    void delAuthRelations(@Param("roleId") Long roleId, @Param("idList") List<Long> authList);
 
     @Select("select * from role where name=#{roleName}")
     Role findByName(String roleName);
 
-    @Insert("")
+    @Insert("insert into role (name, description) values (#{name}, #{description})")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     void addRole(Role role);
 
-    @Update("")
+    @Update("update role set name = #{name}, description = #{description} WHERE id = #{id}")
     void updateById(Role role);
 
     @Delete("delete from role where id=#{roleId}")

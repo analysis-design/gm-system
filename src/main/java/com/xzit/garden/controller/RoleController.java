@@ -5,7 +5,6 @@ import com.xzit.garden.bean.model.RoleModel;
 import com.xzit.garden.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -22,12 +21,11 @@ public class RoleController {
     /**
      * 访问角色页面
      *
-     * @param model 访问角色页面域对象
      * @return 角色页面
      */
-    @RequestMapping("/index")
-    public String index(Model model) {
-        return "role";
+    @RequestMapping("/add/index")
+    public String index() {
+        return "role_add";
     }
 
     @PostMapping("/add")
@@ -49,7 +47,7 @@ public class RoleController {
         Map<String, Object> rs = new HashMap<>();
 
         rs.put("code", 0);
-        rs.put("msg", "添加成功");
+        rs.put("msg", "修改成功");
         rs.put("data", role);
         return rs;
     }
@@ -61,7 +59,7 @@ public class RoleController {
         Map<String, Object> rs = new HashMap<>();
 
         rs.put("code", 0);
-        rs.put("msg", "添加成功");
+        rs.put("msg", "删除成功");
         rs.put("data", role);
         return rs;
     }
@@ -73,7 +71,7 @@ public class RoleController {
         Map<String, Object> rs = new HashMap<>();
 
         rs.put("code", 0);
-        rs.put("msg", "添加成功");
+        rs.put("msg", "查询完成");
         rs.put("data", role);
         return rs;
     }
@@ -97,7 +95,7 @@ public class RoleController {
         Map<String, Object> rs = new HashMap<>();
 
         rs.put("code", 0);
-        rs.put("msg", "添加成功");
+        rs.put("msg", "权限分配成功");
         rs.put("data", role);
         return rs;
     }

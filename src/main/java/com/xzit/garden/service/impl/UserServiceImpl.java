@@ -55,7 +55,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 //        User user = (User) loadUserByUsername(principal.getUsername());
         User user = (User) loadUserByUsername("admin");
         List<Authority> authorities = new ArrayList<>();
-        user.getRoleList().forEach(role -> authorities.addAll(role.getAuthorityList()));
+        user.getRoleList().forEach(role -> {
+            for (Authority authority : role.getAuthorityList()) {
+                if (authorities.contains(authority)) continue;
+                authorities.add(authority);
+            }
+        });
 
         Staff staff = staffMapper.findById(user.getStaffId());
         return new UserDto(user.getId(), user.getUsername(), user.getRoleList(), authorities, staff);

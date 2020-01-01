@@ -44,7 +44,8 @@ public class RoleServiceImpl implements RoleService {
         if (role == null)
             throw new RuntimeException("角色" + roleModel.getRoleId() + "不存在");
 
-        validateExistAuthority(roleModel.getAuthList());
+        if (roleModel.getAuthList() != null && roleModel.getAuthList().size() > 0)
+            validateExistAuthority(roleModel.getAuthList());
     }
 
     @Transactional
@@ -54,16 +55,19 @@ public class RoleServiceImpl implements RoleService {
         List<RoleAuth> updRoleAuthList = getRoleAuth(roleModel.getRoleId(), roleModel.getAuthList());
         List<RoleAuth> roleAuthList = new ArrayList<>(roleMapper.findRoleAuthListByRoleId(roleModel.getRoleId()));
 
+        List<RoleAuth> updRoleAuthListCopy = new ArrayList<>(updRoleAuthList);
         updRoleAuthList.removeAll(roleAuthList);
         List<RoleAuth> addRAList = new ArrayList<>(updRoleAuthList);
-        roleAuthList.removeAll(updRoleAuthList);
+        roleAuthList.removeAll(updRoleAuthListCopy);
         List<Long> delRAList = new ArrayList<>();
         for (RoleAuth roleAuth : roleAuthList)
             delRAList.add(roleAuth.getAuthId());
 
 
-        roleMapper.addAuthRelations(addRAList);
-        roleMapper.delAuthRelations(roleModel.getRoleId(), delRAList);
+        if (addRAList.size() > 0)
+            roleMapper.addAuthRelations(addRAList);
+        if (delRAList.size() > 0)
+            roleMapper.delAuthRelations(roleModel.getRoleId(), delRAList);
     }
 
     @Override
@@ -90,6 +94,8 @@ public class RoleServiceImpl implements RoleService {
         temp.setDescription(roleModel.getDescription());
         roleMapper.addRole(temp);
 
+        if (roleModel.getAuthList() == null || roleModel.getAuthList().size() == 0) return;
+
         roleModel.setRoleId(temp.getId());
         List<RoleAuth> roleAuthList = getRoleAuth(temp.getId(), roleModel.getAuthList());
         roleMapper.addAuthRelations(roleAuthList);
@@ -104,6 +110,8 @@ public class RoleServiceImpl implements RoleService {
         temp.setName(roleModel.getRoleName());
         temp.setDescription(roleModel.getDescription());
         roleMapper.updateById(temp);
+
+        if (roleModel.getAuthList() == null || roleModel.getAuthList().size() == 0) return;
 
         roleModel.setRoleId(temp.getId());
         List<RoleAuth> roleAuthList = getRoleAuth(temp.getId(), roleModel.getAuthList());
