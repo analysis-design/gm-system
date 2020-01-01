@@ -3,11 +3,11 @@ package com.xzit.garden.bean.entity;
 import java.util.Date;
 
 public class ResSchPlan {
-    private Integer id;
+    private Long id;
 
-    private Integer implplanid;
+    private Long implplanid;
 
-    private Integer resid;
+    private Long resid;
 
     private Integer resnum;
 
@@ -17,27 +17,27 @@ public class ResSchPlan {
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getImplplanid() {
+    public Long getImplplanid() {
         return implplanid;
     }
 
-    public void setImplplanid(Integer implplanid) {
+    public void setImplplanid(Long implplanid) {
         this.implplanid = implplanid;
     }
 
-    public Integer getResid() {
+    public Long getResid() {
         return resid;
     }
 
-    public void setResid(Integer resid) {
+    public void setResid(Long resid) {
         this.resid = resid;
     }
 

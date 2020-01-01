@@ -1,11 +1,11 @@
 package com.xzit.garden.bean.entity;
 
 public class MaintenanceRes {
-    private Integer id;
+    private Long id;
 
-    private Integer maintenanceplanid;
+    private Long maintenanceplanid;
 
-    private Integer resid;
+    private Long resid;
 
     private Integer resnum;
 
@@ -13,27 +13,27 @@ public class MaintenanceRes {
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getMaintenanceplanid() {
+    public Long getMaintenanceplanid() {
         return maintenanceplanid;
     }
 
-    public void setMaintenanceplanid(Integer maintenanceplanid) {
+    public void setMaintenanceplanid(Long maintenanceplanid) {
         this.maintenanceplanid = maintenanceplanid;
     }
 
-    public Integer getResid() {
+    public Long getResid() {
         return resid;
     }
 
-    public void setResid(Integer resid) {
+    public void setResid(Long resid) {
         this.resid = resid;
     }
 

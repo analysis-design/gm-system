@@ -3,9 +3,9 @@ package com.xzit.garden.bean.entity;
 import java.util.Date;
 
 public class OvertimeCost {
-    private Integer id;
+    private Long id;
 
-    private Integer staffid;
+    private Long staffid;
 
     private Date starttime;
 
@@ -17,19 +17,19 @@ public class OvertimeCost {
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getStaffid() {
+    public Long getStaffid() {
         return staffid;
     }
 
-    public void setStaffid(Integer staffid) {
+    public void setStaffid(Long staffid) {
         this.staffid = staffid;
     }
 

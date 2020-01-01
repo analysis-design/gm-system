@@ -3,7 +3,7 @@ package com.xzit.garden.bean.entity;
 import java.util.Date;
 
 public class ResPurchase {
-    private Integer id;
+    private Long id;
 
     private Date purtime;
 
@@ -13,17 +13,17 @@ public class ResPurchase {
 
     private Double discount;
 
-    private Integer resid;
+    private Long resid;
 
-    private Integer supplierid;
+    private Long supplierid;
 
-    private Integer buyerid;
+    private Long buyerid;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -59,27 +59,27 @@ public class ResPurchase {
         this.discount = discount;
     }
 
-    public Integer getResid() {
+    public Long getResid() {
         return resid;
     }
 
-    public void setResid(Integer resid) {
+    public void setResid(Long resid) {
         this.resid = resid;
     }
 
-    public Integer getSupplierid() {
+    public Long getSupplierid() {
         return supplierid;
     }
 
-    public void setSupplierid(Integer supplierid) {
+    public void setSupplierid(Long supplierid) {
         this.supplierid = supplierid;
     }
 
-    public Integer getBuyerid() {
+    public Long getBuyerid() {
         return buyerid;
     }
 
-    public void setBuyerid(Integer buyerid) {
+    public void setBuyerid(Long buyerid) {
         this.buyerid = buyerid;
     }
 }

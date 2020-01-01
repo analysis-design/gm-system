@@ -3,17 +3,17 @@ package com.xzit.garden.bean.entity;
 import java.util.Date;
 
 public class StaffApply {
-    private Integer id;
+    private Long id;
 
     private Date applytime;
 
     private Integer auditstate;
 
-    private Integer groupid;
+    private Long groupid;
 
-    private Integer implplanid;
+    private Long implplanid;
 
-    private Integer applierid;
+    private Long applierid;
 
     private String purpose;
 
@@ -21,11 +21,11 @@ public class StaffApply {
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -45,27 +45,27 @@ public class StaffApply {
         this.auditstate = auditstate;
     }
 
-    public Integer getGroupid() {
+    public Long getGroupid() {
         return groupid;
     }
 
-    public void setGroupid(Integer groupid) {
+    public void setGroupid(Long groupid) {
         this.groupid = groupid;
     }
 
-    public Integer getImplplanid() {
+    public Long getImplplanid() {
         return implplanid;
     }
 
-    public void setImplplanid(Integer implplanid) {
+    public void setImplplanid(Long implplanid) {
         this.implplanid = implplanid;
     }
 
-    public Integer getApplierid() {
+    public Long getApplierid() {
         return applierid;
     }
 
-    public void setApplierid(Integer applierid) {
+    public void setApplierid(Long applierid) {
         this.applierid = applierid;
     }
 

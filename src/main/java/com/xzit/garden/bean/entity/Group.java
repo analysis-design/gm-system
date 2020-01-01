@@ -3,7 +3,7 @@ package com.xzit.garden.bean.entity;
 import java.util.Date;
 
 public class Group {
-    private Integer id;
+    private Long id;
 
     private String name;
 
@@ -11,17 +11,17 @@ public class Group {
 
     private Date createtime;
 
-    private Integer leaderid;
+    private Long leaderid;
 
     private Integer type;
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -49,11 +49,11 @@ public class Group {
         this.createtime = createtime;
     }
 
-    public Integer getLeaderid() {
+    public Long getLeaderid() {
         return leaderid;
     }
 
-    public void setLeaderid(Integer leaderid) {
+    public void setLeaderid(Long leaderid) {
         this.leaderid = leaderid;
     }
 

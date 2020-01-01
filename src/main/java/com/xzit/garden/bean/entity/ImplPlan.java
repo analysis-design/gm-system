@@ -3,9 +3,9 @@ package com.xzit.garden.bean.entity;
 import java.util.Date;
 
 public class ImplPlan {
-    private Integer id;
+    private Long id;
 
-    private Integer projectid;
+    private Long projectid;
 
     private String name;
 
@@ -23,19 +23,19 @@ public class ImplPlan {
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getProjectid() {
+    public Long getProjectid() {
         return projectid;
     }
 
-    public void setProjectid(Integer projectid) {
+    public void setProjectid(Long projectid) {
         this.projectid = projectid;
     }
 
