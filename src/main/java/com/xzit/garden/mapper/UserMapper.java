@@ -48,9 +48,10 @@ public interface UserMapper {
 
     /**
      * 删除用户角色关系
+     *
      * @param delURList 删除的用户角色关系列表
      * @return 删除的数目
      */
-    @Delete("delete from user_role where userId")
-    int deleteRoleRelations(List<UserRole> delURList);
+    @Delete("delete from user_role where userId=#{userId} and roleId in #{idList}")
+    int deleteRoleRelations(@Param("userId") Long userId, @Param("idList") List<Long> delURList);
 }

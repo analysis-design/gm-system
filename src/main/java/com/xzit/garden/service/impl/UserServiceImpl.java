@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +77,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return userDtoList;
     }
 
+    @Transactional
     @Override
     public void addAuthority(AuthModel authModel) {
         Long userId = authModel.getUserId();
@@ -85,18 +87,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         validateExistRole(roleList);
 
         List<UserRole> userRoleList = getUserRoleList(userId, roleList);
-        List<RoleAuth> roleAuthList = getRoleAuthList(roleList);
-
         userMapper.addRoleRelations(userRoleList);
-        roleMapper.addAuthRelations(roleAuthList);
-    }
-
-    private List<RoleAuth> getRoleAuthList(List<RoleModel> roleList) {
-        List<RoleAuth> roleAuthList = new ArrayList<>();
-        for (RoleModel roleModel : roleList) {
-            roleAuthList.addAll(getRoleAuth(roleModel.getRoleId(), roleModel.getAuthList()));
-        }
-        return roleAuthList;
     }
 
     private void validateExistUser(Long userId) {
@@ -105,6 +96,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new RuntimeException("用户不存在");
     }
 
+    @Transactional
     @Override
     public void updAuthority(AuthModel authModel) {
         validateExistUser(authModel.getUserId());
@@ -113,28 +105,18 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         validateExistRole(roleList);
 
         List<UserRole> updUserRoleList = getUserRoleList(authModel.getUserId(), roleList);
-        List<RoleAuth> updRoleAuthList = getRoleAuthList(roleList);
 
         List<UserRole> userRoles = userMapper.findUserRoleListByUserId(authModel.getUserId());
-        List<RoleAuth> roleAuthList = new ArrayList<>();
-        for (RoleModel roleModel : authModel.getRoleList())
-            roleAuthList.addAll(roleMapper.findRoleAuthListByRoleId(roleModel.getRoleId()));
 
         updUserRoleList.removeAll(userRoles);
         List<UserRole> addURList = new ArrayList<>(updUserRoleList);
         userRoles.removeAll(updUserRoleList);
-        List<UserRole> delURList = new ArrayList<>(userRoles);
+        List<Long> delURList = new ArrayList<>();
+        for (UserRole userRole : userRoles)
+            delURList.add(userRole.getRoleId());
 
         userMapper.addRoleRelations(addURList);
-        userMapper.deleteRoleRelations(delURList);
-
-        updRoleAuthList.removeAll(roleAuthList);
-        List<RoleAuth> addRAList = new ArrayList<>(updRoleAuthList);
-        roleAuthList.removeAll(updRoleAuthList);
-        List<RoleAuth> delRAList = new ArrayList<>(roleAuthList);
-
-        roleMapper.addAuthRelations(addRAList);
-        roleMapper.delAuthRelations(delRAList);
+        userMapper.deleteRoleRelations(authModel.getUserId(), delURList);
     }
 
     @Override
@@ -162,17 +144,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return authModelList;
     }
 
-    private List<RoleAuth> getRoleAuth(Long roleId, List<Long> authList) {
-        List<RoleAuth> roleAuthList = new ArrayList<>();
-        for (Long authId : authList) {
-            RoleAuth roleAuth = new RoleAuth();
-            roleAuth.setRoleId(roleId);
-            roleAuth.setAuthId(authId);
-            roleAuthList.add(roleAuth);
-        }
-        return roleAuthList;
-    }
-
     private List<UserRole> getUserRoleList(Long userId, List<RoleModel> roleList) {
         List<UserRole> userRoleList = new ArrayList<>();
         for (RoleModel roleModel : roleList) {
@@ -186,22 +157,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     private void validateExistRole(List<RoleModel> roleList) {
-        List<Long> authList = new ArrayList<>();
         for (RoleModel roleModel : roleList) {
             Role role = roleMapper.findById(roleModel.getRoleId());
             if (role == null)
                 throw new RuntimeException("角色" + roleModel.getRoleId() + "不存在");
-            authList.addAll(roleModel.getAuthList());
-        }
-
-        validateExistAuthority(authList);
-    }
-
-    private void validateExistAuthority(List<Long> authList) {
-        for (Long authId : authList) {
-            Authority authority = authorityMapper.findById(authId);
-            if (authority == null)
-                throw new RuntimeException("角色" + authId + "不存在");
         }
     }
 

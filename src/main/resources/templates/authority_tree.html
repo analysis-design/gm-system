@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>权限树状图</title>
+    <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
+</head>
+<body>
+<div class="layui-container" style="margin: 0; width: 100%">
+    <div class="layui-row">
+        <div id="test1" class="layui-col-md2"
+             style="margin-top: 10px; padding-top: 5px; padding-bottom: 10px; border: 1px solid rgb(230, 230, 230);">
+        </div>
+        <div class="layui-col-md1" style="text-align: center;">
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="margin-top: 100px;">
+                <i class="layui-icon">&#xe602;</i>
+            </button>
+        </div>
+        <div class="layui-col-md9">
+            <table id="roleId" lay-filter="role"></table>
+        </div>
+    </div>
+
+</div>
+<script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+<script type="text/html" id="roleToolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+    </div>
+</script>
+<script type="text/html" id="roleListBar">
+    <a class="layui-btn layui-btn-xs" lay-event="auth">权限</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script th:inline="javascript">
+    //JavaScript代码区域
+    layui.use(['element', 'tree', 'util', 'table'], function () {
+        let tree = layui.tree;
+        let util = layui.util;
+        let table = layui.table;
+
+        let factNode = function (nodeList) {
+            let itemList = [];
+            for (let i in nodeList) {
+                let item = {
+                    title: nodeList[i].authName,
+                    id: nodeList[i].id,
+                    children: [],
+                    href: [[${#servletContext.getContextPath()}]] + nodeList[i].url,
+                    spread: true,
+                    checked: false
+                };
+
+                let temp1 = factNode(nodeList[i].children);
+                let temp2 = factNode(nodeList[i].contents);
+                if (temp1 !== null && temp1.length > 0)
+                    item.children = item.children.concat(temp1);
+
+                if (temp2 !== null && temp2.length > 0)
+                    item.children = item.children.concat(temp2);
+
+                itemList.push(item);
+            }
+            if (itemList.length > 0)
+                return itemList;
+            return null;
+        };
+
+        let nodeList = [[${data}]].data.children;
+        let dataList = factNode(nodeList);
+
+        //渲染
+        let inst1 = tree.render({
+            elem: '#test1'  //绑定元素
+            , data: dataList
+            , showCheckbox: true  //是否显示复选框
+            , click: function (obj) {
+                let data = obj.data;  //获取当前点击的节点数据
+                layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
+            }
+        });
+
+
+        //第一个实例
+        table.render({
+            elem: '#roleId'
+            , title: "角色列表"
+            , toolbar: '#roleToolbar' //开启头部工具栏，并为其绑定左侧模板
+            , url: [[${#servletContext.getContextPath()}]] + '/role/list' //数据接口
+            , page: true //开启分页
+            , cols: [
+                [ //表头
+                    {title: '选择', width: 36, type: 'checkbox', fixed: 'left'}
+                    , {field: 'id', title: '编号', width: 69, fixed: 'left', align: 'center'}
+                    , {field: 'name', title: '角色名称', width: '30%', edit: 'text'}
+                    , {field: 'description', title: '描述', width: '50%', edit: 'text'}
+                    , {fixed: 'right', title: '操作', toolbar: '#roleListBar', width: 150}
+                ]
+            ]
+        });
+
+        //监听行工具事件
+        table.on('tool(role)', function (obj) {
+            let data = obj.data;
+            //console.log(obj)
+            if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if (obj.event === 'auth') {
+                layer.prompt({
+                    formType: 2
+                    , value: data.email
+                }, function (value, index) {
+                    obj.update({
+                        email: value
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+
+    });
+</script>
+</body>
+</html>
