@@ -7,25 +7,25 @@ public class Project {
 
     private String name;
 
-    private String worksite;
+    private String workSite;
 
     private Integer state;
 
-    private String contractfile;
+    private String contractFile;
 
-    private Integer difficultylevel;
+    private Integer difficultyLevel;
 
-    private Date starttime;
+    private Date startTime;
 
-    private Date expectedendtime;
+    private Date expectedEndTime;
 
-    private Date actualendtime;
+    private Date actualEndTime;
 
     private String description;
 
-    private Long saleid;
+    private Long saleId;
 
-    private Long clientid;
+    private Long clientId;
 
     public Long getId() {
         return id;
@@ -43,12 +43,12 @@ public class Project {
         this.name = name == null ? null : name.trim();
     }
 
-    public String getWorksite() {
-        return worksite;
+    public String getWorkSite() {
+        return workSite;
     }
 
-    public void setWorksite(String worksite) {
-        this.worksite = worksite == null ? null : worksite.trim();
+    public void setWorkSite(String workSite) {
+        this.workSite = workSite == null ? null : workSite.trim();
     }
 
     public Integer getState() {
@@ -59,44 +59,44 @@ public class Project {
         this.state = state;
     }
 
-    public String getContractfile() {
-        return contractfile;
+    public String getContractFile() {
+        return contractFile;
     }
 
-    public void setContractfile(String contractfile) {
-        this.contractfile = contractfile == null ? null : contractfile.trim();
+    public void setContractFile(String contractFile) {
+        this.contractFile = contractFile == null ? null : contractFile.trim();
     }
 
-    public Integer getDifficultylevel() {
-        return difficultylevel;
+    public Integer getDifficultyLevel() {
+        return difficultyLevel;
     }
 
-    public void setDifficultylevel(Integer difficultylevel) {
-        this.difficultylevel = difficultylevel;
+    public void setDifficultyLevel(Integer difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
     }
 
-    public Date getStarttime() {
-        return starttime;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setStarttime(Date starttime) {
-        this.starttime = starttime;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getExpectedendtime() {
-        return expectedendtime;
+    public Date getExpectedEndTime() {
+        return expectedEndTime;
     }
 
-    public void setExpectedendtime(Date expectedendtime) {
-        this.expectedendtime = expectedendtime;
+    public void setExpectedEndTime(Date expectedEndTime) {
+        this.expectedEndTime = expectedEndTime;
     }
 
-    public Date getActualendtime() {
-        return actualendtime;
+    public Date getActualEndTime() {
+        return actualEndTime;
     }
 
-    public void setActualendtime(Date actualendtime) {
-        this.actualendtime = actualendtime;
+    public void setActualEndTime(Date actualEndTime) {
+        this.actualEndTime = actualEndTime;
     }
 
     public String getDescription() {
@@ -107,19 +107,19 @@ public class Project {
         this.description = description == null ? null : description.trim();
     }
 
-    public Long getSaleid() {
-        return saleid;
+    public Long getSaleId() {
+        return saleId;
     }
 
-    public void setSaleid(Long saleid) {
-        this.saleid = saleid;
+    public void setSaleId(Long saleId) {
+        this.saleId = saleId;
     }
 
-    public Long getClientid() {
-        return clientid;
+    public Long getClientId() {
+        return clientId;
     }
 
-    public void setClientid(Long clientid) {
-        this.clientid = clientid;
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
     }
 }
