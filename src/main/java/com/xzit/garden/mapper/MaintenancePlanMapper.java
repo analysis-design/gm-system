@@ -3,13 +3,17 @@ package com.xzit.garden.mapper;
 import com.xzit.garden.bean.entity.MaintenancePlan;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Mapper
 public interface MaintenancePlanMapper {
     @Delete({
         "delete from maintenance_plan",
         "where id = #{id,jdbcType=INTEGER}"
     })
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     @Insert({
         "insert into maintenance_plan (id, projectId, ",
@@ -46,7 +50,7 @@ public interface MaintenancePlanMapper {
         @Result(column="planState", property="planstate", jdbcType= JdbcType.INTEGER),
         @Result(column="description", property="description", jdbcType= JdbcType.VARCHAR)
     })
-    MaintenancePlan selectByPrimaryKey(Integer id);
+    MaintenancePlan selectByPrimaryKey(Long id);
 
     @UpdateProvider(type= MaintenancePlanSqlProvider.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(MaintenancePlan record);
@@ -64,4 +68,6 @@ public interface MaintenancePlanMapper {
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(MaintenancePlan record);
+    @Select("select * from maintenance_plan")
+    List<MaintenancePlan> findAll();
 }
