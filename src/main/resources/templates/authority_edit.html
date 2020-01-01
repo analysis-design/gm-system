@@ -60,8 +60,9 @@
         <label class="layui-form-label">所属</label>
         <div class="layui-input-block">
             <select name="parentId" lay-filter="aihao">
+                <option value="-1">一级菜单</option>
                 <option th:each="authority, state : ${authList}"
-                        th:selected="${updAuthority?.getParentId() == authority?.getId() || updAuthority?.getAuthName() == authority?.getAuthName()}"
+                        th:selected="${updAuthority?.getParentId() == authority?.getId()}"
                         th:value="${authority?.getId()}"
                         th:text="${authority?.getAuthName()}"></option>
             </select>
