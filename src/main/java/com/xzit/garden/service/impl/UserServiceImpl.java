@@ -3,7 +3,11 @@ package com.xzit.garden.service.impl;
 import com.xzit.garden.bean.dto.UserDto;
 import com.xzit.garden.bean.entity.*;
 import com.xzit.garden.bean.model.AuthModel;
+import com.xzit.garden.bean.model.PageModel;
 import com.xzit.garden.bean.model.RoleModel;
+import com.xzit.garden.exception.ObjNotFoundException;
+import com.xzit.garden.exception.ObjectAlreadyExistException;
+import com.xzit.garden.exception.ObjectAlreadyInUse;
 import com.xzit.garden.mapper.AuthorityMapper;
 import com.xzit.garden.mapper.RoleMapper;
 import com.xzit.garden.mapper.StaffMapper;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -69,17 +74,26 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public List<UserDto> getUserList() {
         List<User> userList = userMapper.findAll();
+
+        return getUserDtoList(userList);
+    }
+
+    private List<UserDto> getUserDtoList(List<User> userList) {
         List<UserDto> userDtoList = new ArrayList<>();
 
         for (User user : userList) {
-            Staff staff = staffMapper.findById(user.getStaffId());
-            UserDto userDto = new UserDto(
-                    user.getId(), user.getUsername(), new ArrayList<>(), new ArrayList<>(), staff);
-
+            UserDto userDto = getUserDto(user);
             userDtoList.add(userDto);
         }
-
         return userDtoList;
+    }
+
+    private UserDto getUserDto(User user) {
+        Staff staff = staffMapper.findById(user.getStaffId());
+        List<Authority> authorityList = authorityMapper.findByUserId(user.getId());
+        List<Role> roleList = roleMapper.findByUserId(user.getId());
+
+        return new UserDto(user.getId(), user.getUsername(), roleList, authorityList, staff);
     }
 
     @Transactional
@@ -95,10 +109,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userMapper.addRoleRelations(userRoleList);
     }
 
-    private void validateExistUser(Long userId) {
+    private User validateExistUser(Long userId) {
         User user = userMapper.findById(userId);
         if (user == null)
             throw new RuntimeException("用户不存在");
+        return user;
     }
 
     @Transactional
@@ -147,6 +162,127 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         authModelList.setRoleList(roleModelList);
         return authModelList;
+    }
+
+    @Override
+    public List<UserDto> getPageUserList(PageModel<List<UserDto>> pageModel) {
+        int page = pageModel.getPage() - 1;
+        List<User> userList = userMapper.findAllPage(page * pageModel.getLimit(), pageModel.getLimit());
+        int count = userMapper.countUser();
+        pageModel.setCount(count);
+
+        if (userList == null)
+            userList = new ArrayList<>();
+
+        return getUserDtoList(userList);
+    }
+
+    @Override
+    public UserDto getUserByUserId(Long userId) {
+        User user = userMapper.findById(userId);
+        if (user == null)
+            throw new ObjNotFoundException("用户" + userId + "不存在");
+
+        return getUserDto(user);
+    }
+
+    @Override
+    public void addUser(UserDto userDto) {
+        validateEditUser(userDto);
+
+        User temp = new User();
+        temp.setUsername(userDto.getUsername());
+        temp.setPassword(userDto.getPassword());
+        temp.setStaffId(userDto.getStaffId());
+        userMapper.add(temp);
+    }
+
+    private void validateEditUser(UserDto userDto) {
+        User user = userMapper.findByName(userDto.getUsername());
+        if (user == null)
+            throw new ObjectAlreadyExistException("用户" + userDto.getUsername() + "已存在");
+
+        List<Long> relatedRoleList = userDto.getRoleIdList();
+        if (relatedRoleList != null && relatedRoleList.size() > 0)
+            validateExistRoleList(relatedRoleList);
+
+        if (userDto.getStaffId() != null)
+            validateExistStaff(userDto.getStaffId());
+    }
+
+    private void validateExistStaff(Long staffId) {
+        Staff staff = staffMapper.findById(staffId);
+        if (staff == null)
+            throw new ObjNotFoundException("员工编号" + staffId + "不存在");
+    }
+
+    private void validateExistRoleList(List<Long> relatedRoleList) {
+        List<Role> roleList = roleMapper.findByIdList(relatedRoleList);
+        List<Long> existRoleList = new ArrayList<>();
+        roleList.forEach(role -> existRoleList.add(role.getId()));
+        List<Long> roleIdList = new ArrayList<>(relatedRoleList);
+        roleIdList.removeAll(existRoleList);
+        if (roleIdList.size() > 0)
+            throw new ObjNotFoundException("角色" + Arrays.toString(roleIdList.toArray()) + "不存在");
+    }
+
+    @Override
+    public User deleteById(Long userId) {
+        User user = validateExistUser(userId);
+        List<UserRole> userRoleList = userMapper.findUserRoleListByUserId(userId);
+        if (userRoleList != null && userRoleList.size() > 0)
+            throw new ObjectAlreadyInUse("用户" + user.getUsername() + "无法删除");
+
+        userMapper.deleteById(userId);
+        return user;
+    }
+
+    @Override
+    public List<User> deleteAllById(List<Long> userList) {
+        List<User> list = new ArrayList<>();
+        for (Long userId : userList) {
+            list.add(validateExistUser(userId));
+        }
+
+        userMapper.deleteByIdList(userList);
+        return list;
+    }
+
+    @Override
+    public void updateById(UserDto userDto) {
+        Long userId = userDto.getId();
+        validateExistUser(userId);
+        validateEditUser(userDto);
+        List<Long> relatedRoleList = userDto.getRoleIdList();
+        List<UserRole> userRoleList = userMapper.findUserRoleListByUserId(userId);
+        List<Long> originUserRoleList = new ArrayList<>();
+        userRoleList.forEach(userRole -> originUserRoleList.add(userRole.getRoleId()));
+
+        List<Long> updUserRoleList = new ArrayList<>(relatedRoleList);
+        relatedRoleList.removeAll(originUserRoleList);
+        originUserRoleList.removeAll(updUserRoleList);
+        List<Long> delUserRoleList = new ArrayList<>(originUserRoleList);
+
+
+        List<UserRole> addUserRoleList = switchUserRoleList(userId, relatedRoleList);
+        if (addUserRoleList.size() > 0)
+            userMapper.addRoleRelations(addUserRoleList);
+
+        if (delUserRoleList.size() > 0)
+            userMapper.deleteRoleRelations(userId, delUserRoleList);
+    }
+
+    private List<UserRole> switchUserRoleList(Long userId, List<Long> relatedRoleList) {
+        List<UserRole> addUserRoleList = new ArrayList<>();
+        if (relatedRoleList == null) return addUserRoleList;
+
+        for (Long roleId : relatedRoleList) {
+            UserRole temp = new UserRole();
+            temp.setUserId(userId);
+            temp.setRoleId(roleId);
+            addUserRoleList.add(temp);
+        }
+        return addUserRoleList;
     }
 
     private List<UserRole> getUserRoleList(Long userId, List<RoleModel> roleList) {

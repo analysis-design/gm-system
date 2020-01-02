@@ -54,4 +54,25 @@ public interface UserMapper {
      */
     @Delete("delete from user_role where userId=#{userId} and roleId in #{idList}")
     int deleteRoleRelations(@Param("userId") Long userId, @Param("idList") List<Long> delURList);
+
+    @Select("select * from user limit #{page}, #{limit}")
+    List<User> findAllPage(@Param("page") Integer page, @Param("limit") Integer limit);
+
+    @Select("select count(*) from user")
+    int countUser();
+
+    @Insert("insert into user (username, password, staffId) values (#{username}, #{password}, #{staffId})")
+    @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
+    void add(User user);
+
+    @Delete("delete from user where id=#{userId}")
+    void deleteById(Long userId);
+
+    @Delete("<script>" +
+            "delete from where id in " +
+            "<foreach collection=\"idList\"  item=\"item\" open=\"(\" separator=\",\" close=\")\">" +
+            "   #{item} " +
+            "</foreach>" +
+            "</script>")
+    void deleteByIdList(@Param("idList") List<Long> userList);
 }

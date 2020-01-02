@@ -84,4 +84,12 @@ public interface RoleMapper {
 
     @Delete("delete from role where id=#{roleId}")
     void deleteById(Long roleId);
+
+    @Select("<script>" +
+            "select * from role where id in " +
+            "<foreach collection=\"idList\"  item=\"item\" open=\"(\" separator=\",\" close=\")\">" +
+            "   #{item} " +
+            "</foreach>" +
+            "</script>")
+    List<Role> findByIdList(@Param("idList") List<Long> roleIdList);
 }
