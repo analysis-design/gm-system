@@ -7,25 +7,25 @@ public class Order {
 
     private String name;
 
-    private Long budgetId;
+    private Long budgetid;
 
-    private Integer budgetTotal;
+    private Integer budgettotal;
 
     private Double discount;
 
-    private Integer prepaid;
+    private Long prepaid;
 
-    private Integer payState;
+    private Integer paystate;
 
-    private Integer paymentMethod;
+    private Integer paymentmethod;
 
-    private Integer paymentTotal;
+    private Integer paymenttotal;
 
-    private Date createTime;
+    private Date createtime;
 
-    private Date endTime;
+    private Date endtime;
 
-    private Long projectId;
+    private Long projectid;
 
     public Long getId() {
         return id;
@@ -43,20 +43,20 @@ public class Order {
         this.name = name == null ? null : name.trim();
     }
 
-    public Long getBudgetId() {
-        return budgetId;
+    public Long getBudgetid() {
+        return budgetid;
     }
 
-    public void setBudgetId(Long budgetId) {
-        this.budgetId = budgetId;
+    public void setBudgetid(Long budgetid) {
+        this.budgetid = budgetid;
     }
 
-    public Integer getBudgetTotal() {
-        return budgetTotal;
+    public Integer getBudgettotal() {
+        return budgettotal;
     }
 
-    public void setBudgetTotal(Integer budgetTotal) {
-        this.budgetTotal = budgetTotal;
+    public void setBudgettotal(Integer budgettotal) {
+        this.budgettotal = budgettotal;
     }
 
     public Double getDiscount() {
@@ -67,59 +67,59 @@ public class Order {
         this.discount = discount;
     }
 
-    public Integer getPrepaid() {
+    public Long getPrepaid() {
         return prepaid;
     }
 
-    public void setPrepaid(Integer prepaid) {
+    public void setPrepaid(Long prepaid) {
         this.prepaid = prepaid;
     }
 
-    public Integer getPayState() {
-        return payState;
+    public Integer getPaystate() {
+        return paystate;
     }
 
-    public void setPayState(Integer payState) {
-        this.payState = payState;
+    public void setPaystate(Integer paystate) {
+        this.paystate = paystate;
     }
 
-    public Integer getPaymentMethod() {
-        return paymentMethod;
+    public Integer getPaymentmethod() {
+        return paymentmethod;
     }
 
-    public void setPaymentMethod(Integer paymentMethod) {
-        this.paymentMethod = paymentMethod;
+    public void setPaymentmethod(Integer paymentmethod) {
+        this.paymentmethod = paymentmethod;
     }
 
-    public Integer getPaymentTotal() {
-        return paymentTotal;
+    public Integer getPaymenttotal() {
+        return paymenttotal;
     }
 
-    public void setPaymentTotal(Integer paymentTotal) {
-        this.paymentTotal = paymentTotal;
+    public void setPaymenttotal(Integer paymenttotal) {
+        this.paymenttotal = paymenttotal;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatetime() {
+        return createtime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
     }
 
-    public Date getEndTime() {
-        return endTime;
+    public Date getEndtime() {
+        return endtime;
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setEndtime(Date endtime) {
+        this.endtime = endtime;
     }
 
-    public Long getProjectId() {
-        return projectId;
+    public Long getProjectid() {
+        return projectid;
     }
 
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
+    public void setProjectid(Long projectid) {
+        this.projectid = projectid;
     }
 }

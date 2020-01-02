@@ -2,10 +2,7 @@ package com.xzit.garden.mapper;
 
 import com.xzit.garden.bean.entity.Role;
 import com.xzit.garden.bean.entity.RoleAuth;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -44,8 +41,14 @@ public interface RoleMapper {
      *
      * @param roleAuthList 角色和权限关系列表
      */
-    @Insert("")
-    void addAuthRelations(List<RoleAuth> roleAuthList);
+    @Insert("<script>" +
+            "insert into role_authority(roleId, authId) " +
+            "values" +
+            "<foreach collection=\"list\" item=\"item\" index=\"index\" separator=\",\">" +
+            "   (#{item.roleId}, #{item.authId})" +
+            "</foreach>" +
+            "</script>")
+    void addAuthRelations(@Param("list") List<RoleAuth> roleAuthList);
 
     /**
      * 根据角色id查询角色权限关系
@@ -59,7 +62,26 @@ public interface RoleMapper {
     /**
      * 删除角色权限关系
      *
-     * @param delRAList 删除的角色权限关系列表
+     * @param authList 删除的角色权限关系列表
      */
-    void delAuthRelations(List<RoleAuth> delRAList);
+    @Delete("<script>" +
+            "delete from role_authority where roleId=#{roleId} and authId in  " +
+            "<foreach collection=\"idList\"  item=\"item\" open=\"(\" separator=\",\" close=\")\">" +
+            "   #{item} " +
+            "</foreach>" +
+            "</script>")
+    void delAuthRelations(@Param("roleId") Long roleId, @Param("idList") List<Long> authList);
+
+    @Select("select * from role where name=#{roleName}")
+    Role findByName(String roleName);
+
+    @Insert("insert into role (name, description) values (#{name}, #{description})")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    void addRole(Role role);
+
+    @Update("update role set name = #{name}, description = #{description} WHERE id = #{id}")
+    void updateById(Role role);
+
+    @Delete("delete from role where id=#{roleId}")
+    void deleteById(Long roleId);
 }

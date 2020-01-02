@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title th:text="${msg}"></title>
+    <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
+</head>
+<body>
+<div class="layui-form layui-container" style="padding:15px 30px 15px 0;">
+    <div class="layui-form-item" hidden>
+        <label class="layui-form-label">权限编号</label>
+        <div class="layui-input-block">
+            <input type="text" name="id"
+                   autocomplete="off" class="layui-input" th:value="${updAuthority?.getId()}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="authName" required lay-verify="required" placeholder="请输入"
+                   autocomplete="off" class="layui-input" th:value="${updAuthority?.getAuthName()}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">资源名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="resName" required lay-verify="required" th:value="${updAuthority?.getResName()}"
+                   placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">资源类型</label>
+        <div class="layui-input-block">
+            <input type="radio" name="resType" value="0" title="菜单" th:checked="${updAuthority?.getResType() == 0}">
+            <input type="radio" name="resType" value="1" title="按钮" th:checked="${updAuthority?.getResType() == 1}">
+            <input type="radio" name="resType" value="2" title="页面" th:checked="${updAuthority?.getResType() == 2}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">资源url</label>
+        <div class="layui-input-block">
+            <input type="text" name="url" required lay-verify="required" th:value="${updAuthority?.getUrl()}"
+                   placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">资源图标</label>
+        <div class="layui-input-block">
+            <input type="text" name="icon" required lay-verify="required" th:value="${updAuthority?.getIcon()}"
+                   placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属</label>
+        <div class="layui-input-block">
+            <select name="parentId" lay-filter="aihao">
+                <option th:each="authority, state : ${authList}"
+                        th:selected="${updAuthority?.getParentId() == authority?.getId() || updAuthority?.getAuthName() == authority?.getAuthName()}"
+                        th:value="${authority?.getId()}"
+                        th:text="${authority?.getAuthName()}"></option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">权限描述</label>
+        <div class="layui-input-block">
+            <textarea name="description" placeholder="请输入内容" th:text="${updAuthority?.getDescription()}"
+                      required lay-verify="required" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="addAuthority">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+</div>
+
+<script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form', 'layer'], function () {
+        let form = layui.form;
+        let layer = layui.layer;
+        let $ = layui.jquery;
+
+        //监听提交
+        form.on('submit(addAuthority)', function (data) {
+            layer.msg(JSON.stringify(data.field));
+
+            $.ajax({
+                type: "POST",
+                url: [[${#servletContext.getContextPath()}]] + [[${url}]],
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(data.field),
+                dataType: "json",
+                success: function (message) {
+                    layer.closeAll('loading');
+                    layer.msg(message.msg, {
+                        icon: 1,
+                        time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        // 当你在iframe页面关闭自身时
+                        let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                    });
+                },
+                error: function (message) {
+                    layer.closeAll('loading');
+                    console.log(JSON.stringify(message));
+                    layer.msg("执行失败", {
+                        icon: 2,
+                        time: 1500
+                    });
+                }
+            });
+            layer.load();
+            return false; // 禁用页面跳转
+        });
+    });
+</script>
+</body>
+</html>

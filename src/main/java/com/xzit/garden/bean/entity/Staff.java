@@ -15,21 +15,21 @@ public class Staff {
 
     private String address;
 
-    private Date entryTime;
+    private Date entrytime;
 
     private Integer state;
 
-    private Integer settlementType;
+    private Integer settlementtype;
 
     private Integer salary;
 
     private String position;
 
-    private Integer staffType;
+    private Integer stafftype;
 
     private String description;
 
-    private Long depId;
+    private Long depid;
 
     public Long getId() {
         return id;
@@ -79,12 +79,12 @@ public class Staff {
         this.address = address == null ? null : address.trim();
     }
 
-    public Date getEntryTime() {
-        return entryTime;
+    public Date getEntrytime() {
+        return entrytime;
     }
 
-    public void setEntryTime(Date entryTime) {
-        this.entryTime = entryTime;
+    public void setEntrytime(Date entrytime) {
+        this.entrytime = entrytime;
     }
 
     public Integer getState() {
@@ -95,12 +95,12 @@ public class Staff {
         this.state = state;
     }
 
-    public Integer getSettlementType() {
-        return settlementType;
+    public Integer getSettlementtype() {
+        return settlementtype;
     }
 
-    public void setSettlementType(Integer settlementType) {
-        this.settlementType = settlementType;
+    public void setSettlementtype(Integer settlementtype) {
+        this.settlementtype = settlementtype;
     }
 
     public Integer getSalary() {
@@ -119,12 +119,12 @@ public class Staff {
         this.position = position == null ? null : position.trim();
     }
 
-    public Integer getStaffType() {
-        return staffType;
+    public Integer getStafftype() {
+        return stafftype;
     }
 
-    public void setStaffType(Integer staffType) {
-        this.staffType = staffType;
+    public void setStafftype(Integer stafftype) {
+        this.stafftype = stafftype;
     }
 
     public String getDescription() {
@@ -135,11 +135,11 @@ public class Staff {
         this.description = description == null ? null : description.trim();
     }
 
-    public Long getDepId() {
-        return depId;
+    public Long getDepid() {
+        return depid;
     }
 
-    public void setDepId(Long depId) {
-        this.depId = depId;
+    public void setDepid(Long depid) {
+        this.depid = depid;
     }
 }

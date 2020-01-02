@@ -3,13 +3,13 @@ package com.xzit.garden.bean.entity;
 import java.util.Date;
 
 public class StaffLeave {
-    private Integer id;
+    private Long id;
 
     private Date starttime;
 
     private Date endtime;
 
-    private Integer staffid;
+    private Long staffid;
 
     private Integer stafftype;
 
@@ -19,11 +19,11 @@ public class StaffLeave {
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -43,11 +43,11 @@ public class StaffLeave {
         this.endtime = endtime;
     }
 
-    public Integer getStaffid() {
+    public Long getStaffid() {
         return staffid;
     }
 
-    public void setStaffid(Integer staffid) {
+    public void setStaffid(Long staffid) {
         this.staffid = staffid;
     }
 

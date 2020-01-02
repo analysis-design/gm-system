@@ -1,13 +1,13 @@
 package com.xzit.garden.bean.entity;
 
 public class ImplCost {
-    private Integer id;
+    private Long id;
 
-    private Integer staffid;
+    private Long staffid;
 
-    private Integer implplanid;
+    private Long implplanid;
 
-    private Integer projectid;
+    private Long projectid;
 
     private Integer implday;
 
@@ -17,35 +17,35 @@ public class ImplCost {
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getStaffid() {
+    public Long getStaffid() {
         return staffid;
     }
 
-    public void setStaffid(Integer staffid) {
+    public void setStaffid(Long staffid) {
         this.staffid = staffid;
     }
 
-    public Integer getImplplanid() {
+    public Long getImplplanid() {
         return implplanid;
     }
 
-    public void setImplplanid(Integer implplanid) {
+    public void setImplplanid(Long implplanid) {
         this.implplanid = implplanid;
     }
 
-    public Integer getProjectid() {
+    public Long getProjectid() {
         return projectid;
     }
 
-    public void setProjectid(Integer projectid) {
+    public void setProjectid(Long projectid) {
         this.projectid = projectid;
     }
 

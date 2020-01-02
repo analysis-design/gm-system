@@ -1,7 +1,5 @@
 package com.xzit.garden.bean.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -26,6 +24,9 @@ public class Role implements Serializable {
     // ************关联数据部分************
     // 当前角色拥有的权限列表
     private List<Authority> authorityList;
+
+    public Role() {
+    }
 
     public Role(Long id, String name) {
         this.id = id;
@@ -56,7 +57,6 @@ public class Role implements Serializable {
         this.description = description;
     }
 
-    @JsonIgnore
     public List<Authority> getAuthorityList() {
         return authorityList;
     }

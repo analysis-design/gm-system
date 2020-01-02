@@ -1,46 +1,46 @@
 package com.xzit.garden.bean.entity;
 
 public class ProjectDep {
-    private Integer id;
+    private Long id;
 
-    private Integer projectId;
+    private Long projectid;
 
-    private Integer depId;
+    private Long depid;
 
-    private Integer depStaffNum;
+    private Integer depstaffnum;
 
     private String description;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getProjectId() {
-        return projectId;
+    public Long getProjectid() {
+        return projectid;
     }
 
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
+    public void setProjectid(Long projectid) {
+        this.projectid = projectid;
     }
 
-    public Integer getDepId() {
-        return depId;
+    public Long getDepid() {
+        return depid;
     }
 
-    public void setDepId(Integer depId) {
-        this.depId = depId;
+    public void setDepid(Long depid) {
+        this.depid = depid;
     }
 
-    public Integer getDepStaffNum() {
-        return depStaffNum;
+    public Integer getDepstaffnum() {
+        return depstaffnum;
     }
 
-    public void setDepStaffNum(Integer depStaffNum) {
-        this.depStaffNum = depStaffNum;
+    public void setDepstaffnum(Integer depstaffnum) {
+        this.depstaffnum = depstaffnum;
     }
 
     public String getDescription() {

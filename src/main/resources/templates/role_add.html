@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>添加角色</title>
+    <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
+</head>
+<body>
+<div class="layui-form layui-container" style="padding:15px 30px 15px 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="roleName" required lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">角色描述</label>
+        <div class="layui-input-block">
+            <textarea name="description" placeholder="请输入内容" required lay-verify="required"
+                      class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="addRole">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+</div>
+
+<script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form', 'layer'], function () {
+        let form = layui.form;
+        let layer = layui.layer;
+        let $ = layui.jquery;
+
+        //监听提交
+        form.on('submit(addRole)', function (data) {
+            layer.msg(JSON.stringify(data.field));
+
+            $.ajax({
+                type: "POST",
+                url: [[${#servletContext.getContextPath()}]] + '/role/add',
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(data.field),
+                dataType: "json",
+                success: function (message) {
+                    layer.closeAll('loading');
+                    layer.msg(message.msg, {
+                        icon: 1,
+                        time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        // 当你在iframe页面关闭自身时
+                        let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                    });
+                },
+                error: function (message) {
+                    layer.closeAll('loading');
+                    console.log(JSON.stringify(message));
+                    layer.msg("执行失败", {
+                        icon: 2,
+                        time: 1500
+                    });
+                }
+            });
+            layer.load();
+            return false; // 禁用页面跳转
+        });
+    });
+</script>
+</body>
+</html>

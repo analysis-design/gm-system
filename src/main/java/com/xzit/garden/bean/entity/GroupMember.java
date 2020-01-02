@@ -1,45 +1,45 @@
 package com.xzit.garden.bean.entity;
 
 public class GroupMember {
-    private Integer id;
+    private Long id;
 
-    private Integer groupid;
+    private Long groupid;
 
-    private Integer memberid;
+    private Long memberid;
 
-    private Integer postid;
+    private Long postid;
 
     private Integer state;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getGroupid() {
+    public Long getGroupid() {
         return groupid;
     }
 
-    public void setGroupid(Integer groupid) {
+    public void setGroupid(Long groupid) {
         this.groupid = groupid;
     }
 
-    public Integer getMemberid() {
+    public Long getMemberid() {
         return memberid;
     }
 
-    public void setMemberid(Integer memberid) {
+    public void setMemberid(Long memberid) {
         this.memberid = memberid;
     }
 
-    public Integer getPostid() {
+    public Long getPostid() {
         return postid;
     }
 
-    public void setPostid(Integer postid) {
+    public void setPostid(Long postid) {
         this.postid = postid;
     }
 

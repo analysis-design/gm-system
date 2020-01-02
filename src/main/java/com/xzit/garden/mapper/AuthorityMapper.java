@@ -50,12 +50,31 @@ public interface AuthorityMapper {
     @Select("select * from authority where id=#{id}")
     Authority findById(Long id);
 
-    @Insert("")
+    @Insert("insert into authority (authName, resName, resType, url, icon, parentId, description) " +
+            "values (#{authName}, #{resName}, #{resType}, #{url}, #{icon}, #{parentId}, #{description})")
+    @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
     void add(Authority authority);
 
     @Delete("delete from authority where id=#{id}")
     void deleteById(Long id);
 
-    @Update("")
+    @Update("update authority set " +
+            "authName = #{authName}, resName = #{resName}, resType = #{resType}, " +
+            "url = #{url}, icon = #{icon}, parentId = #{parentId}, description = #{description} " +
+            "where id = #{id}")
     void update(Authority authority);
+
+    @Select("select * from authority limit #{index}, #{limit}")
+    List<Authority> findPage(@Param("index") Integer index, @Param("limit") Integer limit);
+
+    @Select("select count(*) from authority")
+    int countList();
+
+    @Delete("<script>" +
+            "delete from authority where id in  " +
+            "<foreach collection=\"idList\"  item=\"item\" open=\"(\" separator=\",\" close=\")\">" +
+            "   #{item} " +
+            "</foreach>" +
+            "</script>")
+    void deleteByIdList(@Param("idList") List<Long> authList);
 }

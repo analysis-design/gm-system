@@ -5,7 +5,7 @@ public class Department {
 
     private String name;
 
-    private Long leaderId;
+    private Integer leaderid;
 
     private String description;
 
@@ -25,12 +25,12 @@ public class Department {
         this.name = name == null ? null : name.trim();
     }
 
-    public Long getLeaderId() {
-        return leaderId;
+    public Integer getLeaderid() {
+        return leaderid;
     }
 
-    public void setLeaderId(Long leaderId) {
-        this.leaderId = leaderId;
+    public void setLeaderid(Integer leaderid) {
+        this.leaderid = leaderid;
     }
 
     public String getDescription() {

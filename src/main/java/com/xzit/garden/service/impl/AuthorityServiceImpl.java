@@ -3,10 +3,16 @@ package com.xzit.garden.service.impl;
 import com.xzit.garden.bean.dto.AuthorityDto;
 import com.xzit.garden.bean.dto.UserDto;
 import com.xzit.garden.bean.entity.Authority;
+import com.xzit.garden.bean.model.PageModel;
+import com.xzit.garden.exception.ObjNotFoundException;
 import com.xzit.garden.mapper.AuthorityMapper;
 import com.xzit.garden.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AuthorityServiceImpl implements AuthorityService {
@@ -14,11 +20,12 @@ public class AuthorityServiceImpl implements AuthorityService {
     private AuthorityMapper authorityMapper;
 
     @Override
-    public AuthorityDto getAllAuthority() {
+    public AuthorityDto getAllAuthorityTree() {
 
         return UserDto.loadAuthority(authorityMapper.findAll());
     }
 
+    @Transactional
     @Override
     public void add(Authority authority) {
         Long parentId = authority.getParentId();
@@ -29,6 +36,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         authorityMapper.add(authority);
     }
 
+    @Transactional
     @Override
     public Authority deleteById(Long authId) {
         Authority temp = authorityMapper.findById(authId);
@@ -38,6 +46,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         return temp;
     }
 
+    @Transactional
     @Override
     public void updateById(Authority authority) {
         Authority temp = authorityMapper.findById(authority.getId());
@@ -50,4 +59,42 @@ public class AuthorityServiceImpl implements AuthorityService {
 
         authorityMapper.update(authority);
     }
+
+    @Override
+    public List<Authority> getAllAuthorityList(PageModel<List<Authority>> page) {
+        Integer limit = page.getLimit();
+        List<Authority> authorityList = authorityMapper.findPage((page.getPage() - 1) * limit, limit);
+        if (authorityList == null)
+            authorityList = new ArrayList<>();
+
+        int count = authorityMapper.countList();
+        page.setCount(count);
+        return authorityList;
+    }
+
+    @Override
+    public Authority getById(Long authId) {
+        Authority authority = authorityMapper.findById(authId);
+        if (authority == null)
+            throw new ObjNotFoundException("指定的修改的权限编号不存在");
+
+        return authority;
+    }
+
+    @Override
+    public List<Authority> deleteAllById(List<Long> authList) {
+        List<Authority> list = new ArrayList<>();
+
+        for (Long authId : authList) {
+            Authority authority = authorityMapper.findById(authId);
+            if (authority == null)
+                throw new ObjNotFoundException("指定的修改的权限编号" + authId + "不存在");
+            list.add(authority);
+        }
+
+        authorityMapper.deleteByIdList(authList);
+        return list;
+    }
+
+
 }

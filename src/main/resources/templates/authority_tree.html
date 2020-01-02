@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>权限树状图</title>
+    <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
+</head>
+<body>
+<div class="layui-container" style="margin: 0; width: 100%">
+    <div class="layui-row">
+        <div id="authorityTree" class="layui-col-md3"
+             style="margin-top: 10px; padding-top: 5px; padding-bottom: 10px; border: 1px solid rgb(230, 230, 230);">
+        </div>
+        <div class="layui-col-md1" style="text-align: center;">
+            <button type="button" id="updAuth"
+                    class="layui-btn layui-btn-primary layui-btn-sm" style="margin-top: 100px;">
+                <i class="layui-icon">&#xe602;</i>
+            </button>
+        </div>
+        <div class="layui-col-md8">
+            <table id="roleTable" lay-filter="role"></table>
+        </div>
+    </div>
+
+</div>
+<script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+<script type="text/html" id="roleToolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addRoleBtn">添加</button>
+    </div>
+</script>
+<script type="text/html" id="roleListBar">
+    <a class="layui-btn layui-btn-xs" lay-event="upd">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script th:inline="javascript">
+    //JavaScript代码区域
+    layui.use(['element', 'tree', 'util', 'table'], function () {
+        let tree = layui.tree;
+        let util = layui.util;
+        let table = layui.table;
+        let $ = layui.jquery;
+        let checkedRole = null;
+
+        $("#updAuth").click(function () {
+            if (checkedRole == null) {
+                layer.msg("未选择角色", {
+                    icon: 2,
+                    time: 1500
+                });
+                return;
+            }
+            let roleModel = {};
+            roleModel.roleId = checkedRole.id;
+
+            let authIdList = tree.getChecked('authorityTreeId');
+            // 递归获取选中的权限id值
+            let factId = function (authIdList) {
+                let temp = [];
+                for (let i in authIdList) {
+                    temp.push(authIdList[i].id);
+                    let temp2 = factId(authIdList[i].children);
+                    temp = temp.concat(temp2);
+                }
+                return temp;
+            };
+
+            roleModel.authList = factId(authIdList);
+
+            console.log(roleModel);
+
+            $.ajax({
+                type: "POST",
+                url: [[${#servletContext.getContextPath()}]] + "/role/alloc/upd",
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(roleModel),
+                dataType: "json",
+                success: function (message) {
+                    layer.closeAll('loading');
+
+                    layer.msg(message.msg, {
+                        icon: 1,
+                        time: 1500 // 2秒关闭（如果不配置，默认是3秒）
+                    });
+                },
+                error: function (message) {
+                    layer.closeAll('loading');
+                    console.log(JSON.stringify(message));
+                    layer.msg("添加失败", {
+                        icon: 2,
+                        time: 1500
+                    });
+                }
+            });
+            layer.load();
+        });
+
+        let factNode = function (nodeList) {
+            let itemList = [];
+            for (let i in nodeList) {
+                let item = {
+                    title: nodeList[i].authName,
+                    id: nodeList[i].id,
+                    children: [],
+                    href: [[${#servletContext.getContextPath()}]] + nodeList[i].url,
+                    spread: true,
+                    checked: false
+                };
+
+                let temp1 = factNode(nodeList[i].children);
+                let temp2 = factNode(nodeList[i].contents);
+                if (temp1 !== null && temp1.length > 0)
+                    item.children = item.children.concat(temp1);
+
+                if (temp2 !== null && temp2.length > 0)
+                    item.children = item.children.concat(temp2);
+
+                itemList.push(item);
+            }
+            if (itemList.length > 0)
+                return itemList;
+            return null;
+        };
+
+        let nodeList = [[${data}]].data.children;
+        let dataList = factNode(nodeList);
+
+        //渲染
+        let authorityTree = tree.render({
+            id: "authorityTreeId"
+            , elem: '#authorityTree'  //绑定元素
+            , data: dataList
+            , showCheckbox: true  //是否显示复选框
+            , click: function (obj) {
+                let data = obj.data;  //获取当前点击的节点数据
+                layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
+            }
+        });
+
+
+        //第一个实例
+        table.render({
+            id: "roleId"
+            , elem: '#roleTable'
+            , title: "角色列表"
+            , toolbar: '#roleToolbar' //开启头部工具栏，并为其绑定左侧模板
+            , url: [[${#servletContext.getContextPath()}]] + '/role/list' //数据接口
+            , page: true //开启分页
+            , cols: [
+                [ //表头
+                    {title: '选择', width: 36, type: 'radio', fixed: 'left'}
+                    , {field: 'id', title: '编号', width: 69, fixed: 'left', align: 'center'}
+                    , {field: 'name', title: '角色名称', width: '30%', edit: 'text'}
+                    , {field: 'description', title: '描述', width: '50%', edit: 'text'}
+                    , {fixed: 'right', title: '操作', toolbar: '#roleListBar', width: 115, align: 'center'}
+                ]
+            ]
+        });
+
+        table.on('toolbar(role)', function (obj) {
+            if (obj.event === 'addRoleBtn') {
+                layer.open({
+                    type: 2,
+                    title: '添加角色',
+                    shadeClose: true,
+                    shade: 0.8,
+                    offset: '30px',
+                    area: ['50%', '69%'],
+                    content: [[${#servletContext.getContextPath()}]] + '/role/add/index' //iframe的url
+                });
+
+                table.reload("roleId", {url: [[${#servletContext.getContextPath()}]] + '/role/list'});
+            }
+        });
+
+        //监听行工具事件
+        table.on('tool(role)', function (obj) {
+            let data = obj.data;
+            // console.log(obj)
+            if (obj.event === 'del') {
+                layer.confirm('确认删除？', function (index) {
+                    $.ajax({
+                        url: [[${#servletContext.getContextPath()}]] + "/role/del",
+                        data: {roleId: data.id},
+                        dataType: "json",
+                        success: function (message) {
+                            layer.closeAll('loading');
+                            obj.del();
+
+                            layer.msg(message.msg, {
+                                icon: 1,
+                                time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                            });
+
+                            table.reload("roleId", {
+                                page: {curr: 1},
+                                url: [[${#servletContext.getContextPath()}]] + '/role/list'
+                            });
+                        },
+                        error: function (message) {
+                            layer.closeAll('loading');
+                            console.log(JSON.stringify(message));
+                            layer.msg("删除失败", {
+                                icon: 2,
+                                time: 1500
+                            });
+                        }
+                    });
+                    layer.close(index);
+                    layer.load();
+                });
+            } else if (obj.event === 'upd') {
+                let roleModel = {
+                    roleId: data.id,
+                    roleName: data.name,
+                    description: data.description
+                };
+                $.ajax({
+                    type: "POST",
+                    url: [[${#servletContext.getContextPath()}]] + "/role/update",
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify(roleModel),
+                    dataType: "json",
+                    success: function (message) {
+                        layer.closeAll('loading');
+
+                        layer.msg(message.msg, {
+                            icon: 1,
+                            time: 1500 // 2秒关闭（如果不配置，默认是3秒）
+                        });
+                    },
+                    error: function (message) {
+                        layer.closeAll('loading');
+                        console.log(JSON.stringify(message));
+                        layer.msg("修改失败", {
+                            icon: 2,
+                            time: 1500
+                        });
+                    }
+                });
+                layer.load();
+            }
+        });
+
+        table.on('radio(role)', function (obj) {
+            console.log(obj.checked); //当前是否选中状态
+            console.log(obj.data); //选中行的相关数据
+            checkedRole = obj.data;
+
+            let reloadTree = function (role) {
+                let authorityList = role.authorityList;
+
+                let idList = [];
+                let parentIdList = [];
+                for (let i in authorityList) {
+                    idList.push(authorityList[i].id);
+                    if (authorityList[i].parentId != null)
+                        parentIdList.push(authorityList[i].parentId);
+                }
+
+                let updIdList = [];
+                for (let k in idList) {
+                    if (parentIdList.indexOf(idList[k]) >= 0) continue;
+                    updIdList.push(idList[k]);
+                }
+
+                tree.setChecked('authorityTreeId', updIdList);
+            };
+
+            $.ajax({
+                url: [[${#servletContext.getContextPath()}]] + "/role/details",
+                data: {roleId: obj.data.id},
+                dataType: "json",
+                success: function (message) {
+                    layer.closeAll('loading');
+
+                    layer.msg(message.msg, {
+                        icon: 1,
+                        time: 1500 // 2秒关闭（如果不配置，默认是3秒）
+                    });
+
+                    authorityTree.reload({});
+                    reloadTree(message.data);
+                },
+                error: function (message) {
+                    layer.closeAll('loading');
+                    console.log(JSON.stringify(message));
+                    layer.msg("添加失败", {
+                        icon: 2,
+                        time: 1500
+                    });
+                }
+            });
+            layer.load();
+        });
+
+    });
+</script>
+</body>
+</html>
