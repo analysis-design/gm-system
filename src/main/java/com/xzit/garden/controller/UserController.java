@@ -52,6 +52,7 @@ public class UserController {
         model.addAttribute("roleList", roleList);
         model.addAttribute("staffList", staffList);
         model.addAttribute("msg", "添加用户");
+        model.addAttribute("flag", 0);
         model.addAttribute("url", "/user/add");
         return "user_edit";
     }
@@ -71,7 +72,9 @@ public class UserController {
         model.addAttribute("roleList", roleList);
         model.addAttribute("staffList", staffList);
         model.addAttribute("user", user);
+        model.addAttribute("userRoleList", user.getRoleIdList());
         model.addAttribute("msg", "编辑用户");
+        model.addAttribute("flag", 1);
         model.addAttribute("url", "/user/upd");
         return "user_edit";
     }

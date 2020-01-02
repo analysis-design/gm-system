@@ -186,6 +186,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return getUserDto(user);
     }
 
+    @Transactional
     @Override
     public void addUser(UserDto userDto) {
         validateEditUser(userDto);
@@ -195,11 +196,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         temp.setPassword(userDto.getPassword());
         temp.setStaffId(userDto.getStaffId());
         userMapper.add(temp);
+        List<UserRole> userRoleList = switchUserRoleList(temp.getId(), userDto.getRoleIdList());
+
+        if (userRoleList.size() > 0)
+            userMapper.addRoleRelations(userRoleList);
     }
 
     private void validateEditUser(UserDto userDto) {
         User user = userMapper.findByName(userDto.getUsername());
-        if (user == null)
+        if (user != null && userDto.getId() != null && !userDto.getId().equals(user.getId()))
             throw new ObjectAlreadyExistException("用户" + userDto.getUsername() + "已存在");
 
         List<Long> relatedRoleList = userDto.getRoleIdList();
@@ -226,6 +231,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             throw new ObjNotFoundException("角色" + Arrays.toString(roleIdList.toArray()) + "不存在");
     }
 
+    @Transactional
     @Override
     public User deleteById(Long userId) {
         User user = validateExistUser(userId);
@@ -237,21 +243,27 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return user;
     }
 
+    @Transactional
     @Override
     public List<User> deleteAllById(List<Long> userList) {
         List<User> list = new ArrayList<>();
         for (Long userId : userList) {
             list.add(validateExistUser(userId));
         }
+        List<UserRole> userRoleList = userMapper.findUserRoleListByUserIdList(userList);
+        if (userRoleList != null && userRoleList.size() > 0)
+            throw new ObjectAlreadyInUse("无法批量删除用户，存在角色关联");
 
         userMapper.deleteByIdList(userList);
         return list;
     }
 
+    @Transactional
     @Override
     public void updateById(UserDto userDto) {
         Long userId = userDto.getId();
-        validateExistUser(userId);
+        User user = validateExistUser(userId);
+
         validateEditUser(userDto);
         List<Long> relatedRoleList = userDto.getRoleIdList();
         List<UserRole> userRoleList = userMapper.findUserRoleListByUserId(userId);
@@ -270,6 +282,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         if (delUserRoleList.size() > 0)
             userMapper.deleteRoleRelations(userId, delUserRoleList);
+
+        if (user.getPassword() != null && !user.getPassword().equals(""))
+            user.setPassword(userDto.getPassword());
+
+        user.setUsername(userDto.getUsername());
+        user.setStaffId(userDto.getStaffId());
+        userMapper.update(user);
     }
 
     private List<UserRole> switchUserRoleList(Long userId, List<Long> relatedRoleList) {

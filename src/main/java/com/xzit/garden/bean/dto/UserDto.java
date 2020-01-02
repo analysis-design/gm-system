@@ -49,8 +49,12 @@ public class UserDto implements Serializable {
         this.roleDesc = "";
         this.authDesc = "";
         this.staffId = staff.getId();
-        for (Role role : roleList)
+        this.roleIdList = new ArrayList<>();
+
+        for (Role role : roleList) {
             this.roleDesc += role.getName() + ", \n";
+            roleIdList.add(role.getId());
+        }
 
         for (Authority authority : authorityList)
             this.authDesc += authority.getAuthName() + ", \n";

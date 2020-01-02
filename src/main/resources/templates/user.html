@@ -60,6 +60,13 @@
             ]
         });
 
+        let tableReload = function(){
+            userTable.reload({
+                page: {curr: 1},
+                url: [[${#servletContext.getContextPath()}]] + '/user/list'
+            });
+        };
+
         //头工具栏事件
         table.on('toolbar(test)', function (obj) {
             let checkStatus = table.checkStatus(obj.config.id);
@@ -76,7 +83,7 @@
                         content: [[${#servletContext.getContextPath()}]] + '/user/add/index' //iframe的url
                     });
 
-                    userTable.reload({url: [[${#servletContext.getContextPath()}]] + '/user/list'});
+                    tableReload();
                     break;
                 case 'delCheckedUserBtn':
                     data = checkStatus.data;
@@ -98,10 +105,7 @@
                                 time: 1500 //2秒关闭（如果不配置，默认是3秒）
                             });
 
-                            userTable.reload({
-                                page: {curr: 1},
-                                url: [[${#servletContext.getContextPath()}]] + '/user/list'
-                            });
+                            tableReload();
                         },
                         error: function (message) {
                             layer.closeAll('loading');
@@ -116,15 +120,7 @@
 
                 //自定义头工具栏右侧图标 - 提示
                 case 'LAYTABLE_TIPS':
-                    layer.open({
-                        type: 2,
-                        title: '用户角色分配',
-                        shadeClose: true,
-                        shade: 0.8,
-                        offset: '30px',
-                        area: ['85%', '69%'],
-                        content: [[${#servletContext.getContextPath()}]] + '/user/alloc/index' //iframe的url
-                    });
+                    layer.msg('用户信息列表');
                     break;
             }
         });
@@ -148,15 +144,13 @@
                                 icon: 1,
                                 time: 1500 //2秒关闭（如果不配置，默认是3秒）
                             });
-                            userTable.reload({
-                                page: {curr: 1},
-                                url: [[${#servletContext.getContextPath()}]] + '/user/list'
-                            });
+
+                            tableReload();
                         },
                         error: function (message) {
                             layer.closeAll('loading');
                             console.log(JSON.stringify(message));
-                            layer.msg("添加失败", {
+                            layer.msg("删除失败", {
                                 icon: 2,
                                 time: 1500
                             });
@@ -175,7 +169,8 @@
                     area: ['85%', '69%'],
                     content: [[${#servletContext.getContextPath()}]] + '/user/upd/index?userId=' + data.id
                 });
-                userTable.reload({page: {curr: 1}, url: [[${#servletContext.getContextPath()}]] + '/user/list'});
+
+                tableReload();
             }
         });
 

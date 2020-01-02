@@ -26,7 +26,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">密码</label>
         <div class="layui-input-inline">
-            <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
+            <input type="password" name="password" placeholder="请输入密码"
                    th:value="${user?.getPassword()}" autocomplete="off" class="layui-input">
         </div>
         <div class="layui-form-mid layui-word-aux">辅助文字</div>
@@ -35,8 +35,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">角色</label>
         <div class="layui-input-block">
-            <input th:each="role, state : ${roleList}" type="checkbox" name="roleIdList"
-                   th:title="${role.getName()}" th:checked="${user.getRoleList().contains(role)}" lay-skin="primary">
+            <input th:each="role, state : ${roleList}" type="checkbox" name="roleId" th:title="${role.getName()}"
+                   th:checked="${userRoleList?.contains(role.getId())}" lay-skin="primary" th:value="${role.getId()}">
         </div>
     </div>
 
@@ -71,6 +71,20 @@
         //监听提交
         form.on('submit(addUser)', function (data) {
             layer.msg(JSON.stringify(data.field));
+
+            if ([[${flag}]] === 0 && (data.field.password == null || data.field.password.trim() === '')) {
+                layer.msg("密码不能为空", {
+                    icon: 2,
+                    time: 1500
+                });
+                return;
+            }
+
+            let roleIdList = [];
+            $("input:checkbox[name='roleId']:checked").each(function (i) {
+                roleIdList[i] = $(this).val();
+            });
+            data.field.roleIdList = roleIdList;
 
             $.ajax({
                 type: "POST",
