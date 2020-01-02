@@ -8,11 +8,13 @@ public interface ProjectService {
 
     List<Project> findAllProject();
 
-    Project findByIdProject(Integer id);
+    Project findByIdProject(Long id);
+
+    List<Project> findByName(String name);
 
     Integer insertProject(Project project);
 
-    Integer deleteProject(Integer id);
+    Integer deleteProject(Long id);
 
     Integer updateProject(Project project);
 }

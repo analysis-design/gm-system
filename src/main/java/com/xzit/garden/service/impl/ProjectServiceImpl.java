@@ -28,10 +28,22 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project findByIdProject(Integer id) {
+    public Project findByIdProject(Long id) {
         if (projectMapper.findById(id)==null)
             throw new ObjNotFoundException("此工程不存在！");
         return projectMapper.findById(id);
+    }
+
+    /**
+     * 根据工程名模糊查询工程
+     * 如果名称为空则返回findAll
+     * @return
+     */
+    @Override
+    public List<Project> findByName(String name) {
+        if (name==""||name==null||name.equals(""))
+            findAllProject();
+        return projectMapper.findByName(name);
     }
 
     /*
@@ -66,8 +78,8 @@ public class ProjectServiceImpl implements ProjectService {
     5.
      */
     @Override
-    public Integer deleteProject(Integer id) {
-        return projectMapper.delete(id);
+    public Integer deleteProject(Long id) {
+        return projectMapper.isDelete(id);
     }
 
     /*
