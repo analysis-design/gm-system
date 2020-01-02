@@ -102,7 +102,10 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void updateById(Group group) {
         Group temp = getById(group.getId());
-        validateExistGroup(group.getName());
+        Group temp2 = groupMapper.findByGroupName(group.getName());
+        if (temp2 != null && !group.getName().equals(temp2.getName()))
+            throw new ObjectAlreadyExistException("工程组" + group.getName() + "已存在");
+
         validateExistLeader(group.getLeaderId());
 
         group.setState(temp.getState());
