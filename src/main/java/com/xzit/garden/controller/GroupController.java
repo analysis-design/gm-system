@@ -238,6 +238,4 @@ public class GroupController {
         rs.put("data", group);
         return rs;
     }
-
-
 }
