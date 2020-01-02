@@ -49,14 +49,26 @@
                 , icon: 'layui-icon-tips'
             }]
             , url: [[${#servletContext.getContextPath()}]] + '/auth/list' //数据接口
-            , page: true //开启分页
+            , page: true // 开启分页
             , cols: [
                 [ //表头
-                    {title: '选择', width: 36, type: 'checkbox', fixed: 'left'}
-                    , {field: 'id', title: '编号', width: 69, fixed: 'left', align: 'center'}
-                    , {field: 'authName', title: '权限名称', width: '12%'}
-                    , {field: 'resName', title: '资源名称', width: '10%'}
-                    , {field: 'resType', title: '资源类型\n(0：菜单/1：按钮)', width: '10%'}
+                    {title: '选择', width: 36, type: 'checkbox', fixed: 'left'},
+                    {field: 'id', title: '编号', width: 69, fixed: 'left', align: 'center'},
+                    {field: 'authName', title: '权限名称', width: '12%'},
+                    {field: 'resName', title: '资源名称', width: '10%'},
+                    {
+                        field: 'resType', title: '资源类型', width: '10%',
+                        templet: function (d) {
+                            if (d.resType === 0) {
+                                return '菜单';
+                            } else if (d.resType === 1) {
+                                return '按钮';
+                            } else if (d.resType === 2) {
+                                return '页面';
+                            }
+                            return '未知';
+                        }
+                    }
                     , {field: 'url', title: '资源url', width: '15%'}
                     , {field: 'icon', title: '资源图标', width: '20%'}
                     , {field: 'parentId', title: '所属菜单编号', width: '13%'}
