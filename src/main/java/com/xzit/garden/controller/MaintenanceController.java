@@ -7,6 +7,7 @@ import com.xzit.garden.bean.model.PageModel;
 import com.xzit.garden.service.MaintenancePlanService;
 import com.xzit.garden.service.ProjectService;
 import com.xzit.garden.service.UserService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,15 +47,11 @@ public class MaintenanceController {
     }
 
     @GetMapping("/add/index")
-    public String addIndex(Model model) {
-        UserDto user = userService.getUserDto();
-        PageModel<List<MaintenancePlanDto>> pageModel = new PageModel<>();
-        pageModel.setPage(1);
-        pageModel.setLimit(65536);
-        List<MaintenancePlanDto> maintenancePlanDtoList = maintenancePlanService.getAllMaintenanceList(pageModel);
-        model.addAttribute("user", user);
-        model.addAttribute("msg", "添加计划");
-        model.addAttribute("authList", maintenancePlanDtoList);
+    public String addIndex(Model model, Long id) {
+        MaintenancePlan maintenancePlan=new MaintenancePlan();
+        if(id!=null)
+            maintenancePlan=maintenancePlanService.findById(id);
+        model.addAttribute("maintenancePlan",maintenancePlan);
         return "maintenancePlan_edit";
     }
 

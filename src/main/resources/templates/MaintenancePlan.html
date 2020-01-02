@@ -69,13 +69,10 @@
 
         //头工具栏事件
         table.on('toolbar(test)', function (obj) {
-            let checkStatus = table.checkStatus(obj.config.id);
             let data;
-            switch (obj.event) {
-                case 'addAuthBtn':
                     layer.open({
                         type: 2,
-                        title: '添加权限',
+                        title: '添加计划',
                         shadeClose: true,
                         shade: 0.8,
                         offset: '30px',
@@ -84,21 +81,6 @@
                     });
                     console.log("阻塞完成");
                     authorityTable.reload({page: {curr: 1}});
-                    break;
-
-                //自定义头工具栏右侧图标 - 提示
-                case 'LAYTABLE_TIPS':
-                    layer.open({
-                        type: 2,
-                        title: 'layer mobile页',
-                        shadeClose: true,
-                        shade: 0.8,
-                        offset: '30px',
-                        area: ['85%', '69%'],
-                        content: [[${#servletContext.getContextPath()}]] + '/auth/tree/index' //iframe的url
-                    });
-                    break;
-            }
         });
 
         //监听行工具事件
@@ -123,7 +105,7 @@
                         },
                         error: function (message) {
                             console.log(JSON.stringify(message));
-                            layer.msg("添加失败", {
+                            layer.msg("删除失败", {
                                 icon: 2,
                                 time: 1500
                             });
@@ -133,15 +115,17 @@
                     layer.load();
                 });
             } else if (obj.event === 'edit') {
-                layer.prompt({
-                    formType: 2
-                    , value: data.email
-                }, function (value, index) {
-                    obj.update({
-                        email: value
-                    });
-                    layer.close(index);
+                layer.open({
+                    type: 2,
+                    title: '修改计划',
+                    shadeClose: true,
+                    shade: 0.8,
+                    offset: '30px',
+                    area: ['85%', '69%'],
+                    content: [[${#servletContext.getContextPath()}]] + '/maintenance/add/index?'+'id='+data.id//iframe的url
                 });
+                console.log("阻塞完成");
+                authorityTable.reload({page: {curr: 1}});
             }
         });
 
