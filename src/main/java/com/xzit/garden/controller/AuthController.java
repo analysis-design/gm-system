@@ -141,7 +141,6 @@ public class AuthController {
     @ResponseBody
     public Map<String, Object> authList(PageModel<List<Authority>> page) {
         List<Authority> authorityList = authorityService.getAllAuthorityList(page);
-
         Map<String, Object> data = new HashMap<>();
         data.put("code", 0);
         data.put("msg", "查询完成");
