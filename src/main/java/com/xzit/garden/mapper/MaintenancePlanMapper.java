@@ -1,5 +1,6 @@
 package com.xzit.garden.mapper;
 
+import com.xzit.garden.bean.dto.MaintenancePlanDto;
 import com.xzit.garden.bean.entity.MaintenancePlan;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
@@ -70,4 +71,10 @@ public interface MaintenancePlanMapper {
     int updateByPrimaryKey(MaintenancePlan record);
     @Select("select * from maintenance_plan")
     List<MaintenancePlan> findAll();
+
+    @Select("select a.* ,b.name from   maintenance_plan as a join project as b on a.projectId=b.id limit #{index}, #{limit}")
+    List<MaintenancePlanDto> findPage(@Param("index") Integer index, @Param("limit") Integer limit);
+
+    @Select("select count(*) from maintenance_plan")
+    int countList();
 }
