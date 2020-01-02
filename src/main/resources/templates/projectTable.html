@@ -8,8 +8,8 @@
     <title>工程列表</title>
     <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
 </head>
-<body>
-<form class="layui-form">
+<body style="padding-left: 15px;padding-right: 15px">
+<form class="layui-form" style="margin-top: 15px">
     <div class="layui-input-inline">
         <input type="text" autocomplete="off" placeholder="请输入工程名称" class="layui-input" id="pName" value="">
     </div>
@@ -69,11 +69,26 @@
                         name: name
                     }
                 });
+            },
+            toedit:function (winTitle,projectId) {
+                layer.open({
+                    type: 2,
+                    title: winTitle,
+                    shadeClose: false,
+                    shade: 0.5,
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['85%', '69%'],
+                    content:'[[@{/project/add?id=}]]'+projectId
+                });
             }
         };
         //查询按钮
         $('#queryBtn').on('click', function () {
             active.reload();
+        });
+        //添加按钮
+        $('#addBtn').on('click', function () {
+            active.toedit("园林管理系统-添加工程信息",0);
         });
         //监听行工具事件
         table.on('tool(test)', function (obj) {
@@ -83,32 +98,32 @@
                 layer.confirm('真的删除行么', function (index) {
                     obj.del();
                     layer.close(index);
-                    // $.get("[[@{/project/del}]]",{id:data.id},function (result) {
-                    //     if (result=="deleteError"){
-                    //         alert(result);
-                    //     }
-                    //     else {
-                    //         alert(result);
-                    //         window.location.reload();
-                    //     }
-                    // })
-
-                    $.ajax({
-                        url: "[[@{/project/delete}]]",
-                        data: JSON.stringify({"id": data.id}),
-                        type: "post",
-                        dataType: "json",
-                        contentType: "application/json",
-                        success: function (result) {
-                            console.log(result)
-                            // if (result == "deleteError") {
-                            //     alert(result);
-                            // } else {
-                            //     alert(result);
-                            //     window.location.reload();
-                            // }
+                    $.get("[[@{/project/del}]]",{id:data.id},function (result) {
+                        if (result=="deleteError"){
+                            alert(result);
+                        }
+                        else {
+                            alert(result);
+                            window.location.reload();
                         }
                     })
+
+                    // $.ajax({
+                    //     url: "[[@{/project/delete}]]",
+                    //     data: JSON.stringify({"id": data.id}),
+                    //     type: "post",
+                    //     dataType: "json",
+                    //     contentType: "application/json",
+                    //     success: function (result) {
+                    //         console.log(result)
+                    //         // if (result == "deleteError") {
+                    //         //     alert(result);
+                    //         // } else {
+                    //         //     alert(result);
+                    //         //     window.location.reload();
+                    //         // }
+                    //     }
+                    // })
                 });
             } else if (obj.event === 'edit') {
                 layer.prompt({
