@@ -91,7 +91,7 @@ public class AuthController {
     }
 
     /**
-     * 添加权限首页
+     * 更新权限首页
      *
      * @param model 传入数据的域对象
      * @return 首页

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>权限管理</title>
+    <title>用户角色</title>
     <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
 </head>
 <body>
@@ -13,15 +13,12 @@
             <table id="demo" lay-filter="test"></table>
         </div>
     </div>
-    <div class="layui-row">
-
-    </div>
 </div>
 <script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="addAuthBtn">添加权限</button>
-        <button class="layui-btn layui-btn-sm" lay-event="delCheckedAuthBtn">删除所选</button>
+        <button class="layui-btn layui-btn-sm" lay-event="addUserBtn">添加用户</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delCheckedUserBtn">删除所选</button>
     </div>
 </script>
 <script type="text/html" id="barDemo">
@@ -38,53 +35,57 @@
         let $ = layui.jquery;
 
         //第一个实例
-        let authorityTable = table.render({
-            id: 'authorityTableId'
+        let userTable = table.render({
+            id: 'userTableId'
             , elem: '#demo'
-            , title: "权限列表"
+            , title: "用户列表"
             , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
             , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                 title: '获取'
                 , layEvent: 'LAYTABLE_TIPS'
                 , icon: 'layui-icon-tips'
             }]
-            , url: [[${#servletContext.getContextPath()}]] + '/auth/list' //数据接口
+            , url: [[${#servletContext.getContextPath()}]] + '/user/list' //数据接口
             , page: true //开启分页
             , cols: [
                 [ //表头
                     {title: '选择', width: 36, type: 'checkbox', fixed: 'left'}
                     , {field: 'id', title: '编号', width: 69, fixed: 'left', align: 'center'}
-                    , {field: 'authName', title: '权限名称', width: '12%'}
-                    , {field: 'resName', title: '资源名称', width: '10%'}
-                    , {field: 'resType', title: '资源类型\n(0：菜单/1：按钮)', width: '10%'}
-                    , {field: 'url', title: '资源url', width: '15%'}
-                    , {field: 'icon', title: '资源图标', width: '20%'}
-                    , {field: 'parentId', title: '所属菜单编号', width: '13%'}
-                    , {field: 'description', title: '描述', width: '16%'}
+                    , {field: 'username', title: '用户名', width: '15%'}
+                    , {field: 'staffId', title: '员工编号', width: '10%'}
+                    , {field: 'roleDesc', title: '角色', width: '25%'}
+                    , {field: 'authDesc', title: '用户权限', width: '35%'}
                     , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150, align: "center"}
                 ]
             ]
         });
+
+        let tableReload = function(){
+            userTable.reload({
+                page: {curr: 1},
+                url: [[${#servletContext.getContextPath()}]] + '/user/list'
+            });
+        };
 
         //头工具栏事件
         table.on('toolbar(test)', function (obj) {
             let checkStatus = table.checkStatus(obj.config.id);
             let data;
             switch (obj.event) {
-                case 'addAuthBtn':
+                case 'addUserBtn':
                     layer.open({
                         type: 2,
-                        title: '添加权限',
+                        title: '添加用户',
                         shadeClose: true,
                         shade: 0.8,
                         offset: '30px',
                         area: ['85%', '69%'],
-                        content: [[${#servletContext.getContextPath()}]] + '/auth/add/index' //iframe的url
+                        content: [[${#servletContext.getContextPath()}]] + '/user/add/index' //iframe的url
                     });
 
-                    authorityTable.reload({url: [[${#servletContext.getContextPath()}]] + '/auth/list'});
+                    tableReload();
                     break;
-                case 'delCheckedAuthBtn':
+                case 'delCheckedUserBtn':
                     data = checkStatus.data;
                     let del = [];
                     for (let i in data)
@@ -92,7 +93,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: [[${#servletContext.getContextPath()}]] + "/auth/del/list",
+                        url: [[${#servletContext.getContextPath()}]] + "/user/del/list",
                         contentType: "application/json;charset=utf-8",
                         data: JSON.stringify(del),
                         dataType: "json",
@@ -104,10 +105,7 @@
                                 time: 1500 //2秒关闭（如果不配置，默认是3秒）
                             });
 
-                            authorityTable.reload({
-                                page: {curr: 1},
-                                url: [[${#servletContext.getContextPath()}]] + '/auth/list'
-                            });
+                            tableReload();
                         },
                         error: function (message) {
                             layer.closeAll('loading');
@@ -122,15 +120,7 @@
 
                 //自定义头工具栏右侧图标 - 提示
                 case 'LAYTABLE_TIPS':
-                    layer.open({
-                        type: 2,
-                        title: '角色权限分配',
-                        shadeClose: true,
-                        shade: 0.8,
-                        offset: '30px',
-                        area: ['85%', '69%'],
-                        content: [[${#servletContext.getContextPath()}]] + '/auth/tree/index' //iframe的url
-                    });
+                    layer.msg('用户信息列表');
                     break;
             }
         });
@@ -143,8 +133,8 @@
                 layer.confirm('确认删除？', function (index) {
 
                     $.ajax({
-                        url: [[${#servletContext.getContextPath()}]] + "/auth/del",
-                        data: {authId: data.id},
+                        url: [[${#servletContext.getContextPath()}]] + "/user/del",
+                        data: {userId: data.id},
                         dataType: "json",
                         success: function (message) {
                             layer.closeAll('loading');
@@ -154,15 +144,13 @@
                                 icon: 1,
                                 time: 1500 //2秒关闭（如果不配置，默认是3秒）
                             });
-                            authorityTable.reload({
-                                page: {curr: 1},
-                                url: [[${#servletContext.getContextPath()}]] + '/auth/list'
-                            });
+
+                            tableReload();
                         },
                         error: function (message) {
                             layer.closeAll('loading');
                             console.log(JSON.stringify(message));
-                            layer.msg("添加失败", {
+                            layer.msg("删除失败", {
                                 icon: 2,
                                 time: 1500
                             });
@@ -174,14 +162,15 @@
             } else if (obj.event === 'edit') {
                 layer.open({
                     type: 2,
-                    title: '编辑权限',
+                    title: '编辑用户',
                     shadeClose: true,
                     shade: 0.8,
                     offset: '30px',
                     area: ['85%', '69%'],
-                    content: [[${#servletContext.getContextPath()}]] + '/auth/upd/index?authId=' + data.id
+                    content: [[${#servletContext.getContextPath()}]] + '/user/upd/index?userId=' + data.id
                 });
-                authorityTable.reload({page: {curr: 1}, url: [[${#servletContext.getContextPath()}]] + '/auth/list'});
+
+                tableReload();
             }
         });
 

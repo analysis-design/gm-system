@@ -29,9 +29,11 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public void add(Authority authority) {
         Long parentId = authority.getParentId();
-        Authority temp = authorityMapper.findById(parentId);
-        if (temp == null)
-            throw new RuntimeException("指定的父级权限不存在");
+        if (parentId != null && parentId != -1) {
+            Authority temp = authorityMapper.findById(parentId);
+            if (temp == null)
+                throw new RuntimeException("指定的父级权限不存在");
+        } else authority.setParentId(null);
 
         authorityMapper.add(authority);
     }
