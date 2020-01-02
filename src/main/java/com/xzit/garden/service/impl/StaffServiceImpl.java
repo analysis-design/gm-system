@@ -1,4 +1,6 @@
 package com.xzit.garden.service.impl;
 
-public class StaffServiceImpl {
+import com.xzit.garden.service.StaffService;
+
+public class StaffServiceImpl implements StaffService {
 }

@@ -1,4 +1,6 @@
 package com.xzit.garden.service.impl;
 
-public class ResourceServiceImpl {
+import com.xzit.garden.service.ResourceService;
+
+public class ResourceServiceImpl implements ResourceService {
 }

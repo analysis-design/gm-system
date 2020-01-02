@@ -1,4 +1,6 @@
 package com.xzit.garden.service.impl;
 
-public class ResApplyServiceImpl {
+import com.xzit.garden.service.ResApplyService;
+
+public class ResApplyServiceImpl implements ResApplyService {
 }
