@@ -27,6 +27,16 @@ public class Project {
 
     private Long clientId;
 
+    private Integer isDelete;
+
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
     public Long getId() {
         return id;
     }
