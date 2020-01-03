@@ -17,6 +17,7 @@ public interface MaintenancePlanService {
      List<MaintenancePlanDto> getAllMaintenanceList(PageModel<List<MaintenancePlanDto>> page);
      List<Project> findAllProject();
      List<Group> findAllGroup();
-
+     MaintenancePlanDto findDtoById( Long id);
+     List<MaintenancePlanDto> searchByIdOrName(PageModel<List<MaintenancePlanDto>> page,String text);
 }
 

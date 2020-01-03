@@ -15,7 +15,8 @@
         <div class="layui-input-block">
             <select name="projectid" lay-filter=''>
                 <option value="">请选择</option>
-                <option th:each="  t : ${project}"
+
+                <option th:each="t : ${project}"
                         th:selected="${maintenancePlan?.getProjectid() == t?.getId()}"
                         th:value="${t.getId()}"
                         th:text="${ t.getName() }"></option>
@@ -26,21 +27,21 @@
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>
             <div class="layui-input-block"> <!-- 注意：这一层元素并不是必须的 -->
-                <input type="text" th:value="${maintenancePlan.starttime}" class="layui-input" id="maintenancePlanDate1"
+                <input type="text" th:value="${starttime}" class="layui-input" id="maintenancePlanDate1"
                        name="starttime" placeholder="yyyy-MM-dd">
             </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">预期结束时间</label>
             <div class="layui-input-block"> <!-- 注意：这一层元素并不是必须的 -->
-                <input type="text" th:value="${maintenancePlan.expectedendtime}" class="layui-input"
+                <input type="text" th:value="${expectedendtime}" class="layui-input"
                        id="expectedendtime" name="expectedendtime" placeholder="yyyy-MM-dd">
             </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">预期结束时间</label>
+        <label class="layui-form-label">实际结束时间</label>
             <div class="layui-input-block"> <!-- 注意：这一层元素并不是必须的 -->
-                <input type="text" th:value="${maintenancePlan.actualendtime}" class="layui-input" id="actualendtime"
+                <input type="text" th:value="${actualendtime}" class="layui-input" id="actualendtime"
                        name="actualendtime" placeholder="yyyy-MM-dd">
             </div>
     </div>
@@ -55,9 +56,7 @@
             <label class="layui-form-label">计划状态</label>
         <div class="layui-input-block">
                 <select name="planstate">
-                    <script>
-                    </script>
-                    <option value="0" th:selected="${maintenancePlan?.getPlanstate() == 0}">未开始</option>
+                    <option value="0" th:selected="${maintenancePlan?.getPlanstate() == 0}">加入计划</option>
                     <option value="1" th:selected="${maintenancePlan?.getPlanstate() == 1}">实行</option>
                     <option value="2" th:selected="${maintenancePlan?.getPlanstate() == 2}">完成</option>
                 </select>
@@ -67,8 +66,12 @@
         <label class="layui-form-label">工程组：</label>
         <div class="layui-input-block">
             <select name="groupid" lay-filter=''>
-                <option value="">请选择</option>
+                <option value="" th:if="${group.size()!=0||maintenanceDto.groupid!=null}" th:text="请选择"></option>
+                <option value="" th:if="${group.size()==0 and maintenanceDto.groupid==null}" th:text="没有工程组"></option>
+                <option value="" th:if="${maintenanceDto.groupid!=null}" th:value="${maintenanceDto.groupid}" th:selected="true"
+                        th:text="${maintenanceDto.getGroupname()}"></option>
                 <option th:each="t : ${group}"
+                        th:if="${maintenanceDto==null||maintenanceDto.groupid!=t.id}"
                         th:selected="${maintenancePlan?.getGroupid() == t?.getId()}"
                         th:value="${t.getId()}"
                         th:text="${ t.getName()}"></option>
@@ -98,14 +101,20 @@
             let form = layui.form;
             let layer = layui.layer;
             let $ = layui.jquery;
+            var flag=[[${type}]];
 
             //监听提交
             form.on('submit(addMaintenancePlan)', function (data) {
                 layer.msg(JSON.stringify(data.field));
-
+                console.log(flag);
+                var maintenanceurl;
+                if(flag===0)
+                    maintenanceurl=[[${#servletContext.getContextPath()}]] + "/maintenance/add";
+                else
+                    maintenanceurl=[[${#servletContext.getContextPath()}]] + "/maintenance/update?meantenceid="+[[${maintenancePlan.getId()}]];
                 $.ajax({
                     type: "POST",
-                    url: [[${#servletContext.getContextPath()}]] + "/maintenance/add",
+                    url: maintenanceurl,
                     contentType: "application/json;charset=utf-8",
                     data: JSON.stringify(data.field),
                     dataType: "json",

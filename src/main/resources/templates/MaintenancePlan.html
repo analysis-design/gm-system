@@ -14,21 +14,22 @@
         </div>
     </div>
     <div class="layui-row">
-
     </div>
 </div>
 <script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="addAuthBtn">添加计划</button>
-
+        <div class="layui-btn layui-btn-sm" >
+            <input type="text" width="70px" height="50px" name="search">
+        </div><button class="layui-btn layui-btn-sm" lay-event="searchBtn">搜索</button>
+        <br>
+        <button class="layui-btn layui-btn-sm" lay-event="addBtn">添加计划</button>
     </div>
 </script>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
-
 <script th:inline="javascript">
     //JavaScript代码区域
     layui.use(['element', 'layer', 'table'], function () {
@@ -71,7 +72,10 @@
 
         //头工具栏事件
         table.on('toolbar(test)', function (obj) {
+            let checkStatus = table.checkStatus(obj.config.id);
             let data;
+            switch (obj.event) {
+                case 'addBtn':
                     layer.open({
                         type: 2,
                         title: '添加计划',
@@ -83,6 +87,21 @@
                     });
                     console.log("阻塞完成");
                     authorityTable.reload({page: {curr: 1}});
+                    break;
+                case 'searchBtn':
+                    var text=$('input[name="search"]').val();
+                    table.reload('maintenanceTableId',{
+                        url:[[${#servletContext.getContextPath()}]] + '/maintenance/search/list',
+                        where:{
+                            search:text
+                        },
+                        page:{
+                            curr:1
+                        }
+                    });
+                    break;
+
+            }
         });
 
         //监听行工具事件
@@ -93,8 +112,8 @@
                 layer.confirm('确认删除？', function (index) {
 
                     $.ajax({
-                        url: [[${#servletContext.getContextPath()}]] + "/auth/del",
-                        data: {authId: data.id},
+                        url: [[${#servletContext.getContextPath()}]] + "/maintenance/del",
+                        data: {id: data.id},
                         dataType: "json",
                         success: function (message) {
                             layer.closeAll('loading');
