@@ -7,15 +7,25 @@ public class Group {
 
     private String name;
 
+    /**
+     * 0：空闲、1：施工、2：已加入实施计划
+     */
     private Integer state;
 
-    private Date createtime;
+    private Date createTime;
 
-    private Long leaderid;
+    private Date dismissTime;
 
+    private Long leaderId;
+
+    /**
+     * 0：实施工程组，1：养护工程组
+     */
     private Integer type;
 
     private String description;
+
+    private boolean dismissFlag;
 
     public Long getId() {
         return id;
@@ -41,20 +51,28 @@ public class Group {
         this.state = state;
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Long getLeaderid() {
-        return leaderid;
+    public Date getDismissTime() {
+        return dismissTime;
     }
 
-    public void setLeaderid(Long leaderid) {
-        this.leaderid = leaderid;
+    public void setDismissTime(Date dismissTime) {
+        this.dismissTime = dismissTime;
+    }
+
+    public Long getLeaderId() {
+        return leaderId;
+    }
+
+    public void setLeaderId(Long leaderId) {
+        this.leaderId = leaderId;
     }
 
     public Integer getType() {
@@ -71,5 +89,13 @@ public class Group {
 
     public void setDescription(String description) {
         this.description = description == null ? null : description.trim();
+    }
+
+    public boolean isDismissFlag() {
+        return dismissFlag;
+    }
+
+    public void setDismissFlag(boolean dismissFlag) {
+        this.dismissFlag = dismissFlag;
     }
 }

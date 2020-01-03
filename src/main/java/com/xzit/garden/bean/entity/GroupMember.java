@@ -3,11 +3,11 @@ package com.xzit.garden.bean.entity;
 public class GroupMember {
     private Long id;
 
-    private Long groupid;
+    private Long groupId;
 
-    private Long memberid;
+    private Long memberId;
 
-    private Long postid;
+    private Long postId;
 
     private Integer state;
 
@@ -19,28 +19,28 @@ public class GroupMember {
         this.id = id;
     }
 
-    public Long getGroupid() {
-        return groupid;
+    public Long getGroupId() {
+        return groupId;
     }
 
-    public void setGroupid(Long groupid) {
-        this.groupid = groupid;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
-    public Long getMemberid() {
-        return memberid;
+    public Long getMemberId() {
+        return memberId;
     }
 
-    public void setMemberid(Long memberid) {
-        this.memberid = memberid;
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
     }
 
-    public Long getPostid() {
-        return postid;
+    public Long getPostId() {
+        return postId;
     }
 
-    public void setPostid(Long postid) {
-        this.postid = postid;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
     public Integer getState() {

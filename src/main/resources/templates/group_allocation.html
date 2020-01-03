@@ -3,69 +3,59 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>工程组管理</title>
+    <title>工程组成员分配</title>
     <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
 </head>
 <body>
-<div class="layui-container layui-side-scroll" style="margin: 0; width: 100%; padding: 5px 15px;">
-    <div class="layui-row">
-        <div class="layui-col-lg12">
-            <table id="demo" lay-filter="test"></table>
-        </div>
-    </div>
-    <div class="layui-row">
-
-    </div>
+<div class="layui-container" style="margin: 0; width: 100%; padding: 10px 15px;">
+    <table id="demo" lay-filter="test"></table>
 </div>
 <script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="addGroupBtn">添加工程组</button>
+        <button class="layui-btn layui-btn-sm" lay-event="addGroupMemberBtn">添加成员</button>
     </div>
 </script>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="member">成员</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
 </script>
-
 <script th:inline="javascript">
     //JavaScript代码区域
-    layui.use(['element', 'layer', 'table'], function () {
-        let element = layui.element;
-        let table = layui.table;
-        let layer = layui.layer;
+    layui.use(['transfer', 'element', 'tree', 'util', 'table'], function () {
+        let util = layui.util;
         let $ = layui.jquery;
+        let table = layui.table;
+        let transfer = layui.transfer;
 
-        //第一个实例
+
         let groupTable = table.render({
             id: 'groupTableId'
             , elem: '#demo'
-            , title: "工程组列表"
+            , title: "工程组成员列表"
             , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
             , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                 title: '获取'
                 , layEvent: 'LAYTABLE_TIPS'
                 , icon: 'layui-icon-tips'
             }]
-            , url: [[${#servletContext.getContextPath()}]] + '/group/list' //数据接口
+            , url: [[${#servletContext.getContextPath()}]] + '/group/member/list?groupId=' + [[${groupId}]] //数据接口
             , page: true //开启分页
             , cols: [
                 [ //表头
                     {field: 'id', title: '编号', width: 69, fixed: 'left', align: 'center'}
-                    , {field: 'name', title: '工程组', width: '12%'}
-                    , {field: 'showState', title: '状态', width: '10%'}
-                    , {field: 'newTime', title: '创建时间', width: '20%'}
-                    , {field: 'showType', title: '类型', width: '15%'}
-                    , {field: 'leaderName', title: '负责人', width: '10%'}
-                    , {field: 'description', title: '描述', width: '16%'}
-                    , {field: 'oldTime', title: '解除时间', width: '20%'}
+                    , {field: 'memberName', title: '成员', width: '12%'}
+                    , {field: 'postName', title: '职称', width: '10%'}
                     , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150, align: "center"}
                 ]
             ]
         });
 
         let tableReload = function () {
-            groupTable.reload({page: {curr: 1}, url: [[${#servletContext.getContextPath()}]] + '/group/list'});
+            groupTable.reload({
+                page: {curr: 1},
+                url: [[${#servletContext.getContextPath()}]] + '/group/member/list?groupId=' + [[${groupId}]]
+            });
         };
 
         //头工具栏事件
@@ -73,15 +63,16 @@
             let checkStatus = table.checkStatus(obj.config.id);
             let data;
             switch (obj.event) {
-                case 'addGroupBtn':
+                case 'addGroupMemberBtn':
                     layer.open({
                         type: 2,
-                        title: '添加工程组',
+                        title: '添加成员',
                         shadeClose: true,
                         shade: 0.8,
                         offset: '30px',
                         area: ['85%', '69%'],
-                        content: [[${#servletContext.getContextPath()}]] + '/group/add/index' //iframe的url
+                        content: [[${#servletContext.getContextPath()}]]
+                            + '/group/member/add/index?groupId=' + [[${groupId}]]
                     });
 
                     tableReload();
@@ -89,7 +80,7 @@
 
                 //自定义头工具栏右侧图标 - 提示
                 case 'LAYTABLE_TIPS':
-                    layer.msg('工程组信息列表');
+                    layer.msg('工程组成员信息列表');
                     break;
             }
         });
@@ -98,17 +89,35 @@
         table.on('tool(test)', function (obj) {
             let data = obj.data;
             //console.log(obj)
-            if (obj.event === 'member') {
-                layer.open({
-                    type: 2,
-                    title: '分配工程组成员',
-                    shadeClose: true,
-                    shade: 0.8,
-                    offset: '30px',
-                    area: ['85%', '69%'],
-                    content: [[${#servletContext.getContextPath()}]] + '/group/alloc/index?groupId=' + data.id
+            if (obj.event === 'delete') {
+                layer.confirm('确认删除？', function (index) {
+                    $.ajax({
+                        url: [[${#servletContext.getContextPath()}]] + "/group/member/del",
+                        data: {groupMemberId: data.id},
+                        dataType: "json",
+                        success: function (message) {
+                            layer.closeAll('loading');
+                            obj.del();
+
+                            layer.msg(message.msg, {
+                                icon: 1,
+                                time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                            });
+
+                            tableReload();
+                        },
+                        error: function (message) {
+                            layer.closeAll('loading');
+                            console.log(JSON.stringify(message));
+                            layer.msg("删除失败", {
+                                icon: 2,
+                                time: 1500
+                            });
+                        }
+                    });
+                    layer.close(index);
+                    layer.load();
                 });
-                tableReload();
             } else if (obj.event === 'edit') {
                 layer.open({
                     type: 2,
@@ -117,21 +126,11 @@
                     shade: 0.8,
                     offset: '30px',
                     area: ['85%', '69%'],
-                    content: [[${#servletContext.getContextPath()}]] + '/group/upd/index?groupId=' + data.id
+                    content: [[${#servletContext.getContextPath()}]] + '/group/member/upd/index?groupId=' + data.id
                 });
                 tableReload();
             }
         });
-
-        //监听单元格编辑
-        table.on('edit(test)', function (obj) {
-            let value = obj.value //得到修改后的值
-                , data = obj.data //得到所在行所有键值
-                , field = obj.field; //得到字段
-            layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
-        });
-
-
     });
 </script>
 </body>
