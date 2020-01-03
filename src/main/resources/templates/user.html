@@ -100,8 +100,12 @@
                         success: function (message) {
                             layer.closeAll('loading');
 
+                            let icon_flag = 1;
+                            if (message.code !== 0)
+                                icon_flag = 2;
+
                             layer.msg(message.msg, {
-                                icon: 1,
+                                icon: icon_flag,
                                 time: 1500 //2秒关闭（如果不配置，默认是3秒）
                             });
 
@@ -110,7 +114,12 @@
                         error: function (message) {
                             layer.closeAll('loading');
                             console.log(JSON.stringify(message));
-                            layer.msg("执行失败", {
+                            let msg = "执行失败";
+
+                            if (message.responseJSON != null && message.responseJSON.msg != null)
+                                msg = message.responseJSON.msg;
+
+                            layer.msg(msg, {
                                 icon: 2,
                                 time: 1500
                             });
@@ -138,10 +147,14 @@
                         dataType: "json",
                         success: function (message) {
                             layer.closeAll('loading');
-                            obj.del();
+
+                            let icon_flag = 1;
+                            if (message.code !== 0)
+                                icon_flag = 2;
+                            else obj.del();
 
                             layer.msg(message.msg, {
-                                icon: 1,
+                                icon: icon_flag,
                                 time: 1500 //2秒关闭（如果不配置，默认是3秒）
                             });
 
@@ -150,7 +163,12 @@
                         error: function (message) {
                             layer.closeAll('loading');
                             console.log(JSON.stringify(message));
-                            layer.msg("删除失败", {
+                            let msg = "执行失败";
+
+                            if (message.responseJSON != null && message.responseJSON.msg != null)
+                                msg = message.responseJSON.msg;
+
+                            layer.msg(msg, {
                                 icon: 2,
                                 time: 1500
                             });
