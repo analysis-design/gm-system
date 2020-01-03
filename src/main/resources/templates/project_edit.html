@@ -7,6 +7,7 @@
     <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
 </head>
 <body>
+<form>
 <div class="layui-form layui-container" style="padding:15px 30px 15px 0;">
     <div class="layui-form-item" hidden>
         <label class="layui-form-label">工程编号</label>
@@ -19,7 +20,7 @@
         <label class="layui-form-label">工程名称</label>
         <div class="layui-input-block">
             <input type="text" name="name" required lay-verify="required" placeholder="请输入"
-                   autocomplete="off" class="layui-input" th:value="${project.getName()}">
+                  th:disabled="${disabled==1}" autocomplete="off" class="layui-input" th:value="${project?.getName()}">
         </div>
     </div>
 
@@ -27,30 +28,30 @@
         <label class="layui-form-label">工程地点</label>
         <div class="layui-input-block">
             <input type="text" name="workSite" required lay-verify="required" th:value="${project?.getWorkSite()}"
-                   placeholder="请输入" autocomplete="off" class="layui-input">
+                   th:disabled="${disabled==1}" placeholder="请输入" autocomplete="off" class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">工程状态</label>
         <div class="layui-input-inline">
-            <select name="quiz1">
+            <select name="state" th:disabled="${disabled==1}">
                 <option value="">当前工程状态</option>
-                <option value="" selected="">已签合同</option>
-                <option value="">一期完工</option>
-                <option value="">二期完工</option>
-                <option value="">三期完工</option>
-                <option value="">已结算完</option>
+                <option value="0" th:selected="${project?.getState()==0}">未签合同</option>
+                <option value="1" th:selected="${project?.getState()==1}">已签合同</option>
+                <option value="2" th:selected="${project?.getState()==2}">正在实施</option>
+                <option value="3" th:selected="${project?.getState()==3}">工程完成</option>
+                <option value="4" th:selected="${project?.getState()==4}">已结算完</option>
             </select>
-        </div>
-        <div class="layui-input-inline">
-            <input type="text" name="state" required lay-verify="required" th:value="${project?.getState()}"
-                   placeholder="请输入" autocomplete="off" class="layui-input">
         </div>
         <label class="layui-form-label">难度级别</label>
         <div class="layui-input-inline">
-            <input type="text" name="difficultyLevel" required lay-verify="required" th:value="${project?.getDifficultyLevel()}"
-                   placeholder="请输入" autocomplete="off" class="layui-input">
+            <select name="difficultyLevel" th:disabled="${disabled==1}">
+                <option value="" >工程难度等级</option>
+                <option value="0" th:selected="${project?.getDifficultyLevel()==0}">简单</option>
+                <option value="1" th:selected="${project?.getDifficultyLevel()==1}">中等</option>
+                <option value="2" th:selected="${project?.getDifficultyLevel()==2}">困难</option>
+            </select>
         </div>
     </div>
 
@@ -58,7 +59,7 @@
         <label class="layui-form-label">合同文件</label>
         <button type="button" class="layui-btn" id="test3" style="margin-left: 30px"><i class="layui-icon"></i>上传</button>
         <div class="layui-input-inline">
-            <input type="text" name="contractFile" required lay-verify="required" th:value="${project?.getContractFile()}"
+            <input type="text" name="contractFile" th:disabled="${disabled==1}"  th:value="${project?.getContractFile()}"
                    placeholder="请输入" autocomplete="off" class="layui-input">
         </div>
     </div>
@@ -66,17 +67,17 @@
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>
         <div class="layui-input-inline">
-            <input type="text" name="startTime" required lay-verify="date" th:value="${project?.getStartTime()}"
+            <input type="text" name="startTime" th:disabled="${disabled==1}" required lay-verify="date" id="startDate" th:value="${project?.getStartTime()}"
                    placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
         </div>
         <label class="layui-form-label" style="width: auto">预计结束时间</label>
         <div class="layui-input-inline">
-            <input type="text" name="expectedEndTime" required lay-verify="date" th:value="${project?.getExpectedEndTime()}"
+            <input type="text" name="expectedEndTime" th:disabled="${disabled==1}" required lay-verify="date" id="exEndDate" th:value="${project?.getExpectedEndTime()}"
                    placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
         </div>
         <label class="layui-form-label" style="width: auto">实际结束时间</label>
         <div class="layui-input-inline">
-            <input type="text" name="actualEndTime" required lay-verify="date" th:value="${project?.getActualEndTime()}"
+            <input type="text" name="actualEndTime" th:disabled="${disabled==1}" required lay-verify="date" id="acEndDate" th:value="${project?.getActualEndTime()}"
                    placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
         </div>
     </div>
@@ -86,31 +87,47 @@
         <label class="layui-form-label">工程描述</label>
         <div class="layui-input-block">
             <textarea name="description" placeholder="请输入内容" th:text="${project?.getDescription()}"
-                      required lay-verify="required" class="layui-textarea"></textarea>
+                      th:disabled="${disabled==1}"   required lay-verify="required" class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" style="width: auto">销售员姓名</label>
         <div class="layui-input-inline">
-            <input type="text" name="startTime" required lay-verify="required" th:value="${project?.getStartTime()}"
-                   placeholder="请输入" autocomplete="off" class="layui-input">
+            <input type="text" name="saleId"  lay-verify="required" th:value="${project?.getSaleId()}"
+                   th:disabled="${disabled==1}"   placeholder="请输入" autocomplete="off" class="layui-input">
         </div>
         <label class="layui-form-label">客户姓名</label>
         <div class="layui-input-inline">
-            <input type="text" name="expectedEndTime" required lay-verify="date" th:value="${project?.getExpectedEndTime()}"
-                   placeholder="请输入" autocomplete="off" class="layui-input">
+            <input type="text" name="clientId"  lay-verify="required" th:value="${project?.getClientId()}"
+                   th:disabled="${disabled==1}" placeholder="请输入" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="addAuthority">提交</button>
-            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            <button class="layui-btn" lay-submit lay-filter="addAuthority" th:disabled="${disabled==1}">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary" >重置</button>
         </div>
     </div>
     <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
 </div>
-
+</form>
 <script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+<script>
+    layui.use(['laydate'], function() {
+            var laydate = layui.laydate;
+
+            //日期
+            laydate.render({
+                elem: '#startDate'
+            });
+            laydate.render({
+                elem: '#exEndDate'
+            });
+        laydate.render({
+            elem: '#acEndDate'
+        });
+        })
+</script>
 <script th:inline="javascript">
     layui.use(['form', 'layer'], function () {
         let form = layui.form;
@@ -120,7 +137,6 @@
         //监听提交
         form.on('submit(addAuthority)', function (data) {
             layer.msg(JSON.stringify(data.field));
-
             $.ajax({
                 type: "POST",
                 url: [[${#servletContext.getContextPath()}]] + [[${url}]],
@@ -134,11 +150,13 @@
                         time: 1500 //2秒关闭（如果不配置，默认是3秒）
                     }, function () {
                         // 当你在iframe页面关闭自身时
+                        parent.location.reload();
                         let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
                         parent.layer.close(index); //再执行关闭
                     });
                 },
                 error: function (message) {
+                    alert(data.field)
                     layer.closeAll('loading');
                     console.log(JSON.stringify(message));
                     layer.msg("执行失败", {

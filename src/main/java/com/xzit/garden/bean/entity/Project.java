@@ -1,5 +1,6 @@
 package com.xzit.garden.bean.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Project {
@@ -85,24 +86,27 @@ public class Project {
         this.difficultyLevel = difficultyLevel;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public String getStartTime() {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(startTime);
     }
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public Date getExpectedEndTime() {
-        return expectedEndTime;
+    public String getExpectedEndTime() {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(expectedEndTime);
     }
 
     public void setExpectedEndTime(Date expectedEndTime) {
         this.expectedEndTime = expectedEndTime;
     }
 
-    public Date getActualEndTime() {
-        return actualEndTime;
+    public String getActualEndTime() {
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(actualEndTime);
     }
 
     public void setActualEndTime(Date actualEndTime) {

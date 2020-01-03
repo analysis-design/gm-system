@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/project")
@@ -23,11 +23,11 @@ public class ProjectController {
 
     @RequestMapping("")
     @ResponseBody
-    public LayuiDataDto<Project> projectList(@RequestParam(required = false, defaultValue = "") String name) throws Exception {
+    public LayuiDataDto<Project> projectList(@RequestParam(required = false, defaultValue = "") String name,@RequestParam(required = false,value = "page", defaultValue = "1") int page,@RequestParam(required = false,value = "limit", defaultValue = "10") int limit) throws Exception {
         LayuiDataDto<Project> projectData = new LayuiDataDto<Project>();
-        List<Project> projects = projectService.findByName(name);
+        List<Project> projects = projectService.findByName(name,page,limit);
         projectData.setCode(0);
-        projectData.setCount(projects.size());
+        projectData.setCount(projectService.findCount());
         projectData.setData(projects);
         projectData.setMsg("工程信息查询结果");
         return projectData;
@@ -45,18 +45,49 @@ public class ProjectController {
     }
 
     @GetMapping("/add")
-    public String addProject(@RequestParam(required = false,defaultValue = "",value = "id") Long id , Model model){
+    public String addProject(@RequestParam(required = false,defaultValue = "",value = "id") Long id ,@RequestParam(required = false,defaultValue = "0",value = "isDisabled") Long isDisabled , Model model){
         if (id==0){
-            Project project = new Project();
+            model.addAttribute("url","/project/add/insert");
+            return "project_edit";
+        }
+        if (isDisabled==1){
+            Project project = projectService.findByIdProject(id);
             model.addAttribute("project",project);
+            model.addAttribute("disabled",1);
             return "project_edit";
         }
         Project project = projectService.findByIdProject(id);
         model.addAttribute("project",project);
+        model.addAttribute("url","/project/add/update");
         System.out.println(id);
         return "project_edit";
     }
 
+    @RequestMapping(path = "/add/insert",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public LayuiDataDto<Project> addInsProject(@RequestBody Project project){
+        System.out.println(project.getId());
+        projectService.insertProject(project);
+        LayuiDataDto<Project> projectLayuiDataDto = new LayuiDataDto<Project>();
+        projectLayuiDataDto.setCode(0);
+        projectLayuiDataDto.setCount(projectService.findAllProject().size());
+        projectLayuiDataDto.setMsg("增加成功");
+        projectLayuiDataDto.setData(projectService.findAllProject());
+        return projectLayuiDataDto;
+    }
+
+    @RequestMapping(path = "/add/update",method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public LayuiDataDto<Project> addUpdProject(@RequestBody Project project){
+        System.out.println(project.getId());
+        projectService.updateProject(project);
+        LayuiDataDto<Project> projectLayuiDataDto = new LayuiDataDto<Project>();
+        projectLayuiDataDto.setCode(0);
+        projectLayuiDataDto.setCount(projectService.findAllProject().size());
+        projectLayuiDataDto.setMsg("修改成功");
+        projectLayuiDataDto.setData(projectService.findAllProject());
+        return projectLayuiDataDto;
+    }
 
 
 

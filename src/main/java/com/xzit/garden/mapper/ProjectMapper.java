@@ -11,6 +11,9 @@ public interface ProjectMapper {
     @Select("select * from project where isDelete=0")
     List<Project> findAll();
 
+    @Select("select count(*) from project")
+    Integer findCount();
+
     @Select("select * from project where id=#{id} and isDelete=0")
     Project findById(@Param("id") Long id);
 
@@ -35,7 +38,7 @@ public interface ProjectMapper {
     Integer isDelete(@Param("id")Long id);
 
     @Update("update project set name=#{name},workSite=#{workSite},state=#{state},contractFile=#{contractFile}," +
-            "difficultyLevel=#{difficultyLevel},startTime=#{startTime},expectedEndTime=#{expectedEndTime}" +
+            "difficultyLevel=#{difficultyLevel},startTime=#{startTime},expectedEndTime=#{expectedEndTime}," +
             "actualEndTime=#{actualEndTime},description=#{description},saleId=#{saleId},clientId=#{clientId} where id=#{id}")
     Integer update(Project project);
 }

@@ -10,7 +10,9 @@ public interface ProjectService {
 
     Project findByIdProject(Long id);
 
-    List<Project> findByName(String name);
+    List<Project> findByName(String name,Integer page,Integer limit);
+
+    Integer findCount();
 
     Integer insertProject(Project project);
 

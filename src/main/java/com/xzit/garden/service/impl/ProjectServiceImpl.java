@@ -11,6 +11,7 @@ import com.xzit.garden.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -40,10 +41,24 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     @Override
-    public List<Project> findByName(String name) {
-        if (name==""||name==null||name.equals(""))
-            findAllProject();
+    public List<Project> findByName(String name,Integer page,Integer limit) {
+        if (name==""||name==null||name.equals("")){
+            List<Project> projects = findAllProject();
+
+            //分页
+            List<Project> projects1 = new ArrayList<>();
+            for (int i=page*limit-limit;i<page*limit&&i<projects.size();i++){
+                projects1.add(projects.get(i));
+            }
+
+            return projects1;
+        }
         return projectMapper.findByName(name);
+    }
+
+    @Override
+    public Integer findCount() {
+        return projectMapper.findCount();
     }
 
     /*
