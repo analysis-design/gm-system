@@ -2,7 +2,9 @@ package com.xzit.garden.controller;
 
 import com.xzit.garden.bean.dto.MaintenancePlanDto;
 import com.xzit.garden.bean.dto.UserDto;
+import com.xzit.garden.bean.entity.Group;
 import com.xzit.garden.bean.entity.MaintenancePlan;
+import com.xzit.garden.bean.entity.Project;
 import com.xzit.garden.bean.model.PageModel;
 import com.xzit.garden.service.MaintenancePlanService;
 import com.xzit.garden.service.ProjectService;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +55,10 @@ public class MaintenanceController {
         if(id!=null)
             maintenancePlan=maintenancePlanService.findById(id);
         model.addAttribute("maintenancePlan",maintenancePlan);
+        List<Project> list=maintenancePlanService.findAllProject();
+        List<Group> list1=maintenancePlanService.findAllGroup();
+        model.addAttribute("project",list);
+        model.addAttribute("group",list1);
         return "maintenancePlan_edit";
     }
 
@@ -65,4 +72,5 @@ public class MaintenanceController {
         rs.put("data", maintenancePlan);
         return rs;
     }
+
 }

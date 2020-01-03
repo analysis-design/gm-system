@@ -23,6 +23,19 @@ public class MaintenancePlanDto {
 
     private String name;
 
+    public String getGroupname() {
+        return groupname;
+    }
+
+    public void setGroupname(String groupname) {
+        this.groupname = groupname;
+    }
+
+    private String groupname;
+
+
+
+
     public Long getId() {
         return id;
     }

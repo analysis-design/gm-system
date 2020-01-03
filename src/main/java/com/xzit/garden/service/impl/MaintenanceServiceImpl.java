@@ -1,7 +1,9 @@
 package com.xzit.garden.service.impl;
 
 import com.xzit.garden.bean.dto.MaintenancePlanDto;
+import com.xzit.garden.bean.entity.Group;
 import com.xzit.garden.bean.entity.MaintenancePlan;
+import com.xzit.garden.bean.entity.Project;
 import com.xzit.garden.bean.model.PageModel;
 import com.xzit.garden.mapper.MaintenancePlanMapper;
 import com.xzit.garden.service.MaintenancePlanService;
@@ -50,5 +52,15 @@ public class MaintenanceServiceImpl implements MaintenancePlanService {
         int count = maintenancePlanMapper.countList();
         page.setCount(count);
         return maintenancePlanDtoList;
+    }
+
+    @Override
+    public List<Project> findAllProject() {
+        return maintenancePlanMapper.findAllProject();
+    }
+
+    @Override
+    public List<Group> findAllGroup() {
+        return maintenancePlanMapper.findAllGroup();
     }
 }

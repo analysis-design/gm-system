@@ -1,7 +1,9 @@
 package com.xzit.garden.mapper;
 
 import com.xzit.garden.bean.dto.MaintenancePlanDto;
+import com.xzit.garden.bean.entity.Group;
 import com.xzit.garden.bean.entity.MaintenancePlan;
+import com.xzit.garden.bean.entity.Project;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.stereotype.Service;
@@ -72,9 +74,16 @@ public interface MaintenancePlanMapper {
     @Select("select * from maintenance_plan")
     List<MaintenancePlan> findAll();
 
-    @Select("select a.* ,b.name from   maintenance_plan as a join project as b on a.projectId=b.id limit #{index}, #{limit}")
+    @Select("select a.* ,b.`name`,c.`name` as groupname from   maintenance_plan as a join project as b on a.projectId =b.id join `group` as c\n" +
+            "on a.groupId=c.id ORDER BY a.planState,a.startTime limit #{index}, #{limit}")
     List<MaintenancePlanDto> findPage(@Param("index") Integer index, @Param("limit") Integer limit);
 
     @Select("select count(*) from maintenance_plan")
     int countList();
+    @Select("select * from project where id not in(select projectid from \n" +
+            "maintenance_plan where planState=1)")
+    List<Project> findAllProject();
+
+    @Select("select * from `group`")
+    List<Group> findAllGroup();
 }
