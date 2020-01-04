@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>用户角色</title>
+    <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
+</head>
+<body>
+<div class="layui-container layui-side-scroll" style="margin: 0; width: 100%; padding: 5px 15px;">
+    <div class="layui-row">
+        <div class="layui-col-lg12">
+            <table id="demo" lay-filter="test"></table>
+        </div>
+    </div>
+</div>
+<script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addBtn">申请物资</button>
+        <button class="layui-btn layui-btn-sm" lay-event="editBtn">申请物资记录</button>
+    </div>
+</script>
+
+<script th:inline="javascript">
+    //JavaScript代码区域
+    layui.use(['element', 'layer', 'table'], function () {
+        let element = layui.element;
+        let table = layui.table;
+        let layer = layui.layer;
+        let $ = layui.jquery;
+        var planid=[[${id}]];
+
+        //第一个实例
+        let userTable = table.render({
+            id: 'maintenanceResId'
+            , elem: '#demo'
+            , title: "维护物资"
+            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '获取'
+                , layEvent: 'LAYTABLE_TIPS'
+                , icon: 'layui-icon-tips'
+            }]
+            , url: [[${#servletContext.getContextPath()}]] + '/maintenanceRes/list?id='+planid //数据接口
+            , cols: [
+                [ //表头
+                  {field: 'id', title: '编号', width: '10%', fixed: 'left', align: 'center'}
+                    , {field: 'maintenanceplanid', title: '养护计划id', width: '10%'}
+                    , {field: 'resid', title: '物资id', width: '10%'}
+                    , {field: 'resourcename', title: '物资名称', width: '15%'}
+                    , {field: 'resourcedescription', title: '物资备注', width: '20%'}
+                    , {fixed: 'resnum', title: '物资数量', width:'10%' }
+                    , {field: 'purpose', title: '物资目的', width: '20%'}
+                    , {field: 'description', title: '备注', width: '20%'}
+
+                ]
+            ]
+        });
+
+        table.on('toolbar(test)', function (obj) {
+            let checkStatus = table.checkStatus(obj.config.id);
+            let data;
+            switch (obj.event) {
+                case 'addBtn':
+                    layer.open({
+                        type: 2,
+                        title: '添加计划',
+                        shadeClose: true,
+                        shade: 0.8,
+                        offset: '30px',
+                        area: ['100%', '100%'],
+                        content:[[${#servletContext.getContextPath()}]] + '/maintenanceRes/resApply/add/index?planid='+planid  //iframe的url
+                    });
+                    console.log("阻塞完成");
+                    authorityTable.reload({page: {curr: 1}});
+                    break;
+                case 'editBtn':
+                    layer.open({
+                        type: 2,
+                        title: '查看养护物资申请',
+                        shadeClose: true,
+                        shade: 0.8,
+                        offset: '30px',
+                        area: ['100%', '100%'],
+                        content: [[${#servletContext.getContextPath()}]] + '/maintenanceRes/resApply/index?id='+planid //iframe的url
+                    });
+                    console.log("阻塞完成");
+                    authorityTable.reload({page: {curr: 1}});
+                    break;
+            }
+        });
+    });
+</script>
+</body>
+</html>
