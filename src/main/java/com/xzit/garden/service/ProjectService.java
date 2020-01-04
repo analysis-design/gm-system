@@ -1,5 +1,6 @@
 package com.xzit.garden.service;
 
+import com.xzit.garden.bean.dto.ProjectDto;
 import com.xzit.garden.bean.entity.Project;
 
 import java.util.List;
@@ -10,7 +11,13 @@ public interface ProjectService {
 
     Project findByIdProject(Long id);
 
-    List<Project> findByName(String name,Integer page,Integer limit);
+    List<ProjectDto> findByName(String name);
+
+    List<ProjectDto> getProjectDtoList(List<Project> projectList);
+
+    ProjectDto getProjectDto(Project project);
+
+    List<ProjectDto> findByProjectDto(ProjectDto projectDto);
 
     Integer findCount();
 

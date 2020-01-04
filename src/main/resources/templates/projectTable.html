@@ -13,10 +13,12 @@
     <div class="layui-input-inline">
         <input type="text" autocomplete="off" placeholder="请输入工程名称" class="layui-input" id="pName" value="">
     </div>
+    <div class="layui-input-inline">
+        <input type="text" autocomplete="off" placeholder="请输入负责人名称" class="layui-input" id="saleName" value="">
+    </div>
     <a class="layui-btn mgl-20" data-type="reload" id="queryBtn">查询</a>
     <a class="layui-btn mgl-20 layui-btn-normal" data-type="add" id="addBtn">添加</a>
 </form>
-
 <table class="layui-hide" id="projectList" lay-filter="test"></table>
 
 <script type="text/html" id="barDemo">
@@ -41,16 +43,15 @@
                     // {type: 'checkbox', fixed: 'left'},
                     {field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true}
                     , {field: 'name', title: '工程名', width: 120}
-                    , {field: 'workSite', title: '施工地点', width: 150}
-                    , {field: 'state', title: '工程状态', width: 110}
+                    , {field: 'workSite', title: '施工地点', width: 170}
+                    , {field: 'pState', title: '工程状态', width: 110}
                     , {field: 'contractFile', title: '合同文件', width: 90}
-                    , {field: 'difficultyLevel', title: '难度级别', width: 90}
-                    , {field: 'startTime', title: '开始时间', width: 110}
-                    , {field: 'expectedEndTime', title: '预计结束时间', width: 120}
-                    , {field: 'actualEndTime', title: '实际结束时间', width: 120}
-                    , {field: 'description', title: '工程描述', width: 120}
-                    , {field: 'saleId', title: '销售员编号', width: 100}
-                    , {field: 'clientId', title: '客户编号', width: 90}
+                    , {field: 'pDifficultyLevel', title: '难度级别', width: 90}
+                    , {field: 'pStartTime', title: '开始时间', width: 110}
+                    , {field: 'pExpectedEndTime', title: '预计结束时间', width: 120}
+                    , {field: 'pActualEndTime', title: '实际结束时间', width: 120}
+                    , {field: 'description', title: '工程描述', width: 180}
+                    , {field: 'saleName',title:'负责人',width:100}
                     , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 170, align: 'center'}
                 ]
             ]
@@ -61,13 +62,15 @@
             reload: function () {
                 //执行重载
                 var name = $("#pName").val();
+                var saleName = $("#saleName").val();
                 table.reload('projectList', {
                     page: {
                         curr: 1 //重新从第 1 页开始
                     }
                     , where: {
                         //重新加载条件
-                        name: name
+                        name: name,
+                        saleName:saleName
                     }
                 });
             },
@@ -76,9 +79,10 @@
                     type: 2,
                     title: winTitle,
                     shadeClose: false,
+                    offset: '20px',
                     shade: 0.5,
                     maxmin: true, //开启最大化最小化按钮
-                    area: ['85%', '69%'],
+                    area: ['85%', '75%'],
                     content:'[[@{/project/add?id=}]]'+projectId+'&isDisabled='+is
                 });
             }
@@ -108,23 +112,6 @@
                             window.location.reload();
                         }
                     })
-
-                    // $.ajax({
-                    //     url: "[[@{/project/delete}]]",
-                    //     data: JSON.stringify({"id": data.id}),
-                    //     type: "post",
-                    //     dataType: "json",
-                    //     contentType: "application/json",
-                    //     success: function (result) {
-                    //         console.log(result)
-                    //         // if (result == "deleteError") {
-                    //         //     alert(result);
-                    //         // } else {
-                    //         //     alert(result);
-                    //         //     window.location.reload();
-                    //         // }
-                    //     }
-                    // })
                 });
             } else if (obj.event === 'edit') {
                 active.toedit("园林管理系统-修改工程信息",data.id,0);

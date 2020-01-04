@@ -18,6 +18,18 @@ public class Project {
 
     private Date startTime;
 
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public Date getExpectedEndTime() {
+        return expectedEndTime;
+    }
+
+    public Date getActualEndTime() {
+        return actualEndTime;
+    }
+
     private Date expectedEndTime;
 
     private Date actualEndTime;
@@ -86,28 +98,18 @@ public class Project {
         this.difficultyLevel = difficultyLevel;
     }
 
-    public String getStartTime() {
-        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-        return format.format(startTime);
-    }
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public String getExpectedEndTime() {
-        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-        return format.format(expectedEndTime);
-    }
+
 
     public void setExpectedEndTime(Date expectedEndTime) {
         this.expectedEndTime = expectedEndTime;
     }
 
-    public String getActualEndTime() {
-        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-        return format.format(actualEndTime);
-    }
+
 
     public void setActualEndTime(Date actualEndTime) {
         this.actualEndTime = actualEndTime;
