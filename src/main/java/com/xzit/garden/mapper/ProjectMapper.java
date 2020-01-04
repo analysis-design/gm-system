@@ -11,6 +11,12 @@ public interface ProjectMapper {
     @Select("select * from project where isDelete=0")
     List<Project> findAll();
 
+    @Select("select count(*) from project")
+    Integer findCount();
+
+    @Select("select * from project where clientId=#{id} and isDelete=0")
+    Project findByClientId(Long id);
+
     @Select("select * from project where id=#{id} and isDelete=0")
     Project findById(@Param("id") Long id);
 
@@ -22,6 +28,12 @@ public interface ProjectMapper {
 
     @Select("select * from project where difficultyLevel=#{difficultyLevel} and isDelete=0")
     List<Project> findByDifficulty(@Param("difficultyLevel")Integer difficultyLevel);
+
+    @Select("select * from project where saleId=(select id from staff where name like'%${name}%') and isDelete=0")
+    List<Project> findByStaffName(@Param("name") String name);
+
+    @Select("select * from project where name like'%${name}%' and saleId=(select id from staff where name like'%${staffName}%') and isDelete=0")
+    List<Project> findByNameStaff(@Param("name") String name,@Param("staffName")String staffName);
 
     @Insert("insert into project (name,workSite,state,contractFile,difficultyLevel,startTime,expectedEndTime,actualEndTime,description,saleId,clientId)" +
             "values (#{name},#{workSite},#{state},#{contractFile},#{difficultyLevel},#{startTime},#{expectedEndTime},#{actualEndTime},#{description},#{saleId},#{clientId})")
@@ -35,7 +47,7 @@ public interface ProjectMapper {
     Integer isDelete(@Param("id")Long id);
 
     @Update("update project set name=#{name},workSite=#{workSite},state=#{state},contractFile=#{contractFile}," +
-            "difficultyLevel=#{difficultyLevel},startTime=#{startTime},expectedEndTime=#{expectedEndTime}" +
+            "difficultyLevel=#{difficultyLevel},startTime=#{startTime},expectedEndTime=#{expectedEndTime}," +
             "actualEndTime=#{actualEndTime},description=#{description},saleId=#{saleId},clientId=#{clientId} where id=#{id}")
     Integer update(Project project);
 }

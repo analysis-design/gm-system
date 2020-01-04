@@ -78,6 +78,10 @@
             ]
         });
 
+        let tableReload = function () {
+            authorityTable.reload({page: {curr: 1}, url: [[${#servletContext.getContextPath()}]] + '/auth/list'});
+        };
+
         //头工具栏事件
         table.on('toolbar(test)', function (obj) {
             let checkStatus = table.checkStatus(obj.config.id);
@@ -94,7 +98,7 @@
                         content: [[${#servletContext.getContextPath()}]] + '/auth/add/index' //iframe的url
                     });
 
-                    authorityTable.reload({url: [[${#servletContext.getContextPath()}]] + '/auth/list'});
+                    tableReload();
                     break;
                 case 'delCheckedAuthBtn':
                     data = checkStatus.data;
@@ -111,20 +115,26 @@
                         success: function (message) {
                             layer.closeAll('loading');
 
+                            let icon_flag = 1;
+                            if (message.code !== 0) {
+                                icon_flag = 2;
+                            }
+
                             layer.msg(message.msg, {
-                                icon: 1,
+                                icon: icon_flag,
                                 time: 1500 //2秒关闭（如果不配置，默认是3秒）
                             });
-
-                            authorityTable.reload({
-                                page: {curr: 1},
-                                url: [[${#servletContext.getContextPath()}]] + '/auth/list'
-                            });
+                            tableReload();
                         },
                         error: function (message) {
                             layer.closeAll('loading');
                             console.log(JSON.stringify(message));
-                            layer.msg("执行失败", {
+                            let msg = "执行失败";
+
+                            if (message.responseJSON != null && message.responseJSON.msg != null)
+                                msg = message.responseJSON.msg;
+
+                            layer.msg(msg, {
                                 icon: 2,
                                 time: 1500
                             });
@@ -160,21 +170,27 @@
                         dataType: "json",
                         success: function (message) {
                             layer.closeAll('loading');
-                            obj.del();
+
+                            let icon_flag = 1;
+                            if (message.code !== 0) {
+                                icon_flag = 2;
+                            } else obj.del();
 
                             layer.msg(message.msg, {
-                                icon: 1,
+                                icon: icon_flag,
                                 time: 1500 //2秒关闭（如果不配置，默认是3秒）
                             });
-                            authorityTable.reload({
-                                page: {curr: 1},
-                                url: [[${#servletContext.getContextPath()}]] + '/auth/list'
-                            });
+                            tableReload();
                         },
                         error: function (message) {
                             layer.closeAll('loading');
                             console.log(JSON.stringify(message));
-                            layer.msg("添加失败", {
+                            let msg = "执行失败";
+
+                            if (message.responseJSON != null && message.responseJSON.msg != null)
+                                msg = message.responseJSON.msg;
+
+                            layer.msg(msg, {
                                 icon: 2,
                                 time: 1500
                             });
@@ -193,7 +209,7 @@
                     area: ['85%', '69%'],
                     content: [[${#servletContext.getContextPath()}]] + '/auth/upd/index?authId=' + data.id
                 });
-                authorityTable.reload({page: {curr: 1}, url: [[${#servletContext.getContextPath()}]] + '/auth/list'});
+                tableReload();
             }
         });
 

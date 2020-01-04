@@ -11,7 +11,7 @@ public class Client {
 
     private String phone;
 
-    private Integer creditrating;
+    private Integer creditRating;
 
     private String comment;
 
@@ -57,12 +57,12 @@ public class Client {
         this.phone = phone == null ? null : phone.trim();
     }
 
-    public Integer getCreditrating() {
-        return creditrating;
+    public Integer getCreditRating() {
+        return creditRating;
     }
 
-    public void setCreditrating(Integer creditrating) {
-        this.creditrating = creditrating;
+    public void setCreditRating(Integer creditRating) {
+        this.creditRating = creditRating;
     }
 
     public String getComment() {

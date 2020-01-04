@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title></title>
+    <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
+</head>
+<body>
+<form>
+    <div class="layui-form layui-container" style="padding:15px 30px 15px 0;">
+        <div class="layui-form-item" hidden>
+            <label class="layui-form-label">工程编号</label>
+            <div class="layui-input-block">
+                <input type="text" name="id"
+                       autocomplete="off" class="layui-input" th:value="${project?.getId()}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">工程名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" required lay-verify="required" placeholder="请输入"
+                       th:disabled="${disabled==1}" autocomplete="off" class="layui-input"
+                       th:value="${project?.getName()}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">工程地点</label>
+            <div class="layui-input-block">
+                <input type="text" name="workSite" required lay-verify="required" th:value="${project?.getWorkSite()}"
+                       th:disabled="${disabled==1}" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">工程状态</label>
+            <div class="layui-input-inline">
+                <select name="state" th:disabled="${disabled==1}">
+                    <option value="">当前工程状态</option>
+                    <option value="0" th:selected="${project?.getState()==0}">未签合同</option>
+                    <option value="1" th:selected="${project?.getState()==1}">已签合同</option>
+                    <option value="2" th:selected="${project?.getState()==2}">正在实施</option>
+                    <option value="3" th:selected="${project?.getState()==3}">工程完成</option>
+                    <option value="4" th:selected="${project?.getState()==4}">已结算完</option>
+                </select>
+            </div>
+            <label class="layui-form-label">难度级别</label>
+            <div class="layui-input-inline">
+                <select name="difficultyLevel" th:disabled="${disabled==1}">
+                    <option value="">工程难度等级</option>
+                    <option value="0" th:selected="${project?.getDifficultyLevel()==0}">简单</option>
+                    <option value="1" th:selected="${project?.getDifficultyLevel()==1}">中等</option>
+                    <option value="2" th:selected="${project?.getDifficultyLevel()==2}">困难</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">合同文件</label>
+            <button type="button" class="layui-btn" id="test3" style="margin-left: 30px"><i class="layui-icon"></i>上传
+            </button>
+            <div class="layui-input-inline">
+                <input type="text" name="contractFile" th:disabled="${disabled==1}"
+                       th:value="${project?.getContractFile()}"
+                       placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">开始时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="startTime" th:disabled="${disabled==1}" required lay-verify="date"
+                       id="startDate" th:value="${project?.getpStartTime()}"
+                       placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label" style="width: auto">预计结束时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="expectedEndTime" th:disabled="${disabled==1}" required lay-verify="date"
+                       id="exEndDate" th:value="${project?.getpExpectedEndTime()}"
+                       placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label" style="width: auto">实际结束时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="actualEndTime" th:disabled="${disabled==1}" id="acEndDate"
+                       th:value="${project?.getpActualEndTime()}"
+                       placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">工程描述</label>
+            <div class="layui-input-block">
+            <textarea name="description" placeholder="请输入内容" th:text="${project?.getDescription()}"
+                      th:disabled="${disabled==1}" required lay-verify="required" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: auto">负责人姓名</label>
+            <div class="layui-input-inline">
+                <select name="saleId" th:disabled="${disabled==1}">
+                    <option>请选择</option>
+                    <option th:each="staff, state : ${staffList}"
+                            th:selected="${project?.getSaleId() == staff?.getId()}"
+                            th:value="${staff?.getId()}"
+                            th:text="${staff?.getName()}"></option>
+                </select>
+            </div>
+            <label class="layui-form-label">客户姓名</label>
+            <div class="layui-input-inline">
+                <select name="clientId" th:disabled="${disabled==1}">
+                    <option value="">请选择</option>
+                    <option th:each="client, state : ${clientList}"
+                            th:selected="${project?.getClientId() == client?.getId()}"
+                            th:value="${client?.getId()}"
+                            th:text="${client?.getName()}"></option>
+                </select>
+            </div>
+            <div hidden>
+                <input th:value="${disabled}" id="aaa">
+            </div>
+            <a class="layui-btn mgl-20 layui-btn-normal"  data-type="add" id="editClient">修改客户</a>
+            <a class="layui-btn mgl-20 layui-btn-normal"  data-type="add" id="addClient">添加客户</a>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="addAuthority" th:disabled="${disabled==1}">提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+        <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+    </div>
+</form>
+<script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+<script>
+    layui.use(['laydate'], function () {
+        var laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#startDate'
+        });
+        laydate.render({
+            elem: '#exEndDate'
+        });
+        laydate.render({
+            elem: '#acEndDate'
+        });
+    })
+</script>
+<script>
+    layui.use(['layer', 'form'], function () {
+        var $ = layui.$, active = {
+            toedit: function (winTitle,clientId) {
+                layer.open({
+                    type: 2,
+                    title: winTitle,
+                    shadeClose: false,
+                    shade: 0.5,
+                    offset: '20px',
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['90%', '95%'],
+                    content: '[[@{/project/addClient?clientId=}]]'+clientId
+                });
+            }
+        };
+        $('#addClient').on('click', function () {
+            var dd=$('#aaa').val();
+            if (dd==1)
+                return false;
+            active.toedit("添加客户",0)
+        });
+        $('#editClient').on('click', function () {
+            var dd=$('#aaa').val();
+            if (dd==1)
+                return false;
+            var clientId = $("[name='clientId']").val();
+            if (clientId==""||clientId==null){
+                layer.msg("客户不能为空！");
+                return false;
+            }
+            active.toedit("修改客户",clientId)
+        });
+    })
+</script>
+<script th:inline="javascript">
+    layui.use(['form', 'layer'], function () {
+        let form = layui.form;
+        let layer = layui.layer;
+        let $ = layui.jquery;
+        //监听提交
+        form.on('submit(addAuthority)', function (data) {
+            // layer.msg(JSON.stringify(data.field));
+            var date1 = $('#startDate').val();
+            var date2 = $("#exEndDate").val();
+            var date3 = $("#acEndDate").val();
+            if (date1 > date2 || (date3 != "" && date1 > date3)) {
+                layer.msg("开始日期不能小于结束日期");
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: [[${#servletContext.getContextPath()}]] + [[${url}]],
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(data.field),
+                dataType: "json",
+                success: function (message) {
+                    layer.closeAll('loading');
+                    layer.msg(message.msg, {
+                        icon: 1,
+                        time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        // 当你在iframe页面关闭自身时
+                        parent.location.reload();
+                        let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                    });
+                },
+                error: function (message) {
+                    alert(data.field)
+                    layer.closeAll('loading');
+                    console.log(JSON.stringify(message));
+                    layer.msg("执行失败", {
+                        icon: 2,
+                        time: 1500
+                    });
+                }
+            });
+            layer.load();
+            return false; // 禁用页面跳转
+        });
+    });
+</script>
+</body>
+</html>
