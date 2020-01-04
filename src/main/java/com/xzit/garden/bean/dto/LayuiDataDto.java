@@ -5,7 +5,7 @@ import java.util.List;
 //Layui table json的格式
 public class LayuiDataDto<T> {
     private int code;
-    private String msg;
+    public String msg;
     private long count;
     private List<T> data;
 

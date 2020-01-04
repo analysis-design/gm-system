@@ -13,7 +13,7 @@ public class MaintenancePlan {
 
     private Date actualendtime;
 
-    private Integer groupid;
+    private Long groupid;
 
     private String purpose;
 
@@ -61,11 +61,11 @@ public class MaintenancePlan {
         this.actualendtime = actualendtime;
     }
 
-    public Integer getGroupid() {
+    public Long getGroupid() {
         return groupid;
     }
 
-    public void setGroupid(Integer groupid) {
+    public void setGroupid(Long groupid) {
         this.groupid = groupid;
     }
 

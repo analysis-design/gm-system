@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title></title>
+    <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
+</head>
+<body>
+<form>
+    <div class="layui-form layui-container" style="padding:15px 30px 15px 0;">
+        <div class="layui-form-item" hidden>
+            <label class="layui-form-label">客户编号</label>
+            <div class="layui-input-block">
+                <input type="text" name="id"
+                       th:value="${client?.getId()}"   autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">客户姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" required lay-verify="required" placeholder="请输入"
+                     th:value="${client?.getName()}"  autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">联系电话</label>
+            <div class="layui-input-inline">
+                <input type="text" name="phone" required lay-verify="required" placeholder="请输入"
+                       th:value="${client?.getPhone()}" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属单位</label>
+            <div class="layui-input-block">
+                <input type="text" name="company" required lay-verify="required"
+                       th:value="${client?.getCompany()}" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">家庭住址</label>
+            <div class="layui-input-block">
+                <input type="text" name="address"
+                       th:value="${client?.getAddress()}" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">信用等级</label>
+            <div class="layui-input-inline">
+                <select name="creditRating">
+                    <option value="">等级状态</option>
+                    <option value="0" th:selected="${client?.getCreditRating()==0}">较差</option>
+                    <option value="1" th:selected="${client?.getCreditRating()==1}">中等</option>
+                    <option value="2" th:selected="${client?.getCreditRating()==2}">良好</option>
+                    <option value="3" th:selected="${client?.getCreditRating()==3}">优秀</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">评价客户</label>
+            <div class="layui-input-block">
+                <input type="text" name="comment"
+                       th:value="${client?.getComment()}" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述客户</label>
+            <div class="layui-input-block">
+            <textarea name="description" placeholder="请输入内容"
+                      th:value="${client?.getDescription()}" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="addClient">提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                <button class="layui-btn layui-btn-danger" lay-submit lay-filter="deleteClient" th:disabled="${disabled==1}">删除</button>
+            </div>
+        </div>
+        <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+    </div>
+</form>
+<script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form', 'layer'], function () {
+        let form = layui.form;
+        let layer = layui.layer;
+        let $ = layui.jquery;
+        //监听提交
+        form.on('submit(addClient)', function (data) {
+            // layer.msg(JSON.stringify(data.field));
+            $.ajax({
+                type: "POST",
+                url: [[${#servletContext.getContextPath()}]] + [[${url}]],
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(data.field),
+                dataType: "json",
+                success: function (message) {
+                    layer.closeAll('loading');
+                    layer.msg(message.msg, {
+                        icon: 1,
+                        time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        // 当你在iframe页面关闭自身时
+                        parent.location.reload();
+                        let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                    });
+                },
+                error: function (message) {
+                    layer.closeAll('loading');
+                    console.log(JSON.stringify(message));
+                    layer.msg("执行失败", {
+                        icon: 2,
+                        time: 1500
+                    });
+                }
+            });
+            layer.load();
+            return false; // 禁用页面跳转
+        });
+        form.on('submit(deleteClient)', function (data) {
+            // layer.msg(JSON.stringify(data.field));
+            $.ajax({
+                type: "POST",
+                url: [[${#servletContext.getContextPath()}]] + '/project/del/client',
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(data.field),
+                dataType: "json",
+                success: function (message) {
+                    layer.closeAll('loading');
+                    layer.msg(message.msg, {
+                        icon: 1,
+                        time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        // 当你在iframe页面关闭自身时
+                        parent.location.reload();
+                        let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                    });
+                },
+                error: function (message) {
+                    layer.closeAll('loading');
+                    console.log(JSON.stringify(message));
+                    layer.msg("执行失败", {
+                        icon: 2,
+                        time: 1500
+                    });
+                }
+            });
+            layer.load();
+            return false; // 禁用页面跳转
+        });
+    });
+</script>
+</body>
+</html>

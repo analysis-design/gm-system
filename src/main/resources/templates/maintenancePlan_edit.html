@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title ></title>
+    <title></title>
     <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
 </head>
 <body>
@@ -11,89 +11,157 @@
 <div class="layui-form layui-container" style="padding:15px 30px 15px 0;">
 
     <div class="layui-form-item">
-        <label class="layui-form-label">项目id</label>
+        <label class="layui-form-label">项目：</label>
         <div class="layui-input-block">
-            <input type="text" name="projectid" required lay-verify="required"
-                   placeholder="请输入" autocomplete="off" class="layui-input">
+            <select name="projectid" lay-filter=''>
+                <option value="">请选择</option>
+
+                <option th:each="t : ${project}"
+                        th:selected="${maintenancePlan?.getProjectid() == t?.getId()}"
+                        th:value="${t.getId()}"
+                        th:text="${ t.getName() }"></option>
+            </select>
         </div>
     </div>
 
     <div class="layui-form-item">
         <label class="layui-form-label">开始时间</label>
-        <div class="layui-inline">
-            <div class="layui-inline"> <!-- 注意：这一层元素并不是必须的 -->
-                <input type="text" th:value="${maintenancePlan.starttime}" class="layui-input" id="maintenancePlanDate1" name="starttime" placeholder="yyyy-MM-dd">
+            <div class="layui-input-block"> <!-- 注意：这一层元素并不是必须的 -->
+                <input type="text" th:value="${starttime}" class="layui-input" id="maintenancePlanDate1"
+                       name="starttime" placeholder="yyyy-MM-dd">
+            </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">预期结束时间</label>
+            <div class="layui-input-block"> <!-- 注意：这一层元素并不是必须的 -->
+                <input type="text" th:value="${expectedendtime}" class="layui-input"
+                       id="expectedendtime" name="expectedendtime" placeholder="yyyy-MM-dd">
+            </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">实际结束时间</label>
+            <div class="layui-input-block"> <!-- 注意：这一层元素并不是必须的 -->
+                <input type="text" th:value="${actualendtime}" class="layui-input" id="actualendtime"
+                       name="actualendtime" placeholder="yyyy-MM-dd">
+            </div>
+    </div>
+    <div class="layui-form-item">
+            <label class="layui-form-label">养护目的</label>
+        <div class="layui-input-block">
+                <input type="text" th:value="${maintenancePlan.getPurpose()}" name="purpose" required lay-verify="required" autocomplete="off"
+                       class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+            <label class="layui-form-label">计划状态</label>
+        <div class="layui-input-block">
+                <select name="planstate">
+                    <option value="0" th:selected="${maintenancePlan?.getPlanstate() == 0}">加入计划</option>
+                    <option value="1" th:selected="${maintenancePlan?.getPlanstate() == 1}">实行</option>
+                    <option value="2" th:selected="${maintenancePlan?.getPlanstate() == 2}">完成</option>
+                </select>
+    </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">工程组：</label>
+        <div class="layui-input-block">
+            <select name="groupid" lay-filter=''>
+                <option value="" th:if="${group.size()!=0||maintenanceDto.groupid!=null}" th:text="请选择"></option>
+                <option value="" th:if="${group.size()==0 and maintenanceDto.groupid==null}" th:text="没有工程组"></option>
+                <option value="" th:if="${maintenanceDto.groupid!=null}" th:value="${maintenanceDto.groupid}" th:selected="true"
+                        th:text="${maintenanceDto.getGroupname()}"></option>
+                <option th:each="t : ${group}"
+                        th:if="${maintenanceDto==null||maintenanceDto.groupid!=t.id}"
+                        th:selected="${maintenancePlan?.getGroupid() == t?.getId()}"
+                        th:value="${t.getId()}"
+                        th:text="${ t.getName()}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <input type="text"  name="description"
+                   th:value="${maintenancePlan.getDescription()}" required lay-verify="required" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="addMaintenancePlan">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
         </div>
+        <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
     </div>
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">工程组id</label>
-        <div class="layui-input-block">
-            <input type="text" name="groupid" required lay-verify="required"
-                   placeholder="请输入" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="addMaintenancePlan">立即提交</button>
-            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-        </div>
-    </div>
-    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
-</div>
+    <script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+    <script th:inline="javascript">
+        layui.use(['form', 'layer'], function () {
+            let form = layui.form;
+            let layer = layui.layer;
+            let $ = layui.jquery;
+            var flag=[[${type}]];
 
-<script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
-<script th:inline="javascript">
-    layui.use(['form', 'layer'], function () {
-        let form = layui.form;
-        let layer = layui.layer;
-        let $ = layui.jquery;
-
-        //监听提交
-        form.on('submit(addMaintenancePlan)', function (data) {
-            layer.msg(JSON.stringify(data.field));
-
-            $.ajax({
-                type: "POST",
-                url: [[${#servletContext.getContextPath()}]] + "/maintenance/add",
-                contentType: "application/json;charset=utf-8",
-                data: JSON.stringify(data.field),
-                dataType: "json",
-                success: function (message) {
-                    layer.closeAll('loading');
-                    layer.msg(message.msg, {
-                        icon: 1,
-                        time: 1500 //2秒关闭（如果不配置，默认是3秒）
-                    }, function () {
-                        // 当你在iframe页面关闭自身时
-                        let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                        parent.layer.close(index); //再执行关闭
-                    });
-                },
-                error: function (message) {
-                    console.log(JSON.stringify(message));
-                    layer.msg("添加失败", {
-                        icon: 2,
-                        time: 1500
-                    });
-                }
+            //监听提交
+            form.on('submit(addMaintenancePlan)', function (data) {
+                layer.msg(JSON.stringify(data.field));
+                console.log(flag);
+                var maintenanceurl;
+                if(flag===0)
+                    maintenanceurl=[[${#servletContext.getContextPath()}]] + "/maintenance/add";
+                else
+                    maintenanceurl=[[${#servletContext.getContextPath()}]] + "/maintenance/update?meantenceid="+[[${maintenancePlan.getId()}]];
+                $.ajax({
+                    type: "POST",
+                    url: maintenanceurl,
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify(data.field),
+                    dataType: "json",
+                    success: function (message) {
+                        layer.closeAll('loading');
+                        layer.msg(message.msg, {
+                            icon: 1,
+                            time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                        }, function () {
+                            // 当你在iframe页面关闭自身时
+                            let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index); //再执行关闭
+                        });
+                    },
+                    error: function (message) {
+                        console.log(JSON.stringify(message));
+                        layer.msg("添加失败", {
+                            icon: 2,
+                            time: 1500
+                        });
+                    }
+                });
+                layer.load();
+                return false; // 禁用页面跳转
             });
-            layer.load();
-            return false; // 禁用页面跳转
         });
-    });
-</script>
+    </script>
 
-<script>
-    layui.use('laydate', function(){
-        var laydate = layui.laydate;
+    <script>
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
 
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#maintenancePlanDate1' //指定元素
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#maintenancePlanDate1' //指定元素
+            });
+            laydate.render({
+                elem: '#actualendtime'
+
+            });
+            laydate.render({
+                elem: '#expectedendtime'
+            });
         });
-    });
-</script>
+    </script>
+
+    <!--select js-->
+
 </body>
 </html>

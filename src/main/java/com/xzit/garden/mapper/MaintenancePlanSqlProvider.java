@@ -1,6 +1,9 @@
 package com.xzit.garden.mapper;
 
+import com.xzit.garden.bean.entity.Group;
+import com.xzit.garden.bean.entity.GroupMember;
 import com.xzit.garden.bean.entity.MaintenancePlan;
+import com.xzit.garden.bean.entity.Project;
 
 import static org.apache.ibatis.jdbc.SqlBuilder.*;
 
@@ -86,7 +89,40 @@ public class MaintenancePlanSqlProvider {
         }
         
         WHERE("id = #{id,jdbcType=INTEGER}");
-        
         return SQL();
     }
+
+    public String updateGroupByPrimaryKeySelective(Group record) {
+        BEGIN();
+        UPDATE(" `group` ");
+
+        if (record.getName() != null) {
+            SET("name = #{name,jdbcType=VARCHAR}");
+        }
+
+        if (record.getState() != null) {
+            SET("state = #{state,jdbcType=INTEGER}");
+        }
+
+        if (record.getCreateTime() != null) {
+            SET("createTime = #{createtime,jdbcType=TIMESTAMP}");
+        }
+
+        if (record.getLeaderId() != null) {
+            SET("leaderId = #{leaderid,jdbcType=INTEGER}");
+        }
+
+        if (record.getType() != null) {
+            SET("type = #{type,jdbcType=INTEGER}");
+        }
+
+        if (record.getDescription() != null) {
+            SET("description = #{description,jdbcType=VARCHAR}");
+        }
+
+        WHERE("id = #{id,jdbcType=INTEGER}");
+
+        return SQL();
+    }
+
 }

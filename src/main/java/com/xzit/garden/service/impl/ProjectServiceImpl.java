@@ -1,5 +1,6 @@
 package com.xzit.garden.service.impl;
 
+import com.xzit.garden.bean.dto.ProjectDto;
 import com.xzit.garden.bean.entity.Client;
 import com.xzit.garden.bean.entity.Project;
 import com.xzit.garden.bean.entity.Staff;
@@ -11,7 +12,9 @@ import com.xzit.garden.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class ProjectServiceImpl implements ProjectService {
     @Autowired
@@ -20,6 +23,7 @@ public class ProjectServiceImpl implements ProjectService {
     private StaffMapper staffMapper;
     @Autowired
     private ClientMapper clientMapper;
+
     @Override
     public List<Project> findAllProject() {
         if (projectMapper.findAll()==null)
@@ -40,10 +44,80 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     @Override
-    public List<Project> findByName(String name) {
-        if (name==""||name==null||name.equals(""))
-            findAllProject();
-        return projectMapper.findByName(name);
+    public List<ProjectDto> findByName(String name) {
+        if (name == "" || name == null || name.equals("")) {
+            List<Project> projects = findAllProject();
+            return getProjectDtoList(projects);
+        }
+        return getProjectDtoList(projectMapper.findByName(name));
+    }
+
+    /**
+     * 把project列表转换成projectDto列表
+     *
+     * @return
+     */
+    public List<ProjectDto> getProjectDtoList(List<Project> projectList) {
+        List<ProjectDto> projectDtoList = new ArrayList<>();
+        for (Project project : projectList) {
+            Project project1 = projectMapper.findById(project.getId());
+            ProjectDto dto = new ProjectDto(project);
+            dto.setProject(project1);
+
+            Staff staff = staffMapper.findById(project.getSaleId());
+            if (staff != null)
+                dto.setSaleName(staff.getName());
+
+            Client client = clientMapper.findById(project.getClientId());
+            if (client != null)
+                dto.setClientName(client.getName());
+            projectDtoList.add(dto);
+        }
+        return projectDtoList;
+    }
+
+    //project转换为projectDto
+    @Override
+    public ProjectDto getProjectDto(Project project) {
+        ProjectDto projectDto = new ProjectDto(project);
+        Staff staff = staffMapper.findById(project.getSaleId());
+        if (staff != null)
+            projectDto.setSaleName(staff.getName());
+        Client client = clientMapper.findById(project.getClientId());
+        if (client != null)
+            projectDto.setClientName(client.getName());
+        return projectDto;
+    }
+
+
+    /**
+     * 根据工程名或负责人姓名来进行模糊查询
+     * 1.如果工程名和负责人姓名都不为空执行根据工程名和负责人名进行查询
+     * 2.如果工程名不为空执行根据工程名来进行查询
+     * 3.如果负责人姓名不为空执行根据负责人姓名进行查询
+     * @param projectDto
+     * @return
+     */
+    @Override
+    public List<ProjectDto> findByProjectDto(ProjectDto projectDto) {
+        if (projectDto.getName()!=""&&projectDto.getName()!=null&&projectDto.getSaleName()!=null&&projectDto.getSaleName()!=""){
+            List<Project> projects= projectMapper.findByNameStaff(projectDto.getName(),projectDto.getSaleName());
+            return getProjectDtoList(projects);
+        }
+        else if (projectDto.getName()!=null&&projectDto.getName()!=""){
+            List<Project> projects = projectMapper.findByName(projectDto.getName());
+            return getProjectDtoList(projects);
+        }
+        else if (projectDto.getSaleName()!=null&&projectDto.getSaleName()!=""){
+            List<Project> projects = projectMapper.findByStaffName(projectDto.getSaleName());
+            return getProjectDtoList(projects);
+        }
+        return findByName(projectDto.getName());
+    }
+
+    @Override
+    public Integer findCount() {
+        return projectMapper.findCount();
     }
 
     /*
@@ -63,7 +137,7 @@ public class ProjectServiceImpl implements ProjectService {
         Long clientId = project.getClientId();
         Client client = clientMapper.findById(clientId);
 
-        if (client==null)
+        if (client == null)
             throw new RuntimeException("客户不存在");
 
         return projectMapper.insert(project);
@@ -98,7 +172,7 @@ public class ProjectServiceImpl implements ProjectService {
         Long clientId = project.getClientId();
         Client client = clientMapper.findById(clientId);
 
-        if (client==null)
+        if (client == null)
             throw new RuntimeException("客户不存在");
 
         return projectMapper.update(project);
