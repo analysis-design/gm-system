@@ -42,9 +42,11 @@
     <div class="layui-form-item">
         <label class="layui-form-label">描述</label>
         <div class="layui-input-block">
-            <input type="text"  name="description"
-                   th:value="${maintenanceplanResApply.getDescription()}" required lay-verify="required" autocomplete="off"
+            <textarea name="description"
+                 th:text="${maintenanceplanResApply.getDescription()}" required lay-verify="required" autocomplete="off"
                    class="layui-input">
+
+            </textarea>
         </div>
     </div>
     <div class="layui-form-item">
