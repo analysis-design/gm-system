@@ -90,6 +90,28 @@ public class AttendanceController {
         return rs;
     }
 
+    @RequestMapping("/del")
+    @ResponseBody
+    public Map<String, Object> userDelete(@RequestParam("attendanceId") Long attendanceId) {
+        Attendance attendance = attendanceService.deleteById(attendanceId);
+        Map<String, Object> rs = new HashMap<>();
+        rs.put("code", 0);
+        rs.put("msg", "删除成功");
+        rs.put("data", attendance);
+        return rs;
+    }
+
+    @PostMapping("/del/list")
+    @ResponseBody
+    public Map<String, Object> userDeleteAll(@RequestBody List<Long> attendanceIdList) {
+        List<Attendance> attendanceList = attendanceService.deleteAllById(attendanceIdList);
+        Map<String, Object> rs = new HashMap<>();
+        rs.put("code", 0);
+        rs.put("msg", "删除成功");
+        rs.put("data", attendanceList);
+        return rs;
+    }
+
     @GetMapping("/list")
     @ResponseBody
     public Map<String, Object> indexList(PageModel<List<AttendanceDto>> pageModel) {

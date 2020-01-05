@@ -8,6 +8,7 @@ import com.xzit.garden.mapper.ResourceMapper;
 import com.xzit.garden.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class ResourceServiceImpl implements ResourceService {
         return resource;
     }
 
+    @Transactional
     @Override
     public void addResource(Resource resource) {
         Integer supplierId = resource.getSupplierId();
@@ -55,6 +57,7 @@ public class ResourceServiceImpl implements ResourceService {
             throw new ObjectNotFoundException("供应商编号不存在");
     }
 
+    @Transactional
     @Override
     public void updateById(Resource resource) {
         getById(resource.getId());

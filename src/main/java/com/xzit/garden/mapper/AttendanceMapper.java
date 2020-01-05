@@ -26,4 +26,15 @@ public interface AttendanceMapper {
             "staffId = #{staffId}, staffType = #{staffType}, attendanceState = #{attendanceState}, " +
             "description = #{description} where id = #{id}")
     void updateById(Attendance attendance);
+
+    @Delete("delete from attendance where id=#{attendanceId}")
+    void deleteById(Long attendanceId);
+
+    @Delete("<script>" +
+            "delete from attendance where id in " +
+            "<foreach collection=\"idList\"  item=\"item\" open=\"(\" separator=\",\" close=\")\">" +
+            "   #{item} " +
+            "</foreach>" +
+            "</script>")
+    void deleteByIdList(@Param("idList") List<Long> attendanceIdList);
 }

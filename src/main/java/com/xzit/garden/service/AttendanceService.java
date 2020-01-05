@@ -14,4 +14,8 @@ public interface AttendanceService {
     void addAttendance(Attendance attendance);
 
     void updateById(Attendance attendance);
+
+    Attendance deleteById(Long attendanceId);
+
+    List<Attendance> deleteAllById(List<Long> attendanceIdList);
 }

@@ -11,6 +11,7 @@ import com.xzit.garden.mapper.StaffMapper;
 import com.xzit.garden.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         return new AttendanceDto(attendance);
     }
 
+    @Transactional
     @Override
     public void addAttendance(Attendance attendance) {
         Long staffId = attendance.getStaffId();
@@ -78,6 +80,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             throw new ObjectNotFoundException("公司员工编号" + staffId + "不存在");
     }
 
+    @Transactional
     @Override
     public void updateById(Attendance attendance) {
         getById(attendance.getId());
@@ -88,5 +91,29 @@ public class AttendanceServiceImpl implements AttendanceService {
         else validateExistHireStaff(staffId);
 
         attendanceMapper.updateById(attendance);
+    }
+
+    @Transactional
+    @Override
+    public Attendance deleteById(Long attendanceId) {
+        AttendanceDto attendanceDto = getById(attendanceId);
+        attendanceMapper.deleteById(attendanceId);
+        return attendanceDto;
+    }
+
+    @Transactional
+    @Override
+    public List<Attendance> deleteAllById(List<Long> attendanceIdList) {
+        List<Attendance> attendanceList = new ArrayList<>();
+
+        if (attendanceIdList == null || attendanceIdList.size() == 0) return attendanceList;
+
+        for (Long id : attendanceIdList) {
+            AttendanceDto attendanceDto = getById(id);
+            attendanceList.add(attendanceDto);
+        }
+
+        attendanceMapper.deleteByIdList(attendanceIdList);
+        return attendanceList;
     }
 }
