@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>用户角色</title>
+    <title>人员调度计划管理</title>
     <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
 </head>
 <body>
@@ -13,12 +13,15 @@
             <table id="demo" lay-filter="test"></table>
         </div>
     </div>
+    <div class="layui-row">
+
+    </div>
 </div>
 <script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="addUserBtn">添加用户</button>
-        <button class="layui-btn layui-btn-sm" lay-event="delCheckedUserBtn">删除所选</button>
+        <button class="layui-btn layui-btn-sm" lay-event="addSspBtn">添加人员调度计划</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delCheckedSspBtn">删除所选</button>
     </div>
 </script>
 <script type="text/html" id="barDemo">
@@ -35,35 +38,39 @@
         let $ = layui.jquery;
 
         //第一个实例
-        let userTable = table.render({
-            id: 'userTableId'
+        let sspTable = table.render({
+            id: 'sspTableId'
             , elem: '#demo'
-            , title: "用户列表"
+            , title: "人员调度计划列表"
             , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
             , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                 title: '获取'
                 , layEvent: 'LAYTABLE_TIPS'
                 , icon: 'layui-icon-tips'
             }]
-            , url: [[${#servletContext.getContextPath()}]] + '/user/list' //数据接口
-            , page: true //开启分页
+            , url: [[${#servletContext.getContextPath()}]] + '/ssp/list' //数据接口
+            , page: true // 开启分页
             , cols: [
                 [ //表头
-                    {title: '选择', width: 36, type: 'checkbox', fixed: 'left'}
-                    , {field: 'id', title: '编号', width: 69, fixed: 'left', align: 'center'}
-                    , {field: 'username', title: '用户名', width: '15%'}
-                    , {field: 'staffId', title: '员工编号', width: '10%'}
-                    , {field: 'roleDesc', title: '角色', width: '25%'}
-                    , {field: 'authDesc', title: '用户权限', width: '35%'}
+                    {title: '选择', width: 36, type: 'checkbox', fixed: 'left'},
+                    {field: 'id', title: '编号', width: 69, fixed: 'left', align: 'center'},
+                    {field: 'implPlanId', title: '实施计划编号', width: '12%'},
+                    {field: 'implPlanName', title: '实施计划名称', width: '10%'},
+                    {field: 'groupId', title: '工程组编号', width: '10%'},
+                    {field: 'groupName', title: '工程组名称', width: '10%'},
+                    {field: 'newTime', title: '开始时间', width: '20%'}
+                    , {field: 'oldExpectedTime', title: '预期结束时间', width: '20%'}
+                    , {field: 'oldTime', title: '实际结束时间', width: '13%'}
+                    , {field: 'description', title: '描述', width: '16%'}
                     , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150, align: "center"}
                 ]
             ]
         });
 
-        let tableReload = function(){
-            userTable.reload({
+        let tableReload = function () {
+            sspTable.reload({
                 page: {curr: 1},
-                url: [[${#servletContext.getContextPath()}]] + '/user/list'
+                url: [[${#servletContext.getContextPath()}]] + '/ssp/list'
             });
         };
 
@@ -72,20 +79,20 @@
             let checkStatus = table.checkStatus(obj.config.id);
             let data;
             switch (obj.event) {
-                case 'addUserBtn':
+                case 'addSspBtn':
                     layer.open({
                         type: 2,
-                        title: '添加用户',
+                        title: '添加人员调度计划信息',
                         shadeClose: true,
                         shade: 0.8,
                         offset: '30px',
                         area: ['85%', '69%'],
-                        content: [[${#servletContext.getContextPath()}]] + '/user/add/index' //iframe的url
+                        content: [[${#servletContext.getContextPath()}]] + '/ssp/add/index' //iframe的url
                     });
 
                     tableReload();
                     break;
-                case 'delCheckedUserBtn':
+                case 'delCheckedAttendanceBtn':
                     data = checkStatus.data;
                     let del = [];
                     for (let i in data)
@@ -93,7 +100,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: [[${#servletContext.getContextPath()}]] + "/user/del/list",
+                        url: [[${#servletContext.getContextPath()}]] + "/ssp/del/list",
                         contentType: "application/json;charset=utf-8",
                         data: JSON.stringify(del),
                         dataType: "json",
@@ -101,14 +108,14 @@
                             layer.closeAll('loading');
 
                             let icon_flag = 1;
-                            if (message.code !== 0)
+                            if (message.code !== 0) {
                                 icon_flag = 2;
+                            }
 
                             layer.msg(message.msg, {
                                 icon: icon_flag,
                                 time: 1500 //2秒关闭（如果不配置，默认是3秒）
                             });
-
                             tableReload();
                         },
                         error: function (message) {
@@ -129,7 +136,7 @@
 
                 //自定义头工具栏右侧图标 - 提示
                 case 'LAYTABLE_TIPS':
-                    layer.msg('用户信息列表');
+                    layer.msg('人员调度计划信息列表');
                     break;
             }
         });
@@ -142,22 +149,21 @@
                 layer.confirm('确认删除？', function (index) {
 
                     $.ajax({
-                        url: [[${#servletContext.getContextPath()}]] + "/user/del",
-                        data: {userId: data.id},
+                        url: [[${#servletContext.getContextPath()}]] + "/ssp/del",
+                        data: {sspId: data.id},
                         dataType: "json",
                         success: function (message) {
                             layer.closeAll('loading');
 
                             let icon_flag = 1;
-                            if (message.code !== 0)
+                            if (message.code !== 0) {
                                 icon_flag = 2;
-                            else obj.del();
+                            } else obj.del();
 
                             layer.msg(message.msg, {
                                 icon: icon_flag,
                                 time: 1500 //2秒关闭（如果不配置，默认是3秒）
                             });
-
                             tableReload();
                         },
                         error: function (message) {
@@ -180,14 +186,13 @@
             } else if (obj.event === 'edit') {
                 layer.open({
                     type: 2,
-                    title: '编辑用户',
+                    title: '编辑人员调度计划',
                     shadeClose: true,
                     shade: 0.8,
                     offset: '30px',
                     area: ['85%', '69%'],
-                    content: [[${#servletContext.getContextPath()}]] + '/user/upd/index?userId=' + data.id
+                    content: [[${#servletContext.getContextPath()}]] + '/ssp/upd/index?sspId=' + data.id
                 });
-
                 tableReload();
             }
         });

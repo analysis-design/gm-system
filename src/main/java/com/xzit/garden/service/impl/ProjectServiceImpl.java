@@ -4,7 +4,7 @@ import com.xzit.garden.bean.dto.ProjectDto;
 import com.xzit.garden.bean.entity.Client;
 import com.xzit.garden.bean.entity.Project;
 import com.xzit.garden.bean.entity.Staff;
-import com.xzit.garden.exception.ObjNotFoundException;
+import com.xzit.garden.exception.ObjectNotFoundException;
 import com.xzit.garden.mapper.ClientMapper;
 import com.xzit.garden.mapper.ProjectMapper;
 import com.xzit.garden.mapper.StaffMapper;
@@ -26,15 +26,15 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<Project> findAllProject() {
-        if (projectMapper.findAll() == null)
-            throw new ObjNotFoundException("暂无工程！");
+        if (projectMapper.findAll()==null)
+            throw new ObjectNotFoundException("暂无工程！");
         return projectMapper.findAll();
     }
 
     @Override
     public Project findByIdProject(Long id) {
-        if (projectMapper.findById(id) == null)
-            throw new ObjNotFoundException("此工程不存在！");
+        if (projectMapper.findById(id)==null)
+            throw new ObjectNotFoundException("此工程不存在！");
         return projectMapper.findById(id);
     }
 

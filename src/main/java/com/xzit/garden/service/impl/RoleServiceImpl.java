@@ -3,9 +3,12 @@ package com.xzit.garden.service.impl;
 import com.xzit.garden.bean.entity.Authority;
 import com.xzit.garden.bean.entity.Role;
 import com.xzit.garden.bean.entity.RoleAuth;
+import com.xzit.garden.bean.entity.UserRole;
 import com.xzit.garden.bean.model.RoleModel;
+import com.xzit.garden.exception.ObjectAlreadyInUseException;
 import com.xzit.garden.mapper.AuthorityMapper;
 import com.xzit.garden.mapper.RoleMapper;
+import com.xzit.garden.mapper.UserMapper;
 import com.xzit.garden.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private AuthorityMapper authorityMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public List<Role> getAllRole() {
@@ -124,6 +130,14 @@ public class RoleServiceImpl implements RoleService {
         Role role = roleMapper.findById(roleId);
         if (role == null)
             throw new RuntimeException("角色" + roleId + "不存在");
+
+        List<RoleAuth> roleAuthList = roleMapper.findRoleAuthListByRoleId(roleId);
+        if (roleAuthList != null && roleAuthList.size() > 0)
+            throw new ObjectAlreadyInUseException("角色和权限有关联，请解除其关系");
+
+        List<UserRole> userRoleList = roleMapper.findUserRole(roleId);
+        if (userRoleList != null && userRoleList.size() > 0)
+            throw new ObjectAlreadyInUseException("角色已分配给用户，请解除其关系");
 
         roleMapper.deleteById(roleId);
         return role;

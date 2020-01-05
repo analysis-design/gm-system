@@ -5,15 +5,15 @@ import java.util.Date;
 public class ResSchPlan {
     private Long id;
 
-    private Long implplanid;
+    private Long implPlanId;
 
-    private Long resid;
+    private Long resId;
 
-    private Integer resnum;
+    private Integer resNum;
 
-    private Integer planstate;
+    private Integer planState;
 
-    private Date allocatedtime;
+    private Date allocatedTime;
 
     private String description;
 
@@ -25,44 +25,44 @@ public class ResSchPlan {
         this.id = id;
     }
 
-    public Long getImplplanid() {
-        return implplanid;
+    public Long getImplPlanId() {
+        return implPlanId;
     }
 
-    public void setImplplanid(Long implplanid) {
-        this.implplanid = implplanid;
+    public void setImplPlanId(Long implPlanId) {
+        this.implPlanId = implPlanId;
     }
 
-    public Long getResid() {
-        return resid;
+    public Long getResId() {
+        return resId;
     }
 
-    public void setResid(Long resid) {
-        this.resid = resid;
+    public void setResId(Long resId) {
+        this.resId = resId;
     }
 
-    public Integer getResnum() {
-        return resnum;
+    public Integer getResNum() {
+        return resNum;
     }
 
-    public void setResnum(Integer resnum) {
-        this.resnum = resnum;
+    public void setResNum(Integer resNum) {
+        this.resNum = resNum;
     }
 
-    public Integer getPlanstate() {
-        return planstate;
+    public Integer getPlanState() {
+        return planState;
     }
 
-    public void setPlanstate(Integer planstate) {
-        this.planstate = planstate;
+    public void setPlanState(Integer planState) {
+        this.planState = planState;
     }
 
-    public Date getAllocatedtime() {
-        return allocatedtime;
+    public Date getAllocatedTime() {
+        return allocatedTime;
     }
 
-    public void setAllocatedtime(Date allocatedtime) {
-        this.allocatedtime = allocatedtime;
+    public void setAllocatedTime(Date allocatedTime) {
+        this.allocatedTime = allocatedTime;
     }
 
     public String getDescription() {

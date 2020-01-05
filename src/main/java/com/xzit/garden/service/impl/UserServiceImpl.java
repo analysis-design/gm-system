@@ -5,9 +5,9 @@ import com.xzit.garden.bean.entity.*;
 import com.xzit.garden.bean.model.AuthModel;
 import com.xzit.garden.bean.model.PageModel;
 import com.xzit.garden.bean.model.RoleModel;
-import com.xzit.garden.exception.ObjNotFoundException;
+import com.xzit.garden.exception.ObjectNotFoundException;
 import com.xzit.garden.exception.ObjectAlreadyExistException;
-import com.xzit.garden.exception.ObjectAlreadyInUse;
+import com.xzit.garden.exception.ObjectAlreadyInUseException;
 import com.xzit.garden.mapper.AuthorityMapper;
 import com.xzit.garden.mapper.RoleMapper;
 import com.xzit.garden.mapper.StaffMapper;
@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public UserDto getUserByUserId(Long userId) {
         User user = userMapper.findById(userId);
         if (user == null)
-            throw new ObjNotFoundException("用户" + userId + "不存在");
+            throw new ObjectNotFoundException("用户" + userId + "不存在");
 
         return getUserDto(user);
     }
@@ -218,7 +218,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private void validateExistStaff(Long staffId) {
         Staff staff = staffMapper.findById(staffId);
         if (staff == null)
-            throw new ObjNotFoundException("员工编号" + staffId + "不存在");
+            throw new ObjectNotFoundException("员工编号" + staffId + "不存在");
     }
 
     private void validateExistRoleList(List<Long> relatedRoleList) {
@@ -228,7 +228,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         List<Long> roleIdList = new ArrayList<>(relatedRoleList);
         roleIdList.removeAll(existRoleList);
         if (roleIdList.size() > 0)
-            throw new ObjNotFoundException("角色" + Arrays.toString(roleIdList.toArray()) + "不存在");
+            throw new ObjectNotFoundException("角色" + Arrays.toString(roleIdList.toArray()) + "不存在");
     }
 
     @Transactional
@@ -237,7 +237,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         User user = validateExistUser(userId);
         List<UserRole> userRoleList = userMapper.findUserRoleListByUserId(userId);
         if (userRoleList != null && userRoleList.size() > 0)
-            throw new ObjectAlreadyInUse("用户" + user.getUsername() + "无法删除");
+            throw new ObjectAlreadyInUseException("用户" + user.getUsername() + "无法删除");
 
         userMapper.deleteById(userId);
         return user;
@@ -252,7 +252,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
         List<UserRole> userRoleList = userMapper.findUserRoleListByUserIdList(userList);
         if (userRoleList != null && userRoleList.size() > 0)
-            throw new ObjectAlreadyInUse("无法批量删除用户，存在角色关联");
+            throw new ObjectAlreadyInUseException("无法批量删除用户，存在角色关联");
 
         userMapper.deleteByIdList(userList);
         return list;

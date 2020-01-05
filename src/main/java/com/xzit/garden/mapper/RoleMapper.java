@@ -2,6 +2,7 @@ package com.xzit.garden.mapper;
 
 import com.xzit.garden.bean.entity.Role;
 import com.xzit.garden.bean.entity.RoleAuth;
+import com.xzit.garden.bean.entity.UserRole;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -92,4 +93,7 @@ public interface RoleMapper {
             "</foreach>" +
             "</script>")
     List<Role> findByIdList(@Param("idList") List<Long> roleIdList);
+
+    @Select("select * from user_role where roleId=#{roleId}")
+    List<UserRole> findUserRole(Long roleId);
 }

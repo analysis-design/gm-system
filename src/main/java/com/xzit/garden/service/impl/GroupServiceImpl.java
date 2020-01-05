@@ -7,7 +7,7 @@ import com.xzit.garden.bean.entity.GroupMember;
 import com.xzit.garden.bean.entity.Post;
 import com.xzit.garden.bean.entity.Staff;
 import com.xzit.garden.bean.model.PageModel;
-import com.xzit.garden.exception.ObjNotFoundException;
+import com.xzit.garden.exception.ObjectNotFoundException;
 import com.xzit.garden.exception.ObjectAlreadyExistException;
 import com.xzit.garden.mapper.GroupMapper;
 import com.xzit.garden.mapper.PostMapper;
@@ -51,7 +51,7 @@ public class GroupServiceImpl implements GroupService {
     public Group getById(Long groupId) {
         Group group = groupMapper.findById(groupId);
         if (group == null)
-            throw new ObjNotFoundException("工程组" + groupId + "不存在");
+            throw new ObjectNotFoundException("工程组" + groupId + "不存在");
         if (group.getDismissTime() != null)
             group.setDismissFlag(true);
 
@@ -80,7 +80,7 @@ public class GroupServiceImpl implements GroupService {
     private void validateExistLeader(Long leaderId) {
         Staff staff = staffMapper.findById(leaderId);
         if (staff == null)
-            throw new ObjNotFoundException("负责人编号" + leaderId + "不存在");
+            throw new ObjectNotFoundException("负责人编号" + leaderId + "不存在");
     }
 
     @Transactional
@@ -128,7 +128,7 @@ public class GroupServiceImpl implements GroupService {
     public List<GroupMemberDto> getGroupMemberList(PageModel<List<GroupMemberDto>> pageModel, Long groupId) {
         Group group = groupMapper.findById(groupId);
         if (group == null)
-            throw new ObjNotFoundException("工程组" + groupId + "不存在");
+            throw new ObjectNotFoundException("工程组" + groupId + "不存在");
 
         List<GroupMember> groupMemberList = groupMapper.findMemberById(groupId);
         if (groupMemberList == null) groupMemberList = new ArrayList<>();
@@ -141,7 +141,7 @@ public class GroupServiceImpl implements GroupService {
     public GroupMember getGroupMemberById(Long groupMemberId) {
         GroupMember groupMember = groupMapper.findGroupMemberById(groupMemberId);
         if (groupMember == null)
-            throw new ObjNotFoundException("工程组成员编号" + groupMemberId + "不存在");
+            throw new ObjectNotFoundException("工程组成员编号" + groupMemberId + "不存在");
         return groupMember;
     }
 
@@ -151,17 +151,17 @@ public class GroupServiceImpl implements GroupService {
         Long memberId = groupMember.getMemberId();
         Staff staff = staffMapper.findById(memberId);
         if (staff == null)
-            throw new ObjNotFoundException("成员编号" + memberId + "不存在");
+            throw new ObjectNotFoundException("成员编号" + memberId + "不存在");
 
         Long postId = groupMember.getPostId();
         Post post = postMapper.findById(postId);
         if (post == null)
-            throw new ObjNotFoundException("职称编号" + postId + "不存在");
+            throw new ObjectNotFoundException("职称编号" + postId + "不存在");
 
         Long groupId = groupMember.getGroupId();
         Group group = groupMapper.findById(groupId);
         if (group == null)
-            throw new ObjNotFoundException("工程组编号" + groupId + "不存在");
+            throw new ObjectNotFoundException("工程组编号" + groupId + "不存在");
 
         GroupMember temp = groupMapper.findGroupMemberByGroupIdAndMemberId(groupId, memberId);
         if (temp != null)
@@ -186,7 +186,7 @@ public class GroupServiceImpl implements GroupService {
         GroupMember temp = getGroupMemberById(groupMember.getId());
         Post post = postMapper.findById(groupMember.getPostId());
         if (post == null)
-            throw new ObjNotFoundException("职称编号" + groupMember.getPostId() + "不存在");
+            throw new ObjectNotFoundException("职称编号" + groupMember.getPostId() + "不存在");
 
         groupMember.setId(temp.getId());
         groupMember.setGroupId(temp.getGroupId());

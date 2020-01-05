@@ -5,15 +5,15 @@ import java.util.Date;
 public class StaffSchPlan {
     private Long id;
 
-    private Long implplanid;
+    private Long implPlanId;
 
-    private Long projectid;
+    private Long groupId;
 
-    private Date starttime;
+    private Date startTime;
 
-    private Date expectedendtime;
+    private Date expectedEndTime;
 
-    private Date actualendtime;
+    private Date actualEndTime;
 
     private String description;
 
@@ -25,44 +25,44 @@ public class StaffSchPlan {
         this.id = id;
     }
 
-    public Long getImplplanid() {
-        return implplanid;
+    public Long getImplPlanId() {
+        return implPlanId;
     }
 
-    public void setImplplanid(Long implplanid) {
-        this.implplanid = implplanid;
+    public void setImplPlanId(Long implPlanId) {
+        this.implPlanId = implPlanId;
     }
 
-    public Long getProjectid() {
-        return projectid;
+    public Long getGroupId() {
+        return groupId;
     }
 
-    public void setProjectid(Long projectid) {
-        this.projectid = projectid;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
-    public Date getStarttime() {
-        return starttime;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setStarttime(Date starttime) {
-        this.starttime = starttime;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getExpectedendtime() {
-        return expectedendtime;
+    public Date getExpectedEndTime() {
+        return expectedEndTime;
     }
 
-    public void setExpectedendtime(Date expectedendtime) {
-        this.expectedendtime = expectedendtime;
+    public void setExpectedEndTime(Date expectedEndTime) {
+        this.expectedEndTime = expectedEndTime;
     }
 
-    public Date getActualendtime() {
-        return actualendtime;
+    public Date getActualEndTime() {
+        return actualEndTime;
     }
 
-    public void setActualendtime(Date actualendtime) {
-        this.actualendtime = actualendtime;
+    public void setActualEndTime(Date actualEndTime) {
+        this.actualEndTime = actualEndTime;
     }
 
     public String getDescription() {

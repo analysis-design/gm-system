@@ -4,7 +4,7 @@ import com.xzit.garden.bean.dto.AuthorityDto;
 import com.xzit.garden.bean.dto.UserDto;
 import com.xzit.garden.bean.entity.Authority;
 import com.xzit.garden.bean.model.PageModel;
-import com.xzit.garden.exception.ObjNotFoundException;
+import com.xzit.garden.exception.ObjectNotFoundException;
 import com.xzit.garden.mapper.AuthorityMapper;
 import com.xzit.garden.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +78,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     public Authority getById(Long authId) {
         Authority authority = authorityMapper.findById(authId);
         if (authority == null)
-            throw new ObjNotFoundException("指定的修改的权限编号不存在");
+            throw new ObjectNotFoundException("指定的修改的权限编号不存在");
 
         return authority;
     }
@@ -90,7 +90,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         for (Long authId : authList) {
             Authority authority = authorityMapper.findById(authId);
             if (authority == null)
-                throw new ObjNotFoundException("指定的修改的权限编号" + authId + "不存在");
+                throw new ObjectNotFoundException("指定的修改的权限编号" + authId + "不存在");
             list.add(authority);
         }
 
