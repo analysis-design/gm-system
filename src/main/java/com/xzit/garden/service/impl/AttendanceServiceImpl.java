@@ -2,7 +2,9 @@ package com.xzit.garden.service.impl;
 
 import com.xzit.garden.bean.dto.AttendanceDto;
 import com.xzit.garden.bean.entity.Attendance;
+import com.xzit.garden.bean.entity.Staff;
 import com.xzit.garden.bean.model.PageModel;
+import com.xzit.garden.exception.ObjectNotFoundException;
 import com.xzit.garden.mapper.AttendanceMapper;
 import com.xzit.garden.mapper.HireStaffMapper;
 import com.xzit.garden.mapper.StaffMapper;
@@ -44,5 +46,47 @@ public class AttendanceServiceImpl implements AttendanceService {
             attendanceDtoList.add(attendanceDto);
         }
         return attendanceDtoList;
+    }
+
+    @Override
+    public AttendanceDto getById(Long attendanceId) {
+        Attendance attendance = attendanceMapper.findById(attendanceId);
+        if (attendance == null)
+            throw new ObjectNotFoundException("考勤信息编号" + attendanceId + "不存在");
+        return new AttendanceDto(attendance);
+    }
+
+    @Override
+    public void addAttendance(Attendance attendance) {
+        Long staffId = attendance.getStaffId();
+        if (attendance.getStaffType() == 0)
+            validateExistStaff(staffId);
+        else validateExistHireStaff(staffId);
+
+        attendanceMapper.add(attendance);
+    }
+
+    private void validateExistHireStaff(Long staffId) {
+        Staff staff = staffMapper.findByHireStaffId(staffId);
+        if (staff == null)
+            throw new ObjectNotFoundException("雇佣员工编号" + staffId + "不存在");
+    }
+
+    private void validateExistStaff(Long staffId) {
+        Staff staff = staffMapper.findById(staffId);
+        if (staff == null)
+            throw new ObjectNotFoundException("公司员工编号" + staffId + "不存在");
+    }
+
+    @Override
+    public void updateById(Attendance attendance) {
+        getById(attendance.getId());
+
+        Long staffId = attendance.getStaffId();
+        if (attendance.getStaffType() == 0)
+            validateExistStaff(staffId);
+        else validateExistHireStaff(staffId);
+
+        attendanceMapper.updateById(attendance);
     }
 }

@@ -3,6 +3,7 @@ package com.xzit.garden.bean.dto;
 import com.xzit.garden.bean.entity.Attendance;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AttendanceDto extends Attendance {
 
@@ -22,8 +23,13 @@ public class AttendanceDto extends Attendance {
         this.setAttendanceState(attendance.getAttendanceState());
         this.setDescription(attendance.getDescription());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        this.newTime = simpleDateFormat.format(attendance.getStartTime());
-        this.oldTime = simpleDateFormat.format(attendance.getEndTime());
+        Date startTime = attendance.getStartTime();
+        if (startTime != null)
+            this.newTime = simpleDateFormat.format(startTime);
+
+        Date endTime = attendance.getEndTime();
+        if (endTime != null)
+            this.oldTime = simpleDateFormat.format(endTime);
     }
 
     public String getStaffName() {
