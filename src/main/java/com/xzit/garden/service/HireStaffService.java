@@ -1,7 +1,9 @@
 package com.xzit.garden.service;
 
-/**
- * Created by Xsk on 2020/1/2.
- */
+import com.xzit.garden.bean.entity.HireStaff;
+
+import java.util.List;
+
 public interface HireStaffService  {
+    List<HireStaff> findExistAll();
 }

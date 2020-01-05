@@ -1,5 +1,7 @@
 package com.xzit.garden.bean.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class ResSchPlan {
@@ -13,6 +15,7 @@ public class ResSchPlan {
 
     private Integer planState;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date allocatedTime;
 
     private String description;

@@ -19,11 +19,11 @@ public class Resource {
 
     private String purpose;
 
-    private Integer purchaseprice;
+    private Integer purchasePrice;
 
-    private Integer saleprice;
+    private Integer salePrice;
 
-    private Integer supplierid;
+    private Integer supplierId;
 
     private String description;
 
@@ -99,28 +99,28 @@ public class Resource {
         this.purpose = purpose == null ? null : purpose.trim();
     }
 
-    public Integer getPurchaseprice() {
-        return purchaseprice;
+    public Integer getPurchasePrice() {
+        return purchasePrice;
     }
 
-    public void setPurchaseprice(Integer purchaseprice) {
-        this.purchaseprice = purchaseprice;
+    public void setPurchasePrice(Integer purchasePrice) {
+        this.purchasePrice = purchasePrice;
     }
 
-    public Integer getSaleprice() {
-        return saleprice;
+    public Integer getSalePrice() {
+        return salePrice;
     }
 
-    public void setSaleprice(Integer saleprice) {
-        this.saleprice = saleprice;
+    public void setSalePrice(Integer salePrice) {
+        this.salePrice = salePrice;
     }
 
-    public Integer getSupplierid() {
-        return supplierid;
+    public Integer getSupplierId() {
+        return supplierId;
     }
 
-    public void setSupplierid(Integer supplierid) {
-        this.supplierid = supplierid;
+    public void setSupplierId(Integer supplierId) {
+        this.supplierId = supplierId;
     }
 
     public String getDescription() {

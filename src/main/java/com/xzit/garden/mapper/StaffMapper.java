@@ -31,4 +31,7 @@ public interface StaffMapper {
 
     @Select("select name from where id=#{id}")
     String findStaffName(Long id);
+
+    @Select("select * from hire_staff where id=#{staffId}")
+    Staff findByHireStaffId(Long staffId);
 }

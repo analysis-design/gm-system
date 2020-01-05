@@ -1,7 +1,11 @@
 package com.xzit.garden.service;
 
-/**
- * Created by Xsk on 2020/1/2.
- */
+import com.xzit.garden.bean.entity.ImplPlan;
+
+import java.util.List;
+
 public interface ImplPlanService {
+    List<ImplPlan> findAll();
+
+    List<ImplPlan> findNotImplAll();
 }

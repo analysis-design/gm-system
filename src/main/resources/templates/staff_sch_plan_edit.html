@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title th:text="${msg}"></title>
+    <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
+</head>
+<body>
+<div class="layui-form layui-container" style="padding:15px 30px 15px 0;">
+    <div class="layui-form-item" hidden>
+        <label class="layui-form-label">人员调度计划编号</label>
+        <div class="layui-input-block">
+            <input type="text" name="id"
+                   autocomplete="off" class="layui-input" th:value="${staffSchPlan?.getId()}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">实施计划</label>
+        <div class="layui-input-block">
+            <select name="implPlanId" lay-filter="aihao">
+            <option th:each="implPlan, state : ${implPlanList}"
+                    th:selected="${staffSchPlan?.getImplPlanId() == implPlan?.getId()}"
+                    th:value="${implPlan?.getId()}"
+                    th:text="${implPlan?.getName()}"></option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">工程组</label>
+        <div class="layui-input-block">
+            <select name="groupId" lay-filter="aihao">
+            <option th:each="group, state : ${groupList}"
+                    th:selected="${staffSchPlan?.getGroupId() == group?.getId()}"
+                    th:value="${group?.getId()}"
+                    th:text="${group?.getName()}"></option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">开始时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="startTime" required lay-verify="required"
+                   class="layui-input" id="test5" placeholder="yyyy-MM-dd HH:mm:ss">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">预期结束时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="expectedEndTime" required lay-verify="required"
+                   class="layui-input" id="test6" placeholder="yyyy-MM-dd HH:mm:ss">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">实际结束时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="actualEndTime" required lay-verify="required"
+                   class="layui-input" id="test7" placeholder="yyyy-MM-dd HH:mm:ss">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">物资描述</label>
+        <div class="layui-input-block">
+            <textarea name="description" placeholder="请输入内容" th:text="${staffSchPlan?.getDescription()}"
+                      required lay-verify="required" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="addStaffSchPlan">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+</div>
+
+<script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+<script th:inline="javascript">
+    layui.use(['form', 'layer', 'laydate'], function () {
+        let form = layui.form;
+        let layer = layui.layer;
+        let $ = layui.jquery;
+        let laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#test5'
+            , type: 'datetime'
+            , value: [[${startTime}]]
+        });
+        laydate.render({
+            elem: '#test6'
+            , type: 'datetime'
+            , value: [[${expectedTime}]]
+        });
+        laydate.render({
+            elem: '#test7'
+            , type: 'datetime'
+            , value: [[${endTime}]]
+        });
+
+        //监听提交
+        form.on('submit(addStaffSchPlan)', function (data) {
+            layer.msg(JSON.stringify(data.field));
+
+            $.ajax({
+                type: "POST",
+                url: [[${#servletContext.getContextPath()}]] + [[${url}]],
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(data.field),
+                dataType: "json",
+                success: function (message) {
+                    layer.closeAll('loading');
+                    if (message.code === 0) {
+                        layer.msg(message.msg, {
+                            icon: 1,
+                            time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                        }, function () {
+                            // 当你在iframe页面关闭自身时
+                            parent.location.reload();
+                            let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index); //再执行关闭
+                        });
+                    } else {
+                        layer.msg(message.msg, {
+                            icon: 2,
+                            time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                        });
+                    }
+                },
+                error: function (message) {
+                    layer.closeAll('loading');
+                    console.log(JSON.stringify(message));
+                    let msg = "执行失败";
+
+                    if (message.responseJSON != null && message.responseJSON.msg != null)
+                        msg = message.responseJSON.msg;
+
+                    layer.msg(msg, {
+                        icon: 2,
+                        time: 1500
+                    });
+                }
+            });
+            layer.load();
+            return false; // 禁用页面跳转
+        });
+    });
+</script>
+</body>
+</html>

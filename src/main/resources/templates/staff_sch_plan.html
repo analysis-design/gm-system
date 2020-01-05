@@ -92,45 +92,47 @@
 
                     tableReload();
                     break;
-                case 'delCheckedAttendanceBtn':
+                case 'delCheckedSspBtn':
                     data = checkStatus.data;
                     let del = [];
                     for (let i in data)
                         del.push(data[i].id);
 
-                    $.ajax({
-                        type: 'POST',
-                        url: [[${#servletContext.getContextPath()}]] + "/ssp/del/list",
-                        contentType: "application/json;charset=utf-8",
-                        data: JSON.stringify(del),
-                        dataType: "json",
-                        success: function (message) {
-                            layer.closeAll('loading');
+                    layer.confirm('确认删除？', function (index) {
+                        $.ajax({
+                            type: 'POST',
+                            url: [[${#servletContext.getContextPath()}]] + "/ssp/del/list",
+                            contentType: "application/json;charset=utf-8",
+                            data: JSON.stringify(del),
+                            dataType: "json",
+                            success: function (message) {
+                                layer.closeAll('loading');
 
-                            let icon_flag = 1;
-                            if (message.code !== 0) {
-                                icon_flag = 2;
+                                let icon_flag = 1;
+                                if (message.code !== 0) {
+                                    icon_flag = 2;
+                                }
+
+                                layer.msg(message.msg, {
+                                    icon: icon_flag,
+                                    time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                                });
+                                tableReload();
+                            },
+                            error: function (message) {
+                                layer.closeAll('loading');
+                                console.log(JSON.stringify(message));
+                                let msg = "执行失败";
+
+                                if (message.responseJSON != null && message.responseJSON.msg != null)
+                                    msg = message.responseJSON.msg;
+
+                                layer.msg(msg, {
+                                    icon: 2,
+                                    time: 1500
+                                });
                             }
-
-                            layer.msg(message.msg, {
-                                icon: icon_flag,
-                                time: 1500 //2秒关闭（如果不配置，默认是3秒）
-                            });
-                            tableReload();
-                        },
-                        error: function (message) {
-                            layer.closeAll('loading');
-                            console.log(JSON.stringify(message));
-                            let msg = "执行失败";
-
-                            if (message.responseJSON != null && message.responseJSON.msg != null)
-                                msg = message.responseJSON.msg;
-
-                            layer.msg(msg, {
-                                icon: 2,
-                                time: 1500
-                            });
-                        }
+                        });
                     });
                     break;
 

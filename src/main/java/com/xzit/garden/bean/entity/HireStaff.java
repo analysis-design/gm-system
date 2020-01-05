@@ -15,15 +15,17 @@ public class HireStaff {
 
     private String address;
 
-    private Date hirestarttime;
+    private Date hireStartTime;
 
-    private Date hireendtime;
+    private Date hireEndTime;
 
-    private Integer settlementtype;
+    private Integer settlementType;
 
     private Integer salary;
 
     private String comment;
+
+    private Integer hireState;
 
     public Long getId() {
         return id;
@@ -73,28 +75,28 @@ public class HireStaff {
         this.address = address == null ? null : address.trim();
     }
 
-    public Date getHirestarttime() {
-        return hirestarttime;
+    public Date getHireStartTime() {
+        return hireStartTime;
     }
 
-    public void setHirestarttime(Date hirestarttime) {
-        this.hirestarttime = hirestarttime;
+    public void setHireStartTime(Date hireStartTime) {
+        this.hireStartTime = hireStartTime;
     }
 
-    public Date getHireendtime() {
-        return hireendtime;
+    public Date getHireEndTime() {
+        return hireEndTime;
     }
 
-    public void setHireendtime(Date hireendtime) {
-        this.hireendtime = hireendtime;
+    public void setHireEndTime(Date hireEndTime) {
+        this.hireEndTime = hireEndTime;
     }
 
-    public Integer getSettlementtype() {
-        return settlementtype;
+    public Integer getSettlementType() {
+        return settlementType;
     }
 
-    public void setSettlementtype(Integer settlementtype) {
-        this.settlementtype = settlementtype;
+    public void setSettlementType(Integer settlementType) {
+        this.settlementType = settlementType;
     }
 
     public Integer getSalary() {
@@ -111,5 +113,13 @@ public class HireStaff {
 
     public void setComment(String comment) {
         this.comment = comment == null ? null : comment.trim();
+    }
+
+    public Integer getHireState() {
+        return hireState;
+    }
+
+    public void setHireState(Integer hireState) {
+        this.hireState = hireState;
     }
 }
