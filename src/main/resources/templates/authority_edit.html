@@ -104,7 +104,7 @@
                 dataType: "json",
                 success: function (message) {
                     layer.closeAll('loading');
-                    if (message.code !== 0) {
+                    if (message.code === 0) {
                         layer.msg(message.msg, {
                             icon: 1,
                             time: 1500 //2秒关闭（如果不配置，默认是3秒）

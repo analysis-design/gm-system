@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>人员调度计划管理</title>
+    <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
+</head>
+<body>
+<div class="layui-container layui-side-scroll" style="margin: 0; width: 100%; padding: 5px 15px;">
+    <div class="layui-row">
+        <div class="layui-col-lg12">
+            <table id="demo" lay-filter="test"></table>
+        </div>
+    </div>
+    <div class="layui-row">
+
+    </div>
+</div>
+<script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addRspBtn">添加人员调度计划</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delCheckedRspBtn">删除所选</button>
+    </div>
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script th:inline="javascript">
+    //JavaScript代码区域
+    layui.use(['element', 'layer', 'table'], function () {
+        let element = layui.element;
+        let table = layui.table;
+        let layer = layui.layer;
+        let $ = layui.jquery;
+
+        //第一个实例
+        let rspTable = table.render({
+            id: 'rspTableId'
+            , elem: '#demo'
+            , title: "物资调度计划信息列表"
+            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '获取'
+                , layEvent: 'LAYTABLE_TIPS'
+                , icon: 'layui-icon-tips'
+            }]
+            , url: [[${#servletContext.getContextPath()}]] + '/rsp/list' //数据接口
+            , page: true // 开启分页
+            , cols: [
+                [ //表头
+                    {title: '选择', width: 36, type: 'checkbox', fixed: 'left'},
+                    {field: 'id', title: '编号', width: 69, fixed: 'left', align: 'center'},
+                    {field: 'implPlanId', title: '实施计划编号', width: '12%'},
+                    {field: 'implPlanName', title: '实施计划名称', width: '10%'},
+                    {field: 'resId', title: '物资编号', width: '10%'},
+                    {field: 'resName', title: '物资名称', width: '10%'},
+                    {field: 'resNum', title: '物资数量', width: '10%'},
+                    {field: 'planState', title: '计划状态', width: '20%'}
+                    , {field: 'newTime', title: '物资分配时间', width: '20%'}
+                    , {field: 'description', title: '描述', width: '16%'}
+                    , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150, align: "center"}
+                ]
+            ]
+        });
+
+        let tableReload = function () {
+            rspTable.reload({
+                page: {curr: 1},
+                url: [[${#servletContext.getContextPath()}]] + '/rsp/list'
+            });
+        };
+
+        //头工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            let checkStatus = table.checkStatus(obj.config.id);
+            let data;
+            switch (obj.event) {
+                case 'addRspBtn':
+                    layer.open({
+                        type: 2,
+                        title: '添加物资调度计划信息',
+                        shadeClose: true,
+                        shade: 0.8,
+                        offset: '30px',
+                        area: ['85%', '69%'],
+                        content: [[${#servletContext.getContextPath()}]] + '/rsp/add/index' //iframe的url
+                    });
+
+                    tableReload();
+                    break;
+                case 'delCheckedRspBtn':
+                    data = checkStatus.data;
+                    let del = [];
+                    for (let i in data)
+                        del.push(data[i].id);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: [[${#servletContext.getContextPath()}]] + "/rsp/del/list",
+                        contentType: "application/json;charset=utf-8",
+                        data: JSON.stringify(del),
+                        dataType: "json",
+                        success: function (message) {
+                            layer.closeAll('loading');
+
+                            let icon_flag = 1;
+                            if (message.code !== 0) {
+                                icon_flag = 2;
+                            }
+
+                            layer.msg(message.msg, {
+                                icon: icon_flag,
+                                time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                            });
+                            tableReload();
+                        },
+                        error: function (message) {
+                            layer.closeAll('loading');
+                            console.log(JSON.stringify(message));
+                            let msg = "执行失败";
+
+                            if (message.responseJSON != null && message.responseJSON.msg != null)
+                                msg = message.responseJSON.msg;
+
+                            layer.msg(msg, {
+                                icon: 2,
+                                time: 1500
+                            });
+                        }
+                    });
+                    break;
+
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.msg('物资调度计划列表');
+                    break;
+            }
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) {
+            let data = obj.data;
+            //console.log(obj)
+            if (obj.event === 'del') {
+                layer.confirm('确认删除？', function (index) {
+
+                    $.ajax({
+                        url: [[${#servletContext.getContextPath()}]] + "/rsp/del",
+                        data: {sspId: data.id},
+                        dataType: "json",
+                        success: function (message) {
+                            layer.closeAll('loading');
+
+                            let icon_flag = 1;
+                            if (message.code !== 0) {
+                                icon_flag = 2;
+                            } else obj.del();
+
+                            layer.msg(message.msg, {
+                                icon: icon_flag,
+                                time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                            });
+                            tableReload();
+                        },
+                        error: function (message) {
+                            layer.closeAll('loading');
+                            console.log(JSON.stringify(message));
+                            let msg = "执行失败";
+
+                            if (message.responseJSON != null && message.responseJSON.msg != null)
+                                msg = message.responseJSON.msg;
+
+                            layer.msg(msg, {
+                                icon: 2,
+                                time: 1500
+                            });
+                        }
+                    });
+                    layer.close(index);
+                    layer.load();
+                });
+            } else if (obj.event === 'edit') {
+                layer.open({
+                    type: 2,
+                    title: '编辑资源调度计划',
+                    shadeClose: true,
+                    shade: 0.8,
+                    offset: '30px',
+                    area: ['85%', '69%'],
+                    content: [[${#servletContext.getContextPath()}]] + '/rsp/upd/index?sspId=' + data.id
+                });
+                tableReload();
+            }
+        });
+
+        //监听单元格编辑
+        table.on('edit(test)', function (obj) {
+            let value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field; //得到字段
+            layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+        });
+
+
+    });
+</script>
+</body>
+</html>

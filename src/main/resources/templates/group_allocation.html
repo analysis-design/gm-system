@@ -98,9 +98,9 @@
                         success: function (message) {
                             layer.closeAll('loading');
 
-                            let icon_flag = 2;
+                            let icon_flag = 1;
                             if (message.code !== 0)
-                                icon_flag = 1;
+                                icon_flag = 2;
                             else obj.del();
 
                             layer.msg(message.msg, {

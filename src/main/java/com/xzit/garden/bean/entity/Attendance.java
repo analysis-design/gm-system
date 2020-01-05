@@ -5,15 +5,15 @@ import java.util.Date;
 public class Attendance {
     private Long id;
 
-    private Date starttime;
+    private Date startTime;
 
-    private Date endtime;
+    private Date endTime;
 
-    private Long staffid;
+    private Long staffId;
 
-    private Integer stafftype;
+    private Integer staffType;
 
-    private Integer attendancestate;
+    private Integer attendanceState;
 
     private String description;
 
@@ -25,44 +25,44 @@ public class Attendance {
         this.id = id;
     }
 
-    public Date getStarttime() {
-        return starttime;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setStarttime(Date starttime) {
-        this.starttime = starttime;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getEndtime() {
-        return endtime;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEndtime(Date endtime) {
-        this.endtime = endtime;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
-    public Long getStaffid() {
-        return staffid;
+    public Long getStaffId() {
+        return staffId;
     }
 
-    public void setStaffid(Long staffid) {
-        this.staffid = staffid;
+    public void setStaffId(Long staffId) {
+        this.staffId = staffId;
     }
 
-    public Integer getStafftype() {
-        return stafftype;
+    public Integer getStaffType() {
+        return staffType;
     }
 
-    public void setStafftype(Integer stafftype) {
-        this.stafftype = stafftype;
+    public void setStaffType(Integer staffType) {
+        this.staffType = staffType;
     }
 
-    public Integer getAttendancestate() {
-        return attendancestate;
+    public Integer getAttendanceState() {
+        return attendanceState;
     }
 
-    public void setAttendancestate(Integer attendancestate) {
-        this.attendancestate = attendancestate;
+    public void setAttendanceState(Integer attendanceState) {
+        this.attendanceState = attendanceState;
     }
 
     public String getDescription() {
