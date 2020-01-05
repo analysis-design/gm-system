@@ -25,4 +25,15 @@ public interface ResSchPlanMapper {
             "set implPlanId = #{implPlanId}, resId = #{resId}, resNum = #{resNum}, " +
             "allocatedTime = #{allocatedTime}, description = #{description where id = #{id}")
     void updateById(ResSchPlan resSchPlan);
+
+    @Delete("delete from res_sch_plan where id=#{rspId}")
+    void deleteById(Long rspId);
+
+    @Delete("<script>" +
+            "delete from res_sch_plan where id in " +
+            "<foreach collection=\"idList\"  item=\"item\" open=\"(\" separator=\",\" close=\")\">" +
+            "   #{item} " +
+            "</foreach>" +
+            "</script>")
+    void deleteByIdList(@Param("idList") List<Long> resSchPlanIdList);
 }

@@ -21,12 +21,10 @@
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="addResBtn">添加物资</button>
-        <button class="layui-btn layui-btn-sm" lay-event="delCheckedResBtn">删除所选</button>
     </div>
 </script>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
 <script th:inline="javascript">
@@ -66,7 +64,7 @@
                     , {field: 'salePrice', title: '售卖价格', width: '16%'}
                     , {field: 'supplierId', title: '供应商编号', width: '16%'}
                     , {field: 'description', title: '描述', width: '16%'}
-                    , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150, align: "center"}
+                    , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 60, align: "center"}
                 ]
             ]
         });
@@ -96,48 +94,6 @@
 
                     tableReload();
                     break;
-                case 'delCheckedResBtn':
-                    data = checkStatus.data;
-                    let del = [];
-                    for (let i in data)
-                        del.push(data[i].id);
-
-                    $.ajax({
-                        type: 'POST',
-                        url: [[${#servletContext.getContextPath()}]] + "/res/del/list",
-                        contentType: "application/json;charset=utf-8",
-                        data: JSON.stringify(del),
-                        dataType: "json",
-                        success: function (message) {
-                            layer.closeAll('loading');
-
-                            let icon_flag = 1;
-                            if (message.code !== 0) {
-                                icon_flag = 2;
-                            }
-
-                            layer.msg(message.msg, {
-                                icon: icon_flag,
-                                time: 1500 //2秒关闭（如果不配置，默认是3秒）
-                            });
-                            tableReload();
-                        },
-                        error: function (message) {
-                            layer.closeAll('loading');
-                            console.log(JSON.stringify(message));
-                            let msg = "执行失败";
-
-                            if (message.responseJSON != null && message.responseJSON.msg != null)
-                                msg = message.responseJSON.msg;
-
-                            layer.msg(msg, {
-                                icon: 2,
-                                time: 1500
-                            });
-                        }
-                    });
-                    break;
-
                 //自定义头工具栏右侧图标 - 提示
                 case 'LAYTABLE_TIPS':
                     layer.msg('物资信息列表');
@@ -148,46 +104,8 @@
         //监听行工具事件
         table.on('tool(test)', function (obj) {
             let data = obj.data;
-            //console.log(obj)
-            if (obj.event === 'del') {
-                layer.confirm('确认删除？', function (index) {
 
-                    $.ajax({
-                        url: [[${#servletContext.getContextPath()}]] + "/res/del",
-                        data: {resId: data.id},
-                        dataType: "json",
-                        success: function (message) {
-                            layer.closeAll('loading');
-
-                            let icon_flag = 1;
-                            if (message.code !== 0) {
-                                icon_flag = 2;
-                            } else obj.del();
-
-                            layer.msg(message.msg, {
-                                icon: icon_flag,
-                                time: 1500 //2秒关闭（如果不配置，默认是3秒）
-                            });
-                            tableReload();
-                        },
-                        error: function (message) {
-                            layer.closeAll('loading');
-                            console.log(JSON.stringify(message));
-                            let msg = "执行失败";
-
-                            if (message.responseJSON != null && message.responseJSON.msg != null)
-                                msg = message.responseJSON.msg;
-
-                            layer.msg(msg, {
-                                icon: 2,
-                                time: 1500
-                            });
-                        }
-                    });
-                    layer.close(index);
-                    layer.load();
-                });
-            } else if (obj.event === 'edit') {
+            if (obj.event === 'edit') {
                 layer.open({
                     type: 2,
                     title: '编辑物资',

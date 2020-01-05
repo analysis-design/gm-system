@@ -160,7 +160,7 @@
 
                     $.ajax({
                         url: [[${#servletContext.getContextPath()}]] + "/rsp/del",
-                        data: {sspId: data.id},
+                        data: {rspId: data.id},
                         dataType: "json",
                         success: function (message) {
                             layer.closeAll('loading');

@@ -96,6 +96,28 @@ public class ResSchPlanController {
         return rs;
     }
 
+    @RequestMapping("/del")
+    @ResponseBody
+    public Map<String, Object> userDelete(@RequestParam("rspId") Long rspId) {
+        ResSchPlan resSchPlan = resSchPlanService.deleteById(rspId);
+        Map<String, Object> rs = new HashMap<>();
+        rs.put("code", 0);
+        rs.put("msg", "删除成功");
+        rs.put("data", resSchPlan);
+        return rs;
+    }
+
+    @PostMapping("/del/list")
+    @ResponseBody
+    public Map<String, Object> userDeleteAll(@RequestBody List<Long> resSchPlanIdList) {
+        List<ResSchPlan> resSchPlanList = resSchPlanService.deleteAllById(resSchPlanIdList);
+        Map<String, Object> rs = new HashMap<>();
+        rs.put("code", 0);
+        rs.put("msg", "删除成功");
+        rs.put("data", resSchPlanList);
+        return rs;
+    }
+
     @GetMapping("/list")
     @ResponseBody
     public Map<String, Object> indexList(PageModel<List<ResSchPlanDto>> pageModel) {

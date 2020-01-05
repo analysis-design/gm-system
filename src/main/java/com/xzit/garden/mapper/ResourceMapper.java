@@ -37,4 +37,7 @@ public interface ResourceMapper {
 
     @Select("select * from resource")
     List<Resource> findAll();
+
+    @Insert("update resource set num = #{num} where id = #{resId}")
+    void updateNumById(@Param("resId") Long resId, @Param("num") int num);
 }

@@ -14,4 +14,8 @@ public interface ResSchPlanService {
     void addResSchPlan(ResSchPlan resSchPlan);
 
     void updateById(ResSchPlan resSchPlan);
+
+    ResSchPlan deleteById(Long rspId);
+
+    List<ResSchPlan> deleteAllById(List<Long> resSchPlanIdList);
 }
