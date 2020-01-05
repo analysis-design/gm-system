@@ -46,7 +46,7 @@ public class ResourceController {
         List<Supplier> supplierList = supplierService.findAll();
         Resource resource = resourceService.getById(resId);
 
-        model.addAttribute("msg", "编辑工程组");
+        model.addAttribute("msg", "编辑物资信息");
         model.addAttribute("flag", 1);
         model.addAttribute("resource", resource);
         model.addAttribute("supplierList", supplierList);

@@ -34,4 +34,7 @@ public interface ResourceMapper {
             "salePrice = #{salePrice}, supplierId = #{supplierId}, " +
             "description = #{description} where id = #{id}")
     void updateById(Resource resource);
+
+    @Select("select * from resource")
+    List<Resource> findAll();
 }

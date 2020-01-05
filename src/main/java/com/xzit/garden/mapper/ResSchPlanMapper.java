@@ -1,9 +1,7 @@
 package com.xzit.garden.mapper;
 
 import com.xzit.garden.bean.entity.ResSchPlan;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -15,4 +13,16 @@ public interface ResSchPlanMapper {
 
     @Select("select count(*) from res_sch_plan")
     int countResSchPlan();
+
+    @Select("select * from res_sch_plan where id=#{rspId}")
+    ResSchPlan findById(Long rspId);
+
+    @Insert("insert into res_sch_plan (implPlanId, resId, resNum, planState, allocatedTime, description)" +
+            " values (#{implPlanId}, #{resId}, #{resNum}, #{planState}, #{allocatedTime}, #{description})")
+    void add(ResSchPlan resSchPlan);
+
+    @Update("update res_sch_plan " +
+            "set implPlanId = #{implPlanId}, resId = #{resId}, resNum = #{resNum}, " +
+            "allocatedTime = #{allocatedTime}, description = #{description where id = #{id}")
+    void updateById(ResSchPlan resSchPlan);
 }

@@ -13,4 +13,6 @@ public interface ResourceService {
     void addResource(Resource resource);
 
     void updateById(Resource resource);
+
+    List<Resource> findAll();
 }

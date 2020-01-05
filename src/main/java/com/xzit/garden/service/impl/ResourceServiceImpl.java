@@ -66,4 +66,12 @@ public class ResourceServiceImpl implements ResourceService {
         validateExistSupplier(resource.getSupplierId());
         resourceMapper.updateById(resource);
     }
+
+    @Override
+    public List<Resource> findAll() {
+        List<Resource> resourceList = resourceMapper.findAll();
+        if (resourceList == null)
+            resourceList = new ArrayList<>();
+        return resourceList;
+    }
 }

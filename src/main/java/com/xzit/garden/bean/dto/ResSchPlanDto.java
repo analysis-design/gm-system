@@ -24,7 +24,7 @@ public class ResSchPlanDto extends ResSchPlan {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date allocatedTime = resSchPlan.getAllocatedTime();
         if (allocatedTime != null)
-            this.implPlanName = simpleDateFormat.format(allocatedTime);
+            this.newTime = simpleDateFormat.format(allocatedTime);
     }
 
     public String getImplPlanName() {
