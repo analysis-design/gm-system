@@ -12,6 +12,7 @@ import com.xzit.garden.mapper.StaffSchPlanMapper;
 import com.xzit.garden.service.StaffSchPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,7 @@ public class StaffSchPlanServiceImpl implements StaffSchPlanService {
         return new StaffSchPlanDto(staffSchPlan);
     }
 
+    @Transactional
     @Override
     public void addStaffSchPlan(StaffSchPlan staffSchPlan) {
         validateExistImplPlan(staffSchPlan.getImplPlanId());
@@ -76,6 +78,7 @@ public class StaffSchPlanServiceImpl implements StaffSchPlanService {
             throw new ObjectNotFoundException("实施计划编号" + implPlanId + "不存在");
     }
 
+    @Transactional
     @Override
     public void updateById(StaffSchPlan staffSchPlan) {
         getById(staffSchPlan.getId());
@@ -84,5 +87,29 @@ public class StaffSchPlanServiceImpl implements StaffSchPlanService {
         validateExistGroup(staffSchPlan.getGroupId());
 
         staffSchPlanMapper.updateById(staffSchPlan);
+    }
+
+    @Transactional
+    @Override
+    public StaffSchPlan deleteById(Long sspId) {
+        StaffSchPlanDto staffSchPlanDto = getById(sspId);
+        staffSchPlanMapper.deleteById(sspId);
+        return staffSchPlanDto;
+    }
+
+    @Transactional
+    @Override
+    public List<StaffSchPlan> deleteAllById(List<Long> staffSchPlanIdList) {
+        List<StaffSchPlan> staffSchPlanList = new ArrayList<>();
+
+        if (staffSchPlanIdList == null || staffSchPlanIdList.size() == 0) return staffSchPlanList;
+
+        for (Long id : staffSchPlanIdList) {
+            StaffSchPlanDto staffSchPlanDto = getById(id);
+            staffSchPlanList.add(staffSchPlanDto);
+        }
+
+        staffSchPlanMapper.deleteByIdList(staffSchPlanIdList);
+        return staffSchPlanList;
     }
 }

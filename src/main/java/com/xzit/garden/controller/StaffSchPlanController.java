@@ -90,6 +90,28 @@ public class StaffSchPlanController {
         return rs;
     }
 
+    @RequestMapping("/del")
+    @ResponseBody
+    public Map<String, Object> userDelete(@RequestParam("sspId") Long sspId) {
+        StaffSchPlan staffSchPlan = staffSchPlanService.deleteById(sspId);
+        Map<String, Object> rs = new HashMap<>();
+        rs.put("code", 0);
+        rs.put("msg", "删除成功");
+        rs.put("data", staffSchPlan);
+        return rs;
+    }
+
+    @PostMapping("/del/list")
+    @ResponseBody
+    public Map<String, Object> userDeleteAll(@RequestBody List<Long> staffSchPlanIdList) {
+        List<StaffSchPlan> staffSchPlanList = staffSchPlanService.deleteAllById(staffSchPlanIdList);
+        Map<String, Object> rs = new HashMap<>();
+        rs.put("code", 0);
+        rs.put("msg", "删除成功");
+        rs.put("data", staffSchPlanList);
+        return rs;
+    }
+
     @GetMapping("/list")
     @ResponseBody
     public Map<String, Object> indexList(PageModel<List<StaffSchPlanDto>> pageModel) {

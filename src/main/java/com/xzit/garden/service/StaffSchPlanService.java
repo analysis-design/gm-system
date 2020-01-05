@@ -14,4 +14,8 @@ public interface StaffSchPlanService {
     void addStaffSchPlan(StaffSchPlan staffSchPlan);
 
     void updateById(StaffSchPlan staffSchPlan);
+
+    StaffSchPlan deleteById(Long sspId);
+
+    List<StaffSchPlan> deleteAllById(List<Long> staffSchPlanIdList);
 }

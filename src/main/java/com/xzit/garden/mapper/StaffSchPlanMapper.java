@@ -25,4 +25,15 @@ public interface StaffSchPlanMapper {
             "startTime = #{startTime}, expectedEndTime = #{expectedEndTime}, " +
             "actualEndTime = #{actualEndTime}, description = #{description} WHERE id = #{id}")
     void updateById(StaffSchPlan staffSchPlan);
+
+    @Delete("delete from staff_sch_plan where id=#{sspId}")
+    void deleteById(Long sspId);
+
+    @Delete("<script>" +
+            "delete from staff_sch_plan where id in " +
+            "<foreach collection=\"idList\"  item=\"item\" open=\"(\" separator=\",\" close=\")\">" +
+            "   #{item} " +
+            "</foreach>" +
+            "</script>")
+    void deleteByIdList(@Param("idList") List<Long> staffSchPlanIdList);
 }
