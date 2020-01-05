@@ -49,7 +49,8 @@
             <label class="layui-form-label">养护目的</label>
         <div class="layui-input-block">
                 <textarea th:text="${maintenancePlan.getPurpose()}" name="purpose" required lay-verify="required" autocomplete="off"
-                       class="layui-input">
+                       class="layui-input "
+                          style="width: 100%;height: 80px">
                 </textarea>
         </div>
     </div>
@@ -82,8 +83,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">描述</label>
         <div class="layui-input-block">
-            <textarea type="text"  name="description"
-                   th:text="${maintenancePlan.getDescription()}" required lay-verify="required" autocomplete="off"
+            <textarea type="text"  name="description" style="width: 100%;height: 80px"
+                   text="${maintenancePlan.getDescription()}" required lay-verify="required" autocomplete="off"
                    >
             </textarea>
         </div>
