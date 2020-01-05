@@ -7,4 +7,5 @@ import java.util.List;
 public interface ImplPlanService {
     List<ImplPlan> findAll();
 
+    List<ImplPlan> findNotImplAll();
 }

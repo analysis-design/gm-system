@@ -21,4 +21,12 @@ public class ImplPlanServiceImpl implements ImplPlanService {
         if (implPlanList == null) implPlanList = new ArrayList<>();
         return implPlanList;
     }
+
+    @Override
+    public List<ImplPlan> findNotImplAll() {
+        List<ImplPlan> implPlanList = implPlanMapper.findNotImplAll();
+        if (implPlanList == null) implPlanList = new ArrayList<>();
+
+        return implPlanList;
+    }
 }

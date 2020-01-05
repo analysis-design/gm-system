@@ -93,4 +93,9 @@ public interface GroupService {
      * @param groupMember 工程组成员信息
      */
     void updateGroupMemberById(GroupMember groupMember);
+
+    /**
+     * @return 获取所有的为实施的工程组
+     */
+    List<Group> getNotImplAll();
 }

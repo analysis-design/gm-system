@@ -14,4 +14,7 @@ public interface ImplPlanMapper {
 
     @Select("select * from impl_plan")
     List<ImplPlan> findAll();
+
+    @Select("select * from impl_plan where state=0")
+    List<ImplPlan> findNotImplAll();
 }
