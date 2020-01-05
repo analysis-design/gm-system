@@ -1,5 +1,8 @@
 package com.xzit.garden.bean.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Order {
@@ -7,25 +10,28 @@ public class Order {
 
     private String name;
 
-    private Long budgetid;
+    private Long budgetId;
 
-    private Integer budgettotal;
+    private Integer budgetTotal;
 
     private Double discount;
 
     private Long prepaid;
 
-    private Integer paystate;
+    private Integer payState;
 
-    private Integer paymentmethod;
+    private Integer paymentMethod;
 
-    private Integer paymenttotal;
+    private Integer paymentTotal;
 
-    private Date createtime;
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
-    private Date endtime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    private Date endTime;
 
-    private Long projectid;
+    private Long projectId;
 
     public Long getId() {
         return id;
@@ -43,20 +49,20 @@ public class Order {
         this.name = name == null ? null : name.trim();
     }
 
-    public Long getBudgetid() {
-        return budgetid;
+    public Long getBudgetId() {
+        return budgetId;
     }
 
-    public void setBudgetid(Long budgetid) {
-        this.budgetid = budgetid;
+    public void setBudgetId(Long budgetId) {
+        this.budgetId = budgetId;
     }
 
-    public Integer getBudgettotal() {
-        return budgettotal;
+    public Integer getBudgetTotal() {
+        return budgetTotal;
     }
 
-    public void setBudgettotal(Integer budgettotal) {
-        this.budgettotal = budgettotal;
+    public void setBudgetTotal(Integer budgetTotal) {
+        this.budgetTotal = budgetTotal;
     }
 
     public Double getDiscount() {
@@ -75,51 +81,51 @@ public class Order {
         this.prepaid = prepaid;
     }
 
-    public Integer getPaystate() {
-        return paystate;
+    public Integer getPayState() {
+        return payState;
     }
 
-    public void setPaystate(Integer paystate) {
-        this.paystate = paystate;
+    public void setPayState(Integer payState) {
+        this.payState = payState;
     }
 
-    public Integer getPaymentmethod() {
-        return paymentmethod;
+    public Integer getPaymentMethod() {
+        return paymentMethod;
     }
 
-    public void setPaymentmethod(Integer paymentmethod) {
-        this.paymentmethod = paymentmethod;
+    public void setPaymentMethod(Integer paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
-    public Integer getPaymenttotal() {
-        return paymenttotal;
+    public Integer getPaymentTotal() {
+        return paymentTotal;
     }
 
-    public void setPaymenttotal(Integer paymenttotal) {
-        this.paymenttotal = paymenttotal;
+    public void setPaymentTotal(Integer paymentTotal) {
+        this.paymentTotal = paymentTotal;
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getEndtime() {
-        return endtime;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEndtime(Date endtime) {
-        this.endtime = endtime;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
-    public Long getProjectid() {
-        return projectid;
+    public Long getProjectId() {
+        return projectId;
     }
 
-    public void setProjectid(Long projectid) {
-        this.projectid = projectid;
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 }

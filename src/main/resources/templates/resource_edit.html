@@ -9,76 +9,116 @@
 <body>
 <div class="layui-form layui-container" style="padding:15px 30px 15px 0;">
     <div class="layui-form-item" hidden>
-        <label class="layui-form-label">权限编号</label>
+        <label class="layui-form-label">物资编号</label>
         <div class="layui-input-block">
             <input type="text" name="id"
-                   autocomplete="off" class="layui-input" th:value="${updAuthority?.getId()}">
+                   autocomplete="off" class="layui-input" th:value="${resource?.getId()}">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">权限名称</label>
+        <label class="layui-form-label">物资名称</label>
         <div class="layui-input-block">
-            <input type="text" name="authName" required lay-verify="required" placeholder="请输入"
-                   autocomplete="off" class="layui-input" th:value="${updAuthority?.getAuthName()}">
+            <input type="text" name="name" required lay-verify="required" placeholder="请输入"
+                   autocomplete="off" class="layui-input" th:value="${resource?.getName()}">
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">资源名称</label>
+        <label class="layui-form-label">物资数量</label>
         <div class="layui-input-block">
-            <input type="text" name="resName" required lay-verify="required" th:value="${updAuthority?.getResName()}"
+            <input type="text" name="num" required lay-verify="required" th:value="${resource?.getNum()}"
                    placeholder="请输入" autocomplete="off" class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">资源类型</label>
+        <label class="layui-form-label">物资类型</label>
         <div class="layui-input-block">
-            <input type="radio" name="resType" value="0" title="菜单" th:checked="${updAuthority?.getResType() == 0}">
-            <input type="radio" name="resType" value="1" title="按钮" th:checked="${updAuthority?.getResType() == 1}">
-            <input type="radio" name="resType" value="2" title="页面" th:checked="${updAuthority?.getResType() == 2}">
+            <input type="radio" name="type" value="0" title="树木" th:checked="${resource?.getType() == 0}">
+            <input type="radio" name="type" value="1" title="花草" th:checked="${resource?.getType() == 1}">
+            <input type="radio" name="type" value="2" title="工具" th:checked="${resource?.getType() == 2}">
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">资源url</label>
+        <label class="layui-form-label">物资图片</label>
         <div class="layui-input-block">
-            <input type="text" name="url" required lay-verify="required" th:value="${updAuthority?.getUrl()}"
+            <input type="text" name="image" required lay-verify="required" th:value="${resource?.getImage()}"
                    placeholder="请输入" autocomplete="off" class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">资源图标</label>
+        <label class="layui-form-label">物资颜色</label>
         <div class="layui-input-block">
-            <input type="text" name="icon" required lay-verify="required" th:value="${updAuthority?.getIcon()}"
+            <input type="text" name="color" required lay-verify="required" th:value="${resource?.getColor()}"
                    placeholder="请输入" autocomplete="off" class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">所属</label>
+        <label class="layui-form-label">物资单位</label>
         <div class="layui-input-block">
-            <select name="parentId" lay-filter="aihao">
-                <option value="-1">一级菜单</option>
-                <option th:each="authority, state : ${authList}"
-                        th:selected="${updAuthority?.getParentId() == authority?.getId()}"
-                        th:value="${authority?.getId()}"
-                        th:text="${authority?.getAuthName()}"></option>
+            <input type="text" name="unit" required lay-verify="required" th:value="${resource?.getUnit()}"
+                   placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">物资尺寸</label>
+        <div class="layui-input-block">
+            <input type="text" name="size" required lay-verify="required" th:value="${resource?.getSize()}"
+                   placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">物资用途</label>
+        <div class="layui-input-block">
+            <input type="text" name="purpose" required lay-verify="required" th:value="${resource?.getPurpose()}"
+                   placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">购买价格</label>
+        <div class="layui-input-block">
+            <input type="text" name="purchasePrice" required lay-verify="required"
+                   th:value="${resource?.getPurchasePrice()}"
+                   placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">售卖价格</label>
+        <div class="layui-input-block">
+            <input type="text" name="salePrice" required lay-verify="required" th:value="${resource?.getSalePrice()}"
+                   placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">供应商</label>
+        <div class="layui-input-block">
+            <select name="supplierId" lay-filter="aihao">
+                <option th:each="supplier, state : ${supplierList}"
+                        th:selected="${resource?.getSupplierId() == supplier?.getId()}"
+                        th:value="${supplier?.getId()}"
+                        th:text="${supplier?.getName()}"></option>
             </select>
         </div>
     </div>
 
     <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">权限描述</label>
+        <label class="layui-form-label">物资描述</label>
         <div class="layui-input-block">
-            <textarea name="description" placeholder="请输入内容" th:text="${updAuthority?.getDescription()}"
+            <textarea name="description" placeholder="请输入内容" th:text="${resource?.getDescription()}"
                       required lay-verify="required" class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="addAuthority">提交</button>
+            <button class="layui-btn" lay-submit lay-filter="addResource">提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
@@ -93,7 +133,7 @@
         let $ = layui.jquery;
 
         //监听提交
-        form.on('submit(addAuthority)', function (data) {
+        form.on('submit(addResource)', function (data) {
             layer.msg(JSON.stringify(data.field));
 
             $.ajax({

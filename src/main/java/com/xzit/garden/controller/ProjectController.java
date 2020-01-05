@@ -53,13 +53,12 @@ public class ProjectController {
 
     @RequestMapping(path = "/del", method = RequestMethod.GET)
     @ResponseBody
-    public String delProject(@RequestParam(required = false, defaultValue = "") Long id) {
+    public Map<String,Object> delProject(@RequestParam(required = false, defaultValue = "") Long id) {
         Integer delete = projectService.deleteProject(id);
-        System.out.println("id = " + delete);
-        if (delete < 0) {
-            return "deleteError";
-        }
-        return "删除成功!";
+        Map<String, Object> rs = new HashMap<>();
+        rs.put("code", 0);
+        rs.put("msg", "删除成功");
+        return rs;
     }
 
     @GetMapping("/add")
@@ -173,8 +172,7 @@ public class ProjectController {
         Integer succcess = clientService.deleteClient(client.getId());
         Map<String,String> map = new HashMap<>();
         if (succcess==0){
-            map.put("msg","此客户有工程，不能删除！");
-            map.put("del","1");
+            map=null;
             return map;
         }
         else if (succcess==1){

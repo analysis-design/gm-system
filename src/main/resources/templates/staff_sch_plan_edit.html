@@ -9,76 +9,72 @@
 <body>
 <div class="layui-form layui-container" style="padding:15px 30px 15px 0;">
     <div class="layui-form-item" hidden>
-        <label class="layui-form-label">权限编号</label>
+        <label class="layui-form-label">人员调度计划编号</label>
         <div class="layui-input-block">
             <input type="text" name="id"
-                   autocomplete="off" class="layui-input" th:value="${updAuthority?.getId()}">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">权限名称</label>
-        <div class="layui-input-block">
-            <input type="text" name="authName" required lay-verify="required" placeholder="请输入"
-                   autocomplete="off" class="layui-input" th:value="${updAuthority?.getAuthName()}">
+                   autocomplete="off" class="layui-input" th:value="${staffSchPlan?.getId()}">
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">资源名称</label>
+        <label class="layui-form-label">实施计划</label>
         <div class="layui-input-block">
-            <input type="text" name="resName" required lay-verify="required" th:value="${updAuthority?.getResName()}"
-                   placeholder="请输入" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">资源类型</label>
-        <div class="layui-input-block">
-            <input type="radio" name="resType" value="0" title="菜单" th:checked="${updAuthority?.getResType() == 0}">
-            <input type="radio" name="resType" value="1" title="按钮" th:checked="${updAuthority?.getResType() == 1}">
-            <input type="radio" name="resType" value="2" title="页面" th:checked="${updAuthority?.getResType() == 2}">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">资源url</label>
-        <div class="layui-input-block">
-            <input type="text" name="url" required lay-verify="required" th:value="${updAuthority?.getUrl()}"
-                   placeholder="请输入" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">资源图标</label>
-        <div class="layui-input-block">
-            <input type="text" name="icon" required lay-verify="required" th:value="${updAuthority?.getIcon()}"
-                   placeholder="请输入" autocomplete="off" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">所属</label>
-        <div class="layui-input-block">
-            <select name="parentId" lay-filter="aihao">
-                <option value="-1">一级菜单</option>
-                <option th:each="authority, state : ${authList}"
-                        th:selected="${updAuthority?.getParentId() == authority?.getId()}"
-                        th:value="${authority?.getId()}"
-                        th:text="${authority?.getAuthName()}"></option>
+            <select name="implPlanId" lay-filter="aihao">
+            <option th:each="implPlan, state : ${implPlanList}"
+                    th:selected="${staffSchPlan?.getImplPlanId() == implPlan?.getId()}"
+                    th:value="${implPlan?.getId()}"
+                    th:text="${implPlan?.getName()}"></option>
             </select>
         </div>
     </div>
 
-    <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">权限描述</label>
+    <div class="layui-form-item">
+        <label class="layui-form-label">工程组</label>
         <div class="layui-input-block">
-            <textarea name="description" placeholder="请输入内容" th:text="${updAuthority?.getDescription()}"
+            <select name="groupId" lay-filter="aihao">
+            <option th:each="group, state : ${groupList}"
+                    th:selected="${staffSchPlan?.getGroupId() == group?.getId()}"
+                    th:value="${group?.getId()}"
+                    th:text="${group?.getName()}"></option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">开始时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="startTime" required lay-verify="required"
+                   class="layui-input" id="test5" placeholder="yyyy-MM-dd HH:mm:ss">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">预期结束时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="expectedEndTime" required lay-verify="required"
+                   class="layui-input" id="test6" placeholder="yyyy-MM-dd HH:mm:ss">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">实际结束时间</label>
+        <div class="layui-input-block">
+            <input type="text" name="actualEndTime" required lay-verify="required"
+                   class="layui-input" id="test7" placeholder="yyyy-MM-dd HH:mm:ss">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">物资描述</label>
+        <div class="layui-input-block">
+            <textarea name="description" placeholder="请输入内容" th:text="${staffSchPlan?.getDescription()}"
                       required lay-verify="required" class="layui-textarea"></textarea>
         </div>
     </div>
+
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="addAuthority">提交</button>
+            <button class="layui-btn" lay-submit lay-filter="addStaffSchPlan">提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
@@ -87,13 +83,30 @@
 
 <script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
 <script th:inline="javascript">
-    layui.use(['form', 'layer'], function () {
+    layui.use(['form', 'layer', 'laydate'], function () {
         let form = layui.form;
         let layer = layui.layer;
         let $ = layui.jquery;
+        let laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#test5'
+            , type: 'datetime'
+            , value: [[${startTime}]]
+        });
+        laydate.render({
+            elem: '#test6'
+            , type: 'datetime'
+            , value: [[${expectedTime}]]
+        });
+        laydate.render({
+            elem: '#test7'
+            , type: 'datetime'
+            , value: [[${endTime}]]
+        });
 
         //监听提交
-        form.on('submit(addAuthority)', function (data) {
+        form.on('submit(addStaffSchPlan)', function (data) {
             layer.msg(JSON.stringify(data.field));
 
             $.ajax({

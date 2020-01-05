@@ -194,6 +194,14 @@ public class GroupServiceImpl implements GroupService {
         groupMapper.updateGroupMember(groupMember);
     }
 
+    @Override
+    public List<Group> getNotImplAll() {
+        List<Group> groupList = groupMapper.findNotImplAll();
+        if (groupList == null) groupList = new ArrayList<>();
+
+        return groupList;
+    }
+
     private List<GroupMemberDto> getGroupMemberDtoList(Group group, List<GroupMember> groupMemberList) {
         List<GroupMemberDto> dtoList = new ArrayList<>();
         for (GroupMember groupMember : groupMemberList) {

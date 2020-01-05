@@ -53,4 +53,7 @@ public interface GroupMapper {
 
     @Update("update group_member set postId=#{postId} where id=#{id}")
     void updateGroupMember(GroupMember groupMember);
+
+    @Select("select * from `group` where state=0")
+    List<Group> findNotImplAll();
 }

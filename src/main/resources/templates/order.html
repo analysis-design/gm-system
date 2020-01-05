@@ -5,7 +5,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>工程列表</title>
+    <title>订单列表</title>
     <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
 </head>
 <body style="padding-left: 15px;padding-right: 15px">
@@ -13,13 +13,10 @@
     <div class="layui-input-inline">
         <input type="text" autocomplete="off" placeholder="请输入工程名称" class="layui-input" id="pName" value="">
     </div>
-    <div class="layui-input-inline">
-        <input type="text" autocomplete="off" placeholder="请输入负责人名称" class="layui-input" id="saleName" value="">
-    </div>
     <a class="layui-btn mgl-20" data-type="reload" id="queryBtn">查询</a>
     <a class="layui-btn mgl-20 layui-btn-normal" data-type="add" id="addBtn">添加</a>
 </form>
-<table class="layui-hide" id="projectList" lay-filter="test"></table>
+<table class="layui-hide" id="orderList" lay-filter="test"></table>
 
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
@@ -30,28 +27,28 @@
 <script th:src="@{/webjars/layui/2.5.5/layui.js}" charset="utf-8" type="text/javascript"></script>
 <script th:src="@{/js/jquery.min.js}" type="text/javascript"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
-<script type="text/javascript" th:inline="javascript">
+<script type="text/javascript">
     layui.use('table', function () {
         var table = layui.table;
         table.render({
-            elem: '#projectList'
-            , url: [[${#servletContext.getContextPath()}]] + '/project'
-            , title: '工程数据表'
+            elem: '#orderList'
+            , url: '[[@{/order}]]'
+            , title: '订单数据表'
             , page: true
             , cols: [
                 [
                     // {type: 'checkbox', fixed: 'left'},
                     {field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true}
-                    , {field: 'name', title: '工程名', width: 120}
-                    , {field: 'workSite', title: '施工地点', width: 170}
-                    , {field: 'pState', title: '工程状态', width: 110}
-                    , {field: 'contractFile', title: '合同文件', width: 90}
-                    , {field: 'pDifficultyLevel', title: '难度级别', width: 90}
-                    , {field: 'pStartTime', title: '开始时间', width: 110}
-                    , {field: 'pExpectedEndTime', title: '预计结束时间', width: 120}
-                    , {field: 'pActualEndTime', title: '实际结束时间', width: 120}
-                    , {field: 'description', title: '工程描述', width: 180}
-                    , {field: 'saleName', title: '负责人', width: 100}
+                    , {field: 'name', title: '订单名', width: 170}
+                    , {field: 'dtoBudgetTotal', title: '预算总额', width: 120}
+                    , {field: 'dtoDiscount', title: '折扣', width: 110}
+                    , {field: 'dtoPrepaid', title: '预付定金', width: 120}
+                    , {field: 'dtoPayState', title: '支付状态', width: 90}
+                    , {field: 'dtoPaymentMethod', title: '支付方法', width: 110}
+                    , {field: 'dtoPaymentTotal', title: '支付总额', width: 120}
+                    , {field: 'dtoCreatTime', title: '订单生成时间', width: 165}
+                    , {field: 'dtoEndTime', title: '订单完成时间', width: 165}
+                    , {field: 'projectName',title:'工程名',width:170}
                     , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 170, align: 'center'}
                 ]
             ]
@@ -62,19 +59,17 @@
             reload: function () {
                 //执行重载
                 var name = $("#pName").val();
-                var saleName = $("#saleName").val();
-                table.reload('projectList', {
+                table.reload('orderList', {
                     page: {
                         curr: 1 //重新从第 1 页开始
                     }
                     , where: {
                         //重新加载条件
-                        name: name,
-                        saleName: saleName
+                        projectName: name
                     }
                 });
             },
-            toedit: function (winTitle, projectId, is) {
+            toedit:function (winTitle,orderId,isDisabled) {
                 layer.open({
                     type: 2,
                     title: winTitle,
@@ -82,8 +77,8 @@
                     offset: '20px',
                     shade: 0.5,
                     maxmin: true, //开启最大化最小化按钮
-                    area: ['85%', '75%'],
-                    content: [[${#servletContext.getContextPath()}]]+'/project/add?id=' + projectId + '&isDisabled=' + is
+                    area: ['50%', '65%'],
+                    content:'[[@{/order/edit?id=}]]'+orderId+'&isDisabled='+isDisabled
                 });
             }
         };
@@ -93,7 +88,7 @@
         });
         //添加按钮
         $('#addBtn').on('click', function () {
-            active.toedit("园林管理系统-添加工程信息", 0, 0);
+            active.toedit("园林管理系统-添加订单信息",0,2);
         });
         //监听行工具事件
         table.on('tool(test)', function (obj) {
@@ -104,7 +99,7 @@
                     obj.del();
                     layer.close(index);
                     $.ajax({
-                        url: [[${#servletContext.getContextPath()}]] + "/project/del",
+                        url: "[[@{/order/del}]]",
                         data: {id: data.id},
                         dataType: "json",
                         success: function (message) {
@@ -133,13 +128,14 @@
                                 time: 1500
                             });
                         }
-                    });
-                    active.reload();
+
+                    }) ;active.reload();
                 });
             } else if (obj.event === 'edit') {
-                active.toedit("园林管理系统-修改工程信息", data.id, 0);
-            } else if (obj.event === 'detail') {
-                active.toedit("园林管理系统-查看工程信息", data.id, 1);
+                active.toedit("园林管理系统-修改订单信息",data.id,0);
+            }
+            else if(obj.event == 'detail'){
+                active.toedit("园林管理系统-查看订单信息",data.id,1);
             }
         });
     })

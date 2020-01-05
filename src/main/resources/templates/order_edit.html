@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title></title>
+    <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
+</head>
+<body>
+<form>
+    <div class="layui-form layui-container" style="padding:15px 30px 15px 0;">
+        <div class="layui-form-item" hidden>
+            <label class="layui-form-label">订单编号</label>
+            <div class="layui-input-block">
+                <input type="text" name="id"
+                       autocomplete="off" class="layui-input" th:value="${order?.getId()}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">订单名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" required lay-verify="required" placeholder="请输入"
+                       th:disabled="${disabled==1}" autocomplete="off" class="layui-input"
+                       th:value="${order?.getName()}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">预算编号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="budgetId" required lay-verify="required" th:value="${order?.getBudgetId()}"
+                       th:disabled="${disabled==1}" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">预算总额</label>
+            <div class="layui-input-inline">
+                <input type="text" name="budgetTotal" required lay-verify="required"
+                       th:value="${order?.getBudgetTotal()}"
+                       th:disabled="${disabled==1}" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择折扣</label>
+            <div class="layui-input-inline">
+                <select name="discount" th:disabled="${disabled==1}">
+                    <option value="">请选择</option>
+                    <option value="10" th:selected="${order?.getDiscount()==10}">无折扣</option>
+                    <option value="9.8" th:selected="${order?.getDiscount()==9.8}">98折</option>
+                    <option value="9.5" th:selected="${order?.getDiscount()==9.5}">95折</option>
+                    <option value="9.0" th:selected="${order?.getDiscount()==9.0}">9折</option>
+                    <option value="8.8" th:selected="${order?.getDiscount()==8.8}">88折</option>
+                </select>
+            </div>
+            <label class="layui-form-label">支付方式</label>
+            <div class="layui-input-inline">
+                <select name="paymentMethod" th:disabled="${disabled==1}">
+                    <option value="">请选择</option>
+                    <option value="0" th:selected="${order?.getPaymentMethod()==0}">未支付</option>
+                    <option value="1" th:selected="${order?.getPaymentMethod()==1}">现金</option>
+                    <option value="2" th:selected="${order?.getPaymentMethod()==2}">银行转账</option>
+                    <option value="3" th:selected="${order?.getPaymentMethod()==3}">汇款</option>
+                    <option value="4" th:selected="${order?.getPaymentMethod()==4}">支票</option>
+                    <option value="5" th:selected="${order?.getPaymentMethod()==5}">本票</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">预付定金</label>
+            <div class="layui-input-inline">
+                <input type="text" name="prepaid" required lay-verify="required" th:value="${order?.getPrepaid()}"
+                       th:disabled="${disabled==1}" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">支付总额</label>
+            <div class="layui-input-inline">
+                <input type="text" name="paymentTotal" th:disabled="${disabled==1}"
+                       th:value="${order?.getPaymentTotal()}"
+                       placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">创建时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="createTime" disabled
+                       id="startDate" th:value="${order?.getDtoCreatTime()}"
+                       placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">结束时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="endTime" disabled
+                       id="exEndDate" th:value="${order?.getDtoEndTime()}"
+                       placeholder="结束时间" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属工程</label>
+            <div class="layui-input-inline">
+                <select name="projectId" th:disabled="${disabled==1}">
+                    <option value="">请选择</option>
+                    <option th:each="project, state : ${projectList}"
+                            th:selected="${order?.getProjectId() == project?.getId()}"
+                            th:value="${project?.getId()}"
+                            th:text="${project?.getName()}"></option>
+                </select>
+            </div>
+            <label class="layui-form-label">支付状态</label>
+            <div class="layui-input-inline">
+                <select name="payState" th:disabled="${disabled==1}">
+                    <option value="">请选择</option>
+                    <option value="0" th:selected="${order?.getPayState()==0}">未付定金</option>
+                    <option value="1" th:selected="${order?.getPayState()==1}">已付定金</option>
+                    <option value="2" th:selected="${order?.getPayState()==2}">已付尾款</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="addAuthority" th:disabled="${disabled==1}">提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="endOrder" th:disabled="${disabled==1}">完成订单</button>
+            </div>
+        </div>
+        <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+    </div>
+</form>
+<script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+<script>
+    layui.use(['laydate'], function () {
+        var laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#startDate'
+            , format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+        });
+        laydate.render({
+            elem: '#exEndDate'
+            , format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+        });
+    })
+</script>
+<script th:inline="javascript">
+    layui.use(['form', 'layer'], function () {
+        let form = layui.form;
+        let layer = layui.layer;
+        let $ = layui.jquery;
+        //监听提交
+        form.on('submit(addAuthority)', function (data) {
+            // layer.msg(JSON.stringify(data.field));
+            $.ajax({
+                type: "POST",
+                url: [[${#servletContext.getContextPath()}]] + [[${url}]],
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(data.field),
+                dataType: "json",
+                success: function (message) {
+                    layer.closeAll('loading');
+                    layer.msg(message.msg, {
+                        icon: 1,
+                        time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        // 当你在iframe页面关闭自身时
+                        parent.location.reload();
+                        let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                    });
+                },
+                error: function (message) {
+                    layer.closeAll('loading');
+                    console.log(JSON.stringify(message));
+                    let msg = "执行失败";
+
+                    if (message.responseJSON != null && message.responseJSON.msg != null)
+                        msg = message.responseJSON.msg;
+
+                    layer.msg(msg, {
+                        icon: 2,
+                        time: 1500
+                    });
+                }
+            });
+            layer.load();
+            return false; // 禁用页面跳转
+        });
+        form.on('submit(endOrder)', function (data) {
+            // layer.msg(JSON.stringify(data.field));
+            $.ajax({
+                type: "POST",
+                url: [[${#servletContext.getContextPath()}]] +"/order/end",
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(data.field),
+                dataType: "json",
+                success: function (message) {
+                    layer.closeAll('loading');
+                    layer.msg(message.msg, {
+                        icon: 1,
+                        time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        // 当你在iframe页面关闭自身时
+                        parent.location.reload();
+                        let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                    });
+                },
+                error: function (message) {
+                    layer.closeAll('loading');
+                    console.log(JSON.stringify(message));
+                    let msg = "执行失败";
+
+                    if (message.responseJSON != null && message.responseJSON.msg != null)
+                        msg = message.responseJSON.msg;
+
+                    layer.msg(msg, {
+                        icon: 2,
+                        time: 1500
+                    });
+                }
+            });
+            layer.load();
+            return false; // 禁用页面跳转
+        });
+    });
+</script>
+</body>
+</html>

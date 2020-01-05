@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>人员调度计划管理</title>
+    <link rel="stylesheet" th:href="@{/webjars/layui/2.5.5/css/layui.css}" media="all">
+</head>
+<body>
+<div class="layui-container layui-side-scroll" style="margin: 0; width: 100%; padding: 5px 15px;">
+    <div class="layui-row">
+        <div class="layui-col-lg12">
+            <table id="demo" lay-filter="test"></table>
+        </div>
+    </div>
+    <div class="layui-row">
+
+    </div>
+</div>
+<script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addResBtn">添加物资</button>
+    </div>
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+</script>
+
+<script th:inline="javascript">
+    //JavaScript代码区域
+    layui.use(['element', 'layer', 'table'], function () {
+        let element = layui.element;
+        let table = layui.table;
+        let layer = layui.layer;
+        let $ = layui.jquery;
+
+        //第一个实例
+        let resTable = table.render({
+            id: 'resTableId'
+            , elem: '#demo'
+            , title: "物资信息列表"
+            , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '获取'
+                , layEvent: 'LAYTABLE_TIPS'
+                , icon: 'layui-icon-tips'
+            }]
+            , url: [[${#servletContext.getContextPath()}]] + '/res/list' //数据接口
+            , page: true // 开启分页
+            , cols: [
+                [ //表头
+                    {title: '选择', width: 36, type: 'checkbox', fixed: 'left'},
+                    {field: 'id', title: '编号', width: 69, fixed: 'left', align: 'center'},
+                    {field: 'name', title: '物资名称', width: '12%'},
+                    {field: 'num', title: '物资数量', width: '10%'},
+                    {field: 'image', title: '物资图片', width: '10%'},
+                    {field: 'type', title: '物资类型', width: '10%'},
+                    {field: 'color', title: '物资颜色', width: '20%'}
+                    , {field: 'unit', title: '物资单位', width: '20%'}
+                    , {field: 'size', title: '物资尺寸', width: '13%'}
+                    , {field: 'purpose', title: '物资用途', width: '16%'}
+                    , {field: 'purchasePrice', title: '购买价格', width: '16%'}
+                    , {field: 'salePrice', title: '售卖价格', width: '16%'}
+                    , {field: 'supplierId', title: '供应商编号', width: '16%'}
+                    , {field: 'description', title: '描述', width: '16%'}
+                    , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 60, align: "center"}
+                ]
+            ]
+        });
+
+        let tableReload = function () {
+            resTable.reload({
+                page: {curr: 1},
+                url: [[${#servletContext.getContextPath()}]] + '/res/list'
+            });
+        };
+
+        //头工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            let checkStatus = table.checkStatus(obj.config.id);
+            let data;
+            switch (obj.event) {
+                case 'addResBtn':
+                    layer.open({
+                        type: 2,
+                        title: '添加物资信息',
+                        shadeClose: true,
+                        shade: 0.8,
+                        offset: '30px',
+                        area: ['85%', '69%'],
+                        content: [[${#servletContext.getContextPath()}]] + '/res/add/index' //iframe的url
+                    });
+
+                    tableReload();
+                    break;
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.msg('物资信息列表');
+                    break;
+            }
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) {
+            let data = obj.data;
+
+            if (obj.event === 'edit') {
+                layer.open({
+                    type: 2,
+                    title: '编辑物资',
+                    shadeClose: true,
+                    shade: 0.8,
+                    offset: '30px',
+                    area: ['85%', '69%'],
+                    content: [[${#servletContext.getContextPath()}]] + '/res/upd/index?resId=' + data.id
+                });
+                tableReload();
+            }
+        });
+
+        //监听单元格编辑
+        table.on('edit(test)', function (obj) {
+            let value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field; //得到字段
+            layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+        });
+
+
+    });
+</script>
+</body>
+</html>

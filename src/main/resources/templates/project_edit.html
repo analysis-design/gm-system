@@ -58,8 +58,6 @@
 
         <div class="layui-form-item">
             <label class="layui-form-label">合同文件</label>
-            <button type="button" class="layui-btn" id="test3" style="margin-left: 30px"><i class="layui-icon"></i>上传
-            </button>
             <div class="layui-input-inline">
                 <input type="text" name="contractFile" th:disabled="${disabled==1}"
                        th:value="${project?.getContractFile()}"
@@ -100,7 +98,7 @@
             <label class="layui-form-label" style="width: auto">负责人姓名</label>
             <div class="layui-input-inline">
                 <select name="saleId" th:disabled="${disabled==1}">
-                    <option>请选择</option>
+                    <option value="">请选择</option>
                     <option th:each="staff, state : ${staffList}"
                             th:selected="${project?.getSaleId() == staff?.getId()}"
                             th:value="${staff?.getId()}"
@@ -218,13 +216,24 @@
                     });
                 },
                 error: function (message) {
-                    alert(data.field)
                     layer.closeAll('loading');
                     console.log(JSON.stringify(message));
-                    layer.msg("执行失败", {
+                    let msg = "执行失败";
+
+                    if (message.responseJSON != null && message.responseJSON.msg != null)
+                        msg = message.responseJSON.msg;
+
+                    layer.msg(msg, {
                         icon: 2,
                         time: 1500
                     });
+                    // alert(data.field)
+                    // layer.closeAll('loading');
+                    // console.log(JSON.stringify(message));
+                    // layer.msg("执行失败", {
+                    //     icon: 2,
+                    //     time: 1500
+                    // });
                 }
             });
             layer.load();
