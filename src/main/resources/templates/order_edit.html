@@ -28,14 +28,15 @@
         <div class="layui-form-item">
             <label class="layui-form-label">预算编号</label>
             <div class="layui-input-inline">
-                <input type="text" name="budgetId" required lay-verify="required" th:value="${order?.getBudgetId()}"
-                       th:disabled="${disabled==1}" placeholder="请输入" autocomplete="off" class="layui-input">
+                <input type="text" name="budgetId" th:value="${order?.getBudgetId()}"
+                       id="budgetId"  placeholder="请输入" autocomplete="off" th:disabled="disabled"
+                       class="layui-input">
             </div>
             <label class="layui-form-label">预算总额</label>
             <div class="layui-input-inline">
-                <input type="text" name="budgetTotal" required lay-verify="required"
-                       th:value="${order?.getBudgetTotal()}"
-                       th:disabled="${disabled==1}" placeholder="请输入" autocomplete="off" class="layui-input">
+                <input type="text" name="budgetTotal"
+                      th:disabled="disabled" id="budgetTotal" th:value="${order?.getBudgetTotal()}"
+                        placeholder="请输入" autocomplete="off" class="layui-input">
             </div>
         </div>
 
@@ -96,7 +97,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">所属工程</label>
             <div class="layui-input-inline">
-                <select name="projectId" th:disabled="${disabled==1}">
+                <select name="projectId" th:disabled="${disabled==1}" id="projectClick" lay-filter="clickSelect">
                     <option value="">请选择</option>
                     <option th:each="project, state : ${projectList}"
                             th:selected="${order?.getProjectId() == project?.getId()}"
@@ -191,7 +192,7 @@
             // layer.msg(JSON.stringify(data.field));
             $.ajax({
                 type: "POST",
-                url: [[${#servletContext.getContextPath()}]] +"/order/end",
+                url: [[${#servletContext.getContextPath()}]] + "/order/end",
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify(data.field),
                 dataType: "json",
@@ -208,6 +209,37 @@
                     });
                 },
                 error: function (message) {
+                    layer.closeAll('loading');
+                    console.log(JSON.stringify(message));
+                    let msg = "执行失败";
+
+                    if (message.responseJSON != null && message.responseJSON.msg != null)
+                        msg = message.responseJSON.msg;
+
+                    layer.msg(msg, {
+                        icon: 2,
+                        time: 1500
+                    });
+                }
+            });
+            layer.load();
+            return false; // 禁用页面跳转
+        });
+        form.on('select(clickSelect)', function (data) {
+            // layer.msg(JSON.stringify(data.field));
+            var projectId = $("#projectClick").val();
+            $.ajax({
+                url: [[${#servletContext.getContextPath()}]] + "/order/budget",
+                data: {id: projectId},
+                dataType: "json",
+                success: function (message) {
+                    layer.closeAll('loading');
+                    $("#budgetId").val(message.budgetId);
+                    $("#budgetTotal").val(message.budgetTotal);
+                },
+                error: function (message) {
+                    $("#budgetId").val(0);
+                    $("#budgetTotal").val(0);
                     layer.closeAll('loading');
                     console.log(JSON.stringify(message));
                     let msg = "执行失败";
