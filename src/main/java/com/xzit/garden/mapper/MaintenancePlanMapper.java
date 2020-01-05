@@ -85,7 +85,7 @@ public interface MaintenancePlanMapper {
     @Select("select * from project WHERE state=3 or state=4 ")
     List<Project> findAllProject();
 
-    @Select("select * from `group` where state=3")
+    @Select("select * from `group` where state=3 and type=1")
     List<Group> findAllGroup();
 
     @Select("select a.* ,b.`name`,c.`name` as groupname from   maintenance_plan as a join project as b " +

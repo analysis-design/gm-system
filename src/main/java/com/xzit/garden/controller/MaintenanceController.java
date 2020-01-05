@@ -94,7 +94,6 @@ public class MaintenanceController {
     @PostMapping("/add")
     @ResponseBody
     public Map<String, Object> authAdd(@RequestBody MaintenancePlan maintenancePlan) {
-        DateChangeUtil dateChangeUtil=new DateChangeUtil();
         int result=maintenancePlanService.insertMaintenancePlan(maintenancePlan);
         Map<String, Object> rs = new HashMap<>();
         rs.put("code", 0);
