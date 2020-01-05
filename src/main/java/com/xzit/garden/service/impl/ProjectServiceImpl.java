@@ -41,6 +41,7 @@ public class ProjectServiceImpl implements ProjectService {
     /**
      * 根据工程名模糊查询工程
      * 如果名称为空则返回findAll
+     *
      * @return
      */
     @Override
@@ -95,20 +96,19 @@ public class ProjectServiceImpl implements ProjectService {
      * 1.如果工程名和负责人姓名都不为空执行根据工程名和负责人名进行查询
      * 2.如果工程名不为空执行根据工程名来进行查询
      * 3.如果负责人姓名不为空执行根据负责人姓名进行查询
+     *
      * @param projectDto
      * @return
      */
     @Override
     public List<ProjectDto> findByProjectDto(ProjectDto projectDto) {
-        if (projectDto.getName()!=""&&projectDto.getName()!=null&&projectDto.getSaleName()!=null&&projectDto.getSaleName()!=""){
-            List<Project> projects= projectMapper.findByNameStaff(projectDto.getName(),projectDto.getSaleName());
+        if (projectDto.getName() != "" && projectDto.getName() != null && projectDto.getSaleName() != null && projectDto.getSaleName() != "") {
+            List<Project> projects = projectMapper.findByNameStaff(projectDto.getName(), projectDto.getSaleName());
             return getProjectDtoList(projects);
-        }
-        else if (projectDto.getName()!=null&&projectDto.getName()!=""){
+        } else if (projectDto.getName() != null && projectDto.getName() != "") {
             List<Project> projects = projectMapper.findByName(projectDto.getName());
             return getProjectDtoList(projects);
-        }
-        else if (projectDto.getSaleName()!=null&&projectDto.getSaleName()!=""){
+        } else if (projectDto.getSaleName() != null && projectDto.getSaleName() != "") {
             List<Project> projects = projectMapper.findByStaffName(projectDto.getSaleName());
             return getProjectDtoList(projects);
         }
@@ -149,7 +149,8 @@ public class ProjectServiceImpl implements ProjectService {
     2.判断工程部门表是否在用此工程编号
     3.判断成本预算表是否在用此工程编号
     4.判断订单表是否在用此工程编号
-    5.
+    5.如果合同签了，就不能删除
+    6.如果开始了
      */
     @Override
     public Integer deleteProject(Long id) {

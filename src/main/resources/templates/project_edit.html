@@ -100,7 +100,7 @@
             <label class="layui-form-label" style="width: auto">负责人姓名</label>
             <div class="layui-input-inline">
                 <select name="saleId" th:disabled="${disabled==1}">
-                    <option>请选择</option>
+                    <option value="">请选择</option>
                     <option th:each="staff, state : ${staffList}"
                             th:selected="${project?.getSaleId() == staff?.getId()}"
                             th:value="${staff?.getId()}"

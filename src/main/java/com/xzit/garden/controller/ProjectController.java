@@ -55,9 +55,10 @@ public class ProjectController {
     @ResponseBody
     public String delProject(@RequestParam(required = false, defaultValue = "") Long id) {
         Integer delete = projectService.deleteProject(id);
+        System.out.println(delete);
         System.out.println("id = " + delete);
-        if (delete < 0) {
-            return "deleteError";
+        if (delete <=0) {
+            return "删除失败";
         }
         return "删除成功!";
     }
@@ -173,8 +174,7 @@ public class ProjectController {
         Integer succcess = clientService.deleteClient(client.getId());
         Map<String,String> map = new HashMap<>();
         if (succcess==0){
-            map.put("msg","此客户有工程，不能删除！");
-            map.put("del","1");
+            map=null;
             return map;
         }
         else if (succcess==1){
