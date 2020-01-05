@@ -30,12 +30,12 @@
 <script th:src="@{/webjars/layui/2.5.5/layui.js}" charset="utf-8" type="text/javascript"></script>
 <script th:src="@{/js/jquery.min.js}" type="text/javascript"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
     layui.use('table', function () {
         var table = layui.table;
         table.render({
             elem: '#projectList'
-            , url: '[[@{/project}]]'
+            , url: [[${#servletContext.getContextPath()}]] + '/project'
             , title: '工程数据表'
             , page: true
             , cols: [
@@ -51,7 +51,7 @@
                     , {field: 'pExpectedEndTime', title: '预计结束时间', width: 120}
                     , {field: 'pActualEndTime', title: '实际结束时间', width: 120}
                     , {field: 'description', title: '工程描述', width: 180}
-                    , {field: 'saleName',title:'负责人',width:100}
+                    , {field: 'saleName', title: '负责人', width: 100}
                     , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 170, align: 'center'}
                 ]
             ]
@@ -70,11 +70,11 @@
                     , where: {
                         //重新加载条件
                         name: name,
-                        saleName:saleName
+                        saleName: saleName
                     }
                 });
             },
-            toedit:function (winTitle,projectId,is) {
+            toedit: function (winTitle, projectId, is) {
                 layer.open({
                     type: 2,
                     title: winTitle,
@@ -83,7 +83,7 @@
                     shade: 0.5,
                     maxmin: true, //开启最大化最小化按钮
                     area: ['85%', '75%'],
-                    content:'[[@{/project/add?id=}]]'+projectId+'&isDisabled='+is
+                    content: [[${#servletContext.getContextPath()}]]+'/project/add?id=' + projectId + '&isDisabled=' + is
                 });
             }
         };
@@ -93,7 +93,7 @@
         });
         //添加按钮
         $('#addBtn').on('click', function () {
-            active.toedit("园林管理系统-添加工程信息",0,0);
+            active.toedit("园林管理系统-添加工程信息", 0, 0);
         });
         //监听行工具事件
         table.on('tool(test)', function (obj) {
@@ -103,22 +103,43 @@
                 layer.confirm('真的删除行么', function (index) {
                     obj.del();
                     layer.close(index);
-                    $.get("[[@{/project/del}]]",{id:data.id},function (result) {
-                        if (result=="删除失败"){
-                            alert(result);
-                            window.location.reload();
+                    $.ajax({
+                        url: [[${#servletContext.getContextPath()}]] + "/project/del",
+                        data: {id: data.id},
+                        dataType: "json",
+                        success: function (message) {
+                            layer.closeAll('loading');
+
+                            let icon_flag = 1;
+                            if (message.code !== 0) {
+                                icon_flag = 2;
+                            } else obj.del();
+
+                            layer.msg(message.msg, {
+                                icon: icon_flag,
+                                time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                            });
+                        },
+                        error: function (message) {
+                            layer.closeAll('loading');
+                            console.log(JSON.stringify(message));
+                            let msg = "执行失败";
+
+                            if (message.responseJSON != null && message.responseJSON.msg != null)
+                                msg = message.responseJSON.msg;
+
+                            layer.msg(msg, {
+                                icon: 2,
+                                time: 1500
+                            });
                         }
-                        else {
-                            alert(result);
-                            window.location.reload();
-                        }
-                    })
+                    });
+                    active.reload();
                 });
             } else if (obj.event === 'edit') {
-                active.toedit("园林管理系统-修改工程信息",data.id,0);
-            }
-            else if(obj.event == 'detail'){
-                active.toedit("园林管理系统-查看工程信息",data.id,1);
+                active.toedit("园林管理系统-修改工程信息", data.id, 0);
+            } else if (obj.event === 'detail') {
+                active.toedit("园林管理系统-查看工程信息", data.id, 1);
             }
         });
     })

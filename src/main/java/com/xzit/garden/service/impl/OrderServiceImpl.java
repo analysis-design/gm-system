@@ -38,13 +38,25 @@ public class OrderServiceImpl implements OrderService {
             return orderMapper.insert(order);
     }
 
+    /**
+     * 删除订单逻辑
+     *已付定金的订单不能删除
+     * 工程未结束的订单不能删除
+     * @param id
+     * @return
+     */
     @Override
     public Integer deleteOrder(Long id) {
+        if (orderMapper.findById(id).getPayState()==1)
+            throw new RuntimeException("已付定金，不能删除");
+        if (projectMapper.findById(orderMapper.findById(id).getProjectId()).getActualEndTime()==null)
+            throw new RuntimeException("工程未结束，不能删除");
         return orderMapper.delete(id);
     }
 
     /**
      * 修改订单也要判断与订单的相关工程是否存在
+     * 订单结束时间要大于等于工程结束时间
      * @param order
      * @return
      */
@@ -53,8 +65,9 @@ public class OrderServiceImpl implements OrderService {
         Project project = projectMapper.findById(order.getProjectId());
         if (project == null)
             throw new RuntimeException("与订单相关的工程不存在");
-        else
-            return orderMapper.update(order);
+        if (order.getEndTime()!=null&&projectMapper.findById(order.getProjectId()).getActualEndTime()==null)
+            throw new RuntimeException("工程未结束，订单无法完成");
+        return orderMapper.update(order);
     }
 
     @Override

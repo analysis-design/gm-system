@@ -29,4 +29,7 @@ public interface OrderMapper {
 
     @Select("select * from orders where projectId in (select id from project where name like '%${projectName}%')")
     List<Order> findByProjectName(@Param("projectName")String name);
+
+    @Select("select * from orders where projectId=#{projectId}")
+    Order findByProjectId(@Param("projectId") Long id);
 }

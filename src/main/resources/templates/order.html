@@ -98,16 +98,38 @@
                 layer.confirm('真的删除行么', function (index) {
                     obj.del();
                     layer.close(index);
-                    $.get("[[@{/order/del}]]",{id:data.id},function (result) {
-                        if (result=="删除失败"){
-                            alert(result);
-                            window.location.reload();
+                    $.ajax({
+                        url: "[[@{/order/del}]]",
+                        data: {id: data.id},
+                        dataType: "json",
+                        success: function (message) {
+                            layer.closeAll('loading');
+
+                            let icon_flag = 1;
+                            if (message.code !== 0) {
+                                icon_flag = 2;
+                            } else obj.del();
+
+                            layer.msg(message.msg, {
+                                icon: icon_flag,
+                                time: 1500 //2秒关闭（如果不配置，默认是3秒）
+                            });
+                        },
+                        error: function (message) {
+                            layer.closeAll('loading');
+                            console.log(JSON.stringify(message));
+                            let msg = "执行失败";
+
+                            if (message.responseJSON != null && message.responseJSON.msg != null)
+                                msg = message.responseJSON.msg;
+
+                            layer.msg(msg, {
+                                icon: 2,
+                                time: 1500
+                            });
                         }
-                        else {
-                            alert(result);
-                            window.location.reload();
-                        }
-                    })
+
+                    }) ;active.reload();
                 });
             } else if (obj.event === 'edit') {
                 active.toedit("园林管理系统-修改订单信息",data.id,0);

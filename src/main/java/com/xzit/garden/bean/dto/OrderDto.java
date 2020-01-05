@@ -34,6 +34,8 @@ public class OrderDto extends Order {
         if (order.getBudgetTotal() != null)
             this.dtoBudgetTotal = (order.getBudgetTotal() + " ￥");
         this.dtoDiscount = (String.format("%.1f", order.getDiscount()) + " 折");
+        if (order.getDiscount() == 10.0)
+            this.dtoDiscount = "不打折";
         if (order.getPrepaid() != null)
             this.dtoPrepaid = (order.getPrepaid() + " ￥");
         this.dtoPayState = (order.getPayState() == 0 ? "未付定金" : order.getPayState() == 1 ? "已付定金" : "已付尾款");

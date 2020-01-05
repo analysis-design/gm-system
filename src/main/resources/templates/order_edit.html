@@ -171,10 +171,14 @@
                     });
                 },
                 error: function (message) {
-                    alert(data.field)
                     layer.closeAll('loading');
                     console.log(JSON.stringify(message));
-                    layer.msg("执行失败", {
+                    let msg = "执行失败";
+
+                    if (message.responseJSON != null && message.responseJSON.msg != null)
+                        msg = message.responseJSON.msg;
+
+                    layer.msg(msg, {
                         icon: 2,
                         time: 1500
                     });
@@ -204,10 +208,14 @@
                     });
                 },
                 error: function (message) {
-                    alert(data.field)
                     layer.closeAll('loading');
                     console.log(JSON.stringify(message));
-                    layer.msg("执行失败", {
+                    let msg = "执行失败";
+
+                    if (message.responseJSON != null && message.responseJSON.msg != null)
+                        msg = message.responseJSON.msg;
+
+                    layer.msg(msg, {
                         icon: 2,
                         time: 1500
                     });

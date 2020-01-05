@@ -100,14 +100,12 @@ public class OrderController {
 
     @RequestMapping(path = "/del", method = RequestMethod.GET)
     @ResponseBody
-    public String delOrder(@RequestParam(required = false, defaultValue = "") Long id) {
+    public Map<String,Object> delOrder(@RequestParam(required = false, defaultValue = "") Long id) {
         Integer delete = orderService.deleteOrder(id);
-        System.out.println(delete);
-        System.out.println("id = " + delete);
-        if (delete <=0) {
-            return "删除失败";
-        }
-        return "删除成功!";
+        Map<String,Object> map = new HashMap<>();
+        map.put("code",0);
+        map.put("msg","删除成功");
+        return map;
     }
 
     @RequestMapping(path = "/end",method = RequestMethod.POST,produces = "application/json;charset=UTF-8")

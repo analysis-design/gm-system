@@ -6,6 +6,7 @@ import com.xzit.garden.bean.entity.Project;
 import com.xzit.garden.bean.entity.Staff;
 import com.xzit.garden.exception.ObjectNotFoundException;
 import com.xzit.garden.mapper.ClientMapper;
+import com.xzit.garden.mapper.OrderMapper;
 import com.xzit.garden.mapper.ProjectMapper;
 import com.xzit.garden.mapper.StaffMapper;
 import com.xzit.garden.service.ProjectService;
@@ -23,6 +24,8 @@ public class ProjectServiceImpl implements ProjectService {
     private StaffMapper staffMapper;
     @Autowired
     private ClientMapper clientMapper;
+    @Autowired
+    OrderMapper orderMapper;
 
     @Override
     public List<Project> findAllProject() {
@@ -124,7 +127,7 @@ public class ProjectServiceImpl implements ProjectService {
     增加工程业务逻辑
     1.判断销售人员编号是否存在
     2.判断客户编号是否存在
-    3.
+    3.如果工程状态不是未签合同则合同文件不能为空
      */
     @Override
     public Integer insertProject(Project project) {
@@ -140,6 +143,8 @@ public class ProjectServiceImpl implements ProjectService {
         if (client == null)
             throw new RuntimeException("客户不存在");
 
+        if (project.getState()!=0&&project.getContractFile()==null)
+            throw new RuntimeException("合同文件不能为空");
         return projectMapper.insert(project);
     }
 
@@ -150,10 +155,12 @@ public class ProjectServiceImpl implements ProjectService {
     3.判断成本预算表是否在用此工程编号
     4.判断订单表是否在用此工程编号
     5.如果合同签了，就不能删除
-    6.如果开始了
+    6.如果开始了且订单还没结束，就不能删除
      */
     @Override
     public Integer deleteProject(Long id) {
+        if (orderMapper.findByProjectId(id)!=null)
+            throw new RuntimeException("该工程存在订单不能删除");
         return projectMapper.isDelete(id);
     }
 
@@ -176,6 +183,8 @@ public class ProjectServiceImpl implements ProjectService {
         if (client == null)
             throw new RuntimeException("客户不存在");
 
+        if (project.getState()!=0&&project.getContractFile()=="")
+            throw new RuntimeException("合同文件不能为空");
         return projectMapper.update(project);
     }
 }
