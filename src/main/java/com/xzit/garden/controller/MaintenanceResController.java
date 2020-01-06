@@ -104,7 +104,10 @@ public class MaintenanceResController {
     @RequestMapping("/resApply/del")
     @ResponseBody
     public Map<String, Object> resApplyDelete(Model model,Long id) {
-        int flag=maintenanceResService.deleteMaintenanceApplyByPrimaryKey(id);
+        MaintenanceplanResApply maintenanceplanResApply=maintenanceResService.selectmaintenanceplanRes_applyByPrimaryKey(id);
+       int flag=0;
+        if(maintenanceplanResApply.getAuditstate()==0);
+       flag=maintenanceResService.deleteMaintenanceApplyByPrimaryKey(id);
         Map<String, Object> rs = new HashMap<>();
         rs.put("code", 0);
         if(flag!=0)

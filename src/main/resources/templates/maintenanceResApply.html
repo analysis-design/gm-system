@@ -51,9 +51,9 @@
                     , {field: 'implplanid', title: '申请养护计划Id', width: '20%'}
                     , {field: 'applytime', title: '申请时间', width: '10%'}
                     , {field: 'applierid', title: '申请者id', width: '15%'}
-                    , {field: 'resid', title: '物资id', width: '20%'}
-                    , {fixed: 'resourcename', title: '物资名称', width:'10%' }
-                    , {field: 'resnum', title: '申请数量', width: '20%'}
+                    , {field: 'resid', title: '物资id', width: '15%'}
+                    , {field: 'resourcename', title: '物资名称', width:'10%' }
+                    , {field:  'resnum', title: '申请数量', width: '10%'}
                     , {field: 'purpose', title: '申请目的', width: '20%'}
                     , {field: 'auditstate', title: '审核状态', width: '10%'}
                     , {field: 'resallocatedtime', title: '分配时间', width: '20%'}
@@ -68,13 +68,14 @@
             let data;
             switch (obj.event) {
                 case 'addBtn':
-                    layer.open({
+                    parent.layer.open({
                         type: 2,
                         title: '申请物资',
                         shadeClose: true,
+                        maxmin: true,
                         shade: 0.8,
                         offset: '30px',
-                        area: ['100%', '100%'],
+                        area: ['85%', '69%'],
                         content: [[${#servletContext.getContextPath()}]] + '/maintenanceRes/resApply/add/index?planid='+planid//iframe的url
                     });
                     console.log("阻塞完成");
@@ -113,10 +114,11 @@
                     layer.load();
                 });
             } else if (obj.event === 'edit') {
-                layer.open({
+                parent.layer.open({
                     type: 2,
-                    title: '修改计划',
+                    title: '修改申请',
                     shadeClose: true,
+                    maxmin: true,
                     shade: 0.8,
                     offset: '30px',
                     area: ['85%', '69%'],

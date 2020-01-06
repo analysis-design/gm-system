@@ -45,12 +45,13 @@
             , url: [[${#servletContext.getContextPath()}]] + '/maintenanceRes/list?id='+planid //数据接口
             , cols: [
                 [ //表头
-                  {field: 'id', title: '编号', width: '10%', fixed: 'left', align: 'center'}
+                      {field: 'id', title: '编号', width: '10%', fixed: 'left', align: 'center'}
                     , {field: 'maintenanceplanid', title: '养护计划id', width: '10%'}
                     , {field: 'resid', title: '物资id', width: '10%'}
                     , {field: 'resourcename', title: '物资名称', width: '15%'}
+                    , {field: 'resnum', title: '物资数量', width:'10%' }
                     , {field: 'resourcedescription', title: '物资备注', width: '20%'}
-                    , {fixed: 'resnum', title: '物资数量', width:'10%' }
+
                     , {field: 'purpose', title: '物资目的', width: '20%'}
                     , {field: 'description', title: '备注', width: '20%'}
 
@@ -63,26 +64,28 @@
             let data;
             switch (obj.event) {
                 case 'addBtn':
-                    layer.open({
+                    parent.layer.open({
                         type: 2,
-                        title: '添加计划',
+                        title: '添加物资申请',
                         shadeClose: true,
+                        maxmin: true,
                         shade: 0.8,
                         offset: '30px',
-                        area: ['100%', '100%'],
+                        area: ['85%', '69%'],
                         content:[[${#servletContext.getContextPath()}]] + '/maintenanceRes/resApply/add/index?planid='+planid  //iframe的url
                     });
                     console.log("阻塞完成");
                     authorityTable.reload({page: {curr: 1}});
                     break;
                 case 'editBtn':
-                    layer.open({
+                    parent.layer.open({
                         type: 2,
                         title: '查看养护物资申请',
                         shadeClose: true,
+                        maxmin: true,
                         shade: 0.8,
                         offset: '30px',
-                        area: ['100%', '100%'],
+                        area: ['85%', '69%'],
                         content: [[${#servletContext.getContextPath()}]] + '/maintenanceRes/resApply/index?id='+planid //iframe的url
                     });
                     console.log("阻塞完成");
