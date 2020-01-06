@@ -5,15 +5,16 @@ import com.xzit.garden.bean.entity.*;
 import com.xzit.garden.bean.model.AuthModel;
 import com.xzit.garden.bean.model.PageModel;
 import com.xzit.garden.bean.model.RoleModel;
-import com.xzit.garden.exception.ObjectNotFoundException;
 import com.xzit.garden.exception.ObjectAlreadyExistException;
 import com.xzit.garden.exception.ObjectAlreadyInUseException;
+import com.xzit.garden.exception.ObjectNotFoundException;
 import com.xzit.garden.mapper.AuthorityMapper;
 import com.xzit.garden.mapper.RoleMapper;
 import com.xzit.garden.mapper.StaffMapper;
 import com.xzit.garden.mapper.UserMapper;
 import com.xzit.garden.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -56,9 +57,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public UserDto getUserDto() {
-//        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        User user = (User) loadUserByUsername(principal.getUsername());
-        User user = (User) loadUserByUsername("admin");
+        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) loadUserByUsername(principal.getUsername());
+
         List<Authority> authorities = new ArrayList<>();
         user.getRoleList().forEach(role -> {
             for (Authority authority : role.getAuthorityList()) {
@@ -283,7 +284,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if (delUserRoleList.size() > 0)
             userMapper.deleteRoleRelations(userId, delUserRoleList);
 
-        if (user.getPassword() != null && !user.getPassword().equals(""))
+        if (userDto.getPassword() != null && !userDto.getPassword().trim().equals(""))
             user.setPassword(userDto.getPassword());
 
         user.setUsername(userDto.getUsername());

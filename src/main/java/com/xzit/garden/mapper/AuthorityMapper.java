@@ -50,8 +50,8 @@ public interface AuthorityMapper {
     @Select("select * from authority where id=#{id}")
     Authority findById(Long id);
 
-    @Insert("insert into authority (authName, resName, resType, url, icon, parentId, description) " +
-            "values (#{authName}, #{resName}, #{resType}, #{url}, #{icon}, #{parentId}, #{description})")
+    @Insert("insert into authority (authName, resName, resType, url, icon, parentId, typeFlag, description) " +
+            "values (#{authName}, #{resName}, #{resType}, #{url}, #{icon}, #{parentId}, #{typeFlag}, #{description})")
     @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
     void add(Authority authority);
 
@@ -59,7 +59,7 @@ public interface AuthorityMapper {
     void deleteById(Long id);
 
     @Update("update authority set " +
-            "authName = #{authName}, resName = #{resName}, resType = #{resType}, " +
+            "authName = #{authName}, resName = #{resName}, resType = #{resType}, typeFlag = #{typeFlag}, " +
             "url = #{url}, icon = #{icon}, parentId = #{parentId}, description = #{description} " +
             "where id = #{id}")
     void update(Authority authority);
@@ -77,4 +77,10 @@ public interface AuthorityMapper {
             "</foreach>" +
             "</script>")
     void deleteByIdList(@Param("idList") List<Long> authList);
+
+    @Select("select * from authority where url=#{uri}")
+    Authority findByUrl(String uri);
+
+    @Select("select * from authority where parentId in (select id from authority where url=#{uri})")
+    List<Authority> findChildrenByUri(String uri);
 }

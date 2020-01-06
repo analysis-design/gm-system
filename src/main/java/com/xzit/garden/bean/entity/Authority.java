@@ -39,6 +39,11 @@ public class Authority implements Serializable {
      */
     private String description;
 
+    /**
+     * 标示资源的操作类型
+     */
+    private Integer typeFlag;
+
     public Long getId() {
         return id;
     }
@@ -101,6 +106,14 @@ public class Authority implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getTypeFlag() {
+        return typeFlag;
+    }
+
+    public void setTypeFlag(Integer typeFlag) {
+        this.typeFlag = typeFlag;
     }
 
     @Override

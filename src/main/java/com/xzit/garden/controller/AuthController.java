@@ -5,12 +5,12 @@ import com.xzit.garden.bean.dto.AuthorityDto;
 import com.xzit.garden.bean.dto.UserDto;
 import com.xzit.garden.bean.entity.Authority;
 import com.xzit.garden.bean.entity.Role;
+import com.xzit.garden.bean.model.AuthorityModel;
 import com.xzit.garden.bean.model.PageModel;
 import com.xzit.garden.service.AuthorityService;
 import com.xzit.garden.service.RoleService;
 import com.xzit.garden.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -65,10 +65,28 @@ public class AuthController {
 
         model.addAttribute("userList", users);
         model.addAttribute("roleList", roleList);
+        model.addAttribute("operationKey", getAuthorityKeyMap());
         model.addAttribute("authorityTree", root);
         return "authority";
     }
 
+    private Map<Integer, String> getAuthorityKeyMap() {
+        HashMap<Integer, String> map = new HashMap<>();
+        map.put(AuthorityModel.ADD_INDEX, "添加页面");
+        map.put(AuthorityModel.DEL, "删除按钮");
+        map.put(AuthorityModel.UPD_INDEX, "更新页面");
+        map.put(AuthorityModel.LIST, "信息列表");
+        map.put(AuthorityModel.QUERY, "查询按钮");
+        map.put(AuthorityModel.ALLOC, "分配按钮");
+        map.put(AuthorityModel.EXTEND, "扩展按钮");
+        map.put(AuthorityModel.DEL_ALL, "批量删除按钮");
+        map.put(AuthorityModel.SORT, "排序按钮");
+        map.put(AuthorityModel.SUBMIT, "提交按钮");
+        map.put(AuthorityModel.PAGE, "提交表单的按钮");
+        map.put(AuthorityModel.ALLOC_INDEX, "分配页面");
+        map.put(AuthorityModel.DETAILS, "详情按钮");
+        return map;
+    }
     /**
      * 添加权限首页
      *
@@ -84,6 +102,7 @@ public class AuthController {
 
         List<Authority> authorityList = authorityService.getAllAuthorityList(pageModel);
 
+        model.addAttribute("operationKey", getAuthorityKeyMap());
         model.addAttribute("user", user);
         model.addAttribute("msg", "添加权限");
         model.addAttribute("authList", authorityList);
@@ -109,6 +128,7 @@ public class AuthController {
 
         if (authority.getParentId() != null)
             authorityList.remove(authority);
+        model.addAttribute("operationKey", getAuthorityKeyMap());
         model.addAttribute("user", user);
         model.addAttribute("msg", "编辑权限");
         model.addAttribute("updAuthority", authority);

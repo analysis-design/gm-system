@@ -36,6 +36,7 @@
         let table = layui.table;
         let layer = layui.layer;
         let $ = layui.jquery;
+        let operationKey = [[${operationKey}]];
 
         //第一个实例
         let authorityTable = table.render({
@@ -70,7 +71,13 @@
                         }
                     }
                     , {field: 'url', title: '资源url', width: '15%'}
-                    , {field: 'icon', title: '资源图标', width: '20%'}
+                    , {field: 'icon', title: '资源图标', width: '20%'},
+                    {
+                        field: 'typeFlag', title: '操作类型', width: '20%',
+                        templet: function (d) {
+                            return operationKey[d.typeFlag];
+                        }
+                    }
                     , {field: 'parentId', title: '所属菜单编号', width: '13%'}
                     , {field: 'description', title: '描述', width: '16%'}
                     , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150, align: "center"}

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler
-    @ResponseStatus
+    @ResponseStatus(HttpStatus.OK)
     public GlobalExceptionInfoModel<String> exception(HttpServletRequest request, Exception e) {
 
         e.printStackTrace();
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({ObjectAlreadyExistException.class, ObjectNotFoundException.class,
             ObjectAlreadyInUseException.class})
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     public GlobalExceptionInfoModel<String> exceptionForService(HttpServletRequest request, RuntimeException e) {
         e.printStackTrace();
 

@@ -55,4 +55,12 @@ public interface AuthorityService {
      * @return 删除的权限列表
      */
     List<Authority> deleteAllById(List<Long> authList);
+
+    /**
+     * 根据URI获取当前URI的子URI
+     *
+     * @param uri 权限的URI
+     * @return 子URI的Authority列表
+     */
+    List<Authority> findChildrenByParentURI(String uri);
 }

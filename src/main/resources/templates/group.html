@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -9,8 +9,11 @@
 <body>
 <div class="layui-container layui-side-scroll" style="margin: 0; width: 100%; padding: 5px 15px;">
     <div class="layui-row">
-        <div class="layui-col-lg12">
+        <div class="layui-col-lg12"
+             th:if="${#arrays.contains(#arrays.toArray(#request.getAttribute('operation')),
+                   T(com.xzit.garden.bean.model.AuthorityModel).LIST)}">
             <table id="demo" lay-filter="test"></table>
+
         </div>
     </div>
     <div class="layui-row">
@@ -28,7 +31,9 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="member">成员</a>
 </script>
 
-<script th:inline="javascript">
+<script th:inline="javascript"
+        th:if="${#arrays.contains(#arrays.toArray(#request.getAttribute('operation')),
+                   T(com.xzit.garden.bean.model.AuthorityModel).LIST)}">
     //JavaScript代码区域
     layui.use(['element', 'layer', 'table'], function () {
         let element = layui.element;
@@ -61,7 +66,17 @@
                     , {field: 'oldTime', title: '解除时间', width: '20%'}
                     , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150, align: "center"}
                 ]
-            ]
+            ], done: function (res, curr, count) {
+                //如果是异步请求数据方式，res即为你接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                console.log(res);
+
+                //得到当前页码
+                console.log(curr);
+
+                //得到数据总量
+                console.log(count);
+            }
         });
 
         let tableReload = function () {

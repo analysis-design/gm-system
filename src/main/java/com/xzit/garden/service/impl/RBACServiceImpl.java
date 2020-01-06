@@ -1,6 +1,8 @@
 package com.xzit.garden.service.impl;
 
+import com.xzit.garden.bean.entity.Authority;
 import com.xzit.garden.mapper.AuthorityMapper;
+import com.xzit.garden.service.AuthorityService;
 import com.xzit.garden.service.RBACService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -9,8 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 用于使用RABC方式验证用户的操作权限
@@ -23,6 +24,9 @@ public class RBACServiceImpl implements RBACService {
 
     @Autowired
     private AuthorityMapper authorityMapper;
+
+    @Autowired
+    private AuthorityService authorityService;
 
     @Override
     public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
@@ -37,9 +41,10 @@ public class RBACServiceImpl implements RBACService {
         Set<String> urls = new HashSet<>();
         authorityMapper.findByUserName(username).forEach(authority -> urls.add(authority.getUrl()));
 
+        putAuthority(request);
         // 注意这里不能用equal来判断，因为有些URL是有参数的，所以要用AntPathMatcher来比较
+        String requestURI = request.getRequestURI();
         for (String url : urls) {
-            String requestURI = request.getRequestURI();
             String contextPath = request.getServletContext().getContextPath();
             if (requestURI.contains(contextPath))
                 requestURI = requestURI.substring(contextPath.length());
@@ -51,5 +56,26 @@ public class RBACServiceImpl implements RBACService {
         }
 
         return hasPermission;
+    }
+
+    public void putAuthority(HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        String contextPath = request.getServletContext().getContextPath();
+
+        if (requestURI.contains(contextPath))
+            requestURI = requestURI.substring(contextPath.length());
+        if (requestURI.contains("error"))
+            return;
+        List<Authority> authorityList = authorityService.findChildrenByParentURI(requestURI);
+
+        List<Integer> typeFlag = new ArrayList<>();
+        Map<Integer, String> authorityMap = new HashMap<>();
+        for (Authority authority : authorityList) {
+            typeFlag.add(authority.getTypeFlag());
+            authorityMap.put(authority.getTypeFlag(), authority.getUrl());
+        }
+
+        request.setAttribute("operation", typeFlag);
+        request.setAttribute("operationMap", authorityMap);
     }
 }

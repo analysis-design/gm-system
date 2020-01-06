@@ -91,6 +91,7 @@ public class UserDto implements Serializable {
                     .filter(authority -> authority.getResType() != 0 &&
                             authorityDto.getId().equals(authority.getParentId())).collect(Collectors.toList());
             authorityDto.addContents(list);
+            level2.addAll(authorityDto.getContents());
         }
         return level2;
     }

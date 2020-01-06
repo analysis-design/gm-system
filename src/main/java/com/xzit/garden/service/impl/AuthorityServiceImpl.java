@@ -29,11 +29,9 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public void add(Authority authority) {
         Long parentId = authority.getParentId();
-        if (parentId != null && parentId != -1) {
-            Authority temp = authorityMapper.findById(parentId);
-            if (temp == null)
-                throw new RuntimeException("指定的父级权限不存在");
-        } else authority.setParentId(null);
+        if (parentId != null && parentId != -1)
+            validateExistAuthorityParent(parentId);
+        else authority.setParentId(null);
 
         authorityMapper.add(authority);
     }
@@ -55,11 +53,18 @@ public class AuthorityServiceImpl implements AuthorityService {
         if (temp == null)
             throw new RuntimeException("指定的修改的权限不存在");
 
-        Authority temp2 = authorityMapper.findById(authority.getParentId());
-        if (temp2 == null)
-            throw new RuntimeException("指定的父级权限不存在");
+        Long authorityParentId = authority.getParentId();
+        if (authorityParentId != null && authorityParentId != -1)
+            validateExistAuthorityParent(authorityParentId);
+        else authority.setParentId(temp.getParentId());
 
         authorityMapper.update(authority);
+    }
+
+    private void validateExistAuthorityParent(Long authorityParentId) {
+        Authority temp2 = authorityMapper.findById(authorityParentId);
+        if (temp2 == null)
+            throw new RuntimeException("指定的父级权限不存在");
     }
 
     @Override
@@ -96,6 +101,18 @@ public class AuthorityServiceImpl implements AuthorityService {
 
         authorityMapper.deleteByIdList(authList);
         return list;
+    }
+
+    @Override
+    public List<Authority> findChildrenByParentURI(String uri) {
+        Authority authority = authorityMapper.findByUrl(uri);
+        if (authority == null)
+            return new ArrayList<>();
+
+        List<Authority> authorityList = authorityMapper.findChildrenByUri(uri);
+        if (authorityList == null) authorityList = new ArrayList<>();
+
+        return authorityList;
     }
 
 

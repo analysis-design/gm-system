@@ -57,6 +57,17 @@
     </div>
 
     <div class="layui-form-item">
+        <label class="layui-form-label">操作类型</label>
+        <div class="layui-input-block">
+            <input type="radio" name="typeFlag"
+                   th:each="operation : ${operationKey}"
+                   th:value="${operation?.getKey()}"
+                   th:title="${operation?.getValue()}"
+                   th:checked="${updAuthority?.getTypeFlag() == operation?.getKey()}">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
         <label class="layui-form-label">所属</label>
         <div class="layui-input-block">
             <select name="parentId" lay-filter="aihao">

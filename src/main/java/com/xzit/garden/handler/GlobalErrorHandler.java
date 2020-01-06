@@ -30,8 +30,7 @@ public class GlobalErrorHandler implements ErrorController {
                 message = "未认证";
                 break;
             case HttpServletResponse.SC_FORBIDDEN:
-                message = "接口拒绝访问，用户权限不足";
-                break;
+                throw new RuntimeException("接口拒绝访问，用户权限不足");
             default:
                 message = "其他错误发生了";
         }
