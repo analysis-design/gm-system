@@ -3,10 +3,8 @@ package com.xzit.garden.controller;
 import com.xzit.garden.bean.dto.LayuiDataDto;
 import com.xzit.garden.bean.dto.OrderDto;
 import com.xzit.garden.bean.dto.ProjectDto;
-import com.xzit.garden.bean.entity.Client;
-import com.xzit.garden.bean.entity.Order;
-import com.xzit.garden.bean.entity.Project;
-import com.xzit.garden.bean.entity.Staff;
+import com.xzit.garden.bean.entity.*;
+import com.xzit.garden.service.BudgetService;
 import com.xzit.garden.service.OrderService;
 import com.xzit.garden.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,8 @@ public class OrderController {
     OrderService orderService;
     @Autowired
     ProjectService projectService;
+    @Autowired
+    BudgetService budgetService;
 
     @RequestMapping("/index")
     public String order(){
@@ -56,6 +56,8 @@ public class OrderController {
                             @RequestParam(required = false,defaultValue = "0",value = "isDisabled")Integer isDisabled){
         if (id==0){//添加
             List<Project> projectList = projectService.findAllProject();
+            List<Budget> budgetList = budgetService.findAll();
+            model.addAttribute("budgetList",budgetList);
             model.addAttribute("projectList",projectList);
             model.addAttribute("url","/order/add");
             return "order_edit";
@@ -71,6 +73,8 @@ public class OrderController {
         Order order = orderService.findById(id);
         OrderDto orderDto = orderService.getOrderDto(order);
         List<Project> projectList = projectService.findAllProject();
+        List<Budget> budgetList = budgetService.findAll();
+        model.addAttribute("budgetList",budgetList);
         model.addAttribute("projectList",projectList);
         model.addAttribute("order",orderDto);
         model.addAttribute("url","/order/update");
@@ -117,6 +121,17 @@ public class OrderController {
         orderService.updateOrder(order);
         Map<String,String> map = new HashMap<>();
         map.put("msg","修改成功");
+        return map;
+    }
+
+    @RequestMapping("/budget")
+    @ResponseBody
+    public Map<String,Object> findProjectId(@RequestParam("id")Long id){
+        Budget budget = budgetService.findByProjectId(id);
+        Map<String,Object> map = new HashMap<>();
+        Integer budgetTotal = budget.getResTotal()+budget.getHireStaffTotal()+budget.getSurchargeTotal()+budget.getHireStaffTotal()+budget.getHireMechanicTotal();
+        map.put("budgetId",budget.getId());
+        map.put("budgetTotal",budgetTotal);
         return map;
     }
 }
