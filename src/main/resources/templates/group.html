@@ -9,9 +9,9 @@
 <body>
 <div class="layui-container layui-side-scroll" style="margin: 0; width: 100%; padding: 5px 15px;">
     <div class="layui-row">
-        <div class="layui-col-lg12"
-             th:if="${#arrays.contains(#arrays.toArray(#request.getAttribute('operation')),
-                   T(com.xzit.garden.bean.model.AuthorityModel).LIST)}">
+        <!--       th:if="${#arrays.contains(#arrays.toArray(#request.getAttribute('operation')),
+                           T(com.xzit.garden.bean.model.AuthorityModel).LIST)}" -->
+        <div class="layui-col-lg12">
             <table id="demo" lay-filter="test"></table>
 
         </div>
@@ -31,9 +31,9 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="member">成员</a>
 </script>
 
-<script th:inline="javascript"
-        th:if="${#arrays.contains(#arrays.toArray(#request.getAttribute('operation')),
-                   T(com.xzit.garden.bean.model.AuthorityModel).LIST)}">
+<!-- th:if="${#arrays.contains(#arrays.toArray(#request.getAttribute('operation')),
+                   T(com.xzit.garden.bean.model.AuthorityModel).LIST)}" -->
+<script th:inline="javascript">
     //JavaScript代码区域
     layui.use(['element', 'layer', 'table'], function () {
         let element = layui.element;

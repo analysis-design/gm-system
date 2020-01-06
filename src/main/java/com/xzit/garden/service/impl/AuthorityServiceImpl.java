@@ -105,8 +105,8 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public List<Authority> findChildrenByParentURI(String uri) {
-        Authority authority = authorityMapper.findByUrl(uri);
-        if (authority == null)
+        List<Authority> authority = authorityMapper.findByUrl(uri);
+        if (authority == null || authority.size() == 0)
             return new ArrayList<>();
 
         List<Authority> authorityList = authorityMapper.findChildrenByUri(uri);

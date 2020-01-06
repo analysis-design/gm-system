@@ -72,19 +72,19 @@ public class AuthController {
 
     private Map<Integer, String> getAuthorityKeyMap() {
         HashMap<Integer, String> map = new HashMap<>();
+        map.put(AuthorityModel.PAGE, "查看主页面");
         map.put(AuthorityModel.ADD_INDEX, "添加页面");
-        map.put(AuthorityModel.DEL, "删除按钮");
         map.put(AuthorityModel.UPD_INDEX, "更新页面");
         map.put(AuthorityModel.LIST, "信息列表");
         map.put(AuthorityModel.QUERY, "查询按钮");
-        map.put(AuthorityModel.ALLOC, "分配按钮");
-        map.put(AuthorityModel.EXTEND, "扩展按钮");
+        map.put(AuthorityModel.DETAILS, "详情按钮");
+        map.put(AuthorityModel.DEL, "删除按钮");
         map.put(AuthorityModel.DEL_ALL, "批量删除按钮");
         map.put(AuthorityModel.SORT, "排序按钮");
         map.put(AuthorityModel.SUBMIT, "提交按钮");
-        map.put(AuthorityModel.PAGE, "提交表单的按钮");
-        map.put(AuthorityModel.ALLOC_INDEX, "分配页面");
-        map.put(AuthorityModel.DETAILS, "详情按钮");
+        map.put(AuthorityModel.EXTEND, "扩展按钮");
+        map.put(AuthorityModel.ALLOC, "分配按钮");
+        map.put(AuthorityModel.ALLOC_INDEX, "跳转分配页面");
         return map;
     }
     /**

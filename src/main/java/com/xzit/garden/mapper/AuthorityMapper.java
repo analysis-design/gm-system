@@ -79,7 +79,7 @@ public interface AuthorityMapper {
     void deleteByIdList(@Param("idList") List<Long> authList);
 
     @Select("select * from authority where url=#{uri}")
-    Authority findByUrl(String uri);
+    List<Authority> findByUrl(String uri);
 
     @Select("select * from authority where parentId in (select id from authority where url=#{uri})")
     List<Authority> findChildrenByUri(String uri);

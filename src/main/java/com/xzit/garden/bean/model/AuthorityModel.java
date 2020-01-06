@@ -11,7 +11,7 @@ public interface AuthorityModel {
     int DEL_ALL = 7;// 批量删除按钮
     int SORT = 8;   // 排序按钮
     int SUBMIT = 9; // 提交按钮
-    int PAGE = 10;  // 提交表单的按钮
+    int PAGE = 10;  // 查看主页面
     int ALLOC_INDEX = 13; // 分配页面
     int DETAILS = 14;   // 详情按钮
     int ADD = 11;   //
