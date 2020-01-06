@@ -14,6 +14,7 @@ import com.xzit.garden.mapper.StaffMapper;
 import com.xzit.garden.mapper.UserMapper;
 import com.xzit.garden.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -40,6 +41,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private StaffMapper staffMapper;
 
+    @Value("${auth.restful.enable}")
+    private boolean authEnable;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userMapper.findByName(username);
@@ -57,8 +61,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public UserDto getUserDto() {
-        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = (User) loadUserByUsername(principal.getUsername());
+        User user = null;
+        if (authEnable) {
+            User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            user = (User) loadUserByUsername(principal.getUsername());
+        } else user = (User) loadUserByUsername("admin");
 
         List<Authority> authorities = new ArrayList<>();
         user.getRoleList().forEach(role -> {
