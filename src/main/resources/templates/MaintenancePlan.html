@@ -19,8 +19,11 @@
 <script th:src="@{/webjars/layui/2.5.5/layui.js}"></script>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <div class="layui-btn layui-btn-sm" >
-            <input type="text" width="70px" height="50px" name="search">
+        <div class="layui-btn layui-btn-sm" style="width: 50%;height:
+        30px;text-align: center;vertical-align: middle;align-items: center">
+            <div>
+            <input type="text" style="width: 100%;height: 100%" name="search">
+            </div>
         </div><button class="layui-btn layui-btn-sm" lay-event="searchBtn">搜索</button>
         <br>
         <button class="layui-btn layui-btn-sm" lay-event="addBtn">添加计划</button>
@@ -81,6 +84,7 @@
                         type: 2,
                         title: '添加计划',
                         shadeClose: true,
+                        maxmin: true,
                         shade: 0.8,
                         offset: '30px',
                         area: ['85%', '69%'],
@@ -141,6 +145,7 @@
                     type: 2,
                     title: '修改计划',
                     shadeClose: true,
+                    maxmin: true,
                     shade: 0.8,
                     offset: '30px',
                     area: ['85%', '69%'],
@@ -154,6 +159,7 @@
                     type: 2,
                     title: '养护物资',
                     shadeClose: true,
+                    maxmin: true,
                     shade: 0.8,
                     offset: '30px',
                     area: ['85%', '69%'],
@@ -161,14 +167,6 @@
                 });
                 authorityTable.reload({page: {curr: 1}});
             }
-        });
-
-        //监听单元格编辑
-        table.on('edit(test)', function (obj) {
-            let value = obj.value //得到修改后的值
-                , data = obj.data //得到所在行所有键值
-                , field = obj.field; //得到字段
-            layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
         });
 
 

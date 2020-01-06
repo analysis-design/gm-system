@@ -64,26 +64,28 @@
             let data;
             switch (obj.event) {
                 case 'addBtn':
-                    layer.open({
+                    parent.layer.open({
                         type: 2,
                         title: '添加物资申请',
                         shadeClose: true,
+                        maxmin: true,
                         shade: 0.8,
                         offset: '30px',
-                        area: ['100%', '100%'],
+                        area: ['85%', '69%'],
                         content:[[${#servletContext.getContextPath()}]] + '/maintenanceRes/resApply/add/index?planid='+planid  //iframe的url
                     });
                     console.log("阻塞完成");
                     authorityTable.reload({page: {curr: 1}});
                     break;
                 case 'editBtn':
-                    layer.open({
+                    parent.layer.open({
                         type: 2,
                         title: '查看养护物资申请',
                         shadeClose: true,
+                        maxmin: true,
                         shade: 0.8,
                         offset: '30px',
-                        area: ['100%', '100%'],
+                        area: ['85%', '69%'],
                         content: [[${#servletContext.getContextPath()}]] + '/maintenanceRes/resApply/index?id='+planid //iframe的url
                     });
                     console.log("阻塞完成");
